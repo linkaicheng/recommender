@@ -1,5 +1,7 @@
 package com.cheng.mall.bean;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -8,45 +10,22 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-/**
- * 订单项的实体
- *
- */
-@Table(name = "orderitem")
+@Table(name = "record")
 @Entity
-public class OrderItem {
-	private Integer itemid;
-	private Integer count;
-	private Double subtotal;
-	// 商品外键:对象
+public class Record {
+	private Integer rid;
 	private Product product;
-	// 订单外键:对象
-	private Order order;
+	private User user;
+	private Date purchaseDate;// 购买日期
 
 	@GeneratedValue
 	@Id
-	public Integer getItemid() {
-		return itemid;
+	public Integer getRid() {
+		return rid;
 	}
 
-	public void setItemid(Integer itemid) {
-		this.itemid = itemid;
-	}
-
-	public Integer getCount() {
-		return count;
-	}
-
-	public void setCount(Integer count) {
-		this.count = count;
-	}
-
-	public Double getSubtotal() {
-		return subtotal;
-	}
-
-	public void setSubtotal(Double subtotal) {
-		this.subtotal = subtotal;
+	public void setRid(Integer rid) {
+		this.rid = rid;
 	}
 
 	// 映射单向 n-1 的关联关系
@@ -67,14 +46,22 @@ public class OrderItem {
 	// 使用 @ManyToOne 来映射多对一的关联关系
 	// 使用 @JoinColumn 来映射外键.
 	// 可使用 @ManyToOne 的 fetch 属性来修改默认的关联属性的加载策略
-	@JoinColumn(name = "oid")
+	@JoinColumn(name = "uid")
 	@ManyToOne(fetch = FetchType.LAZY)
-	public Order getOrder() {
-		return order;
+	public User getUser() {
+		return user;
 	}
 
-	public void setOrder(Order order) {
-		this.order = order;
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public Date getPurchaseDate() {
+		return purchaseDate;
+	}
+
+	public void setPurchaseDate(Date purchaseDate) {
+		this.purchaseDate = purchaseDate;
 	}
 
 }

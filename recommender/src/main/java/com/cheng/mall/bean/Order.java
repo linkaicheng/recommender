@@ -4,15 +4,30 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
 /**
- * 订单实体 CREATE TABLE `orders` ( `oid` int(11) NOT NULL AUTO_INCREMENT, `total`
- * double DEFAULT NULL, `ordertime` datetime DEFAULT NULL, `state` int(11)
- * DEFAULT NULL, `name` varchar(20) DEFAULT NULL, `phone` varchar(20) DEFAULT
- * NULL, `addr` varchar(50) DEFAULT NULL, `uid` int(11) DEFAULT NULL, PRIMARY
- * KEY (`oid`), KEY `FKC3DF62E5AA3D9C7` (`uid`), CONSTRAINT `FKC3DF62E5AA3D9C7`
- * FOREIGN KEY (`uid`) REFERENCES `user` (`uid`) ) ENGINE=InnoDB
- * AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+ * @author linkc 订单实体 CREATE TABLE `orders` ( `oid` int(11) NOT NULL
+ *         AUTO_INCREMENT, `total` double DEFAULT NULL, `ordertime` datetime
+ *         DEFAULT NULL, `state` int(11) DEFAULT NULL, `name` varchar(20)
+ *         DEFAULT NULL, `phone` varchar(20) DEFAULT NULL, `addr` varchar(50)
+ *         DEFAULT NULL, `uid` int(11) DEFAULT NULL, PRIMARY KEY (`oid`), KEY
+ *         `FKC3DF62E5AA3D9C7` (`uid`), CONSTRAINT `FKC3DF62E5AA3D9C7` FOREIGN
+ *         KEY (`uid`) REFERENCES `user` (`uid`) ) ENGINE=InnoDB
+ *         AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
  */
+@Table(name = "orders")
+@Entity
 public class Order {
 	private Integer oid;
 	private Double total;
@@ -26,6 +41,8 @@ public class Order {
 	// 配置订单项的集合
 	private Set<OrderItem> orderItems = new HashSet<OrderItem>();
 
+	@GeneratedValue
+	@Id
 	public Integer getOid() {
 		return oid;
 	}
@@ -42,6 +59,7 @@ public class Order {
 		this.total = total;
 	}
 
+	@Temporal(TemporalType.TIMESTAMP)
 	public Date getOrdertime() {
 		return ordertime;
 	}
@@ -82,6 +100,12 @@ public class Order {
 		this.addr = addr;
 	}
 
+	// 映射单向 n-1 的关联关系
+	// 使用 @ManyToOne 来映射多对一的关联关系
+	// 使用 @JoinColumn 来映射外键.
+	// 可使用 @ManyToOne 的 fetch 属性来修改默认的关联属性的加载策略
+	@JoinColumn(name = "uid")
+	@ManyToOne(fetch = FetchType.LAZY)
 	public User getUser() {
 		return user;
 	}
@@ -90,6 +114,11 @@ public class Order {
 		this.user = user;
 	}
 
+	// 映射单向1-n的关联关系
+	// 使用@OneToMany来映射1-n的关联关系
+	// 使用@joinColumn来映射外键列的名称
+	@JoinColumn(name = "oid")
+	@OneToMany(fetch = FetchType.EAGER, cascade = { CascadeType.REMOVE })
 	public Set<OrderItem> getOrderItems() {
 		return orderItems;
 	}

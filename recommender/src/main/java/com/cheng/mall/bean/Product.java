@@ -2,10 +2,22 @@ package com.cheng.mall.bean;
 
 import java.util.Date;
 
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
 /**
  * 商品的实体对象
  *
  */
+@Table(name = "product")
+@Entity
 public class Product {
 	private Integer pid;
 	private String pname;
@@ -18,6 +30,8 @@ public class Product {
 	// 二级分类的外键:使用二级分类的对象.
 	private CategorySecond categorySecond = new CategorySecond();
 
+	@GeneratedValue
+	@Id
 	public Integer getPid() {
 		return pid;
 	}
@@ -74,6 +88,7 @@ public class Product {
 		this.is_hot = is_hot;
 	}
 
+	@Temporal(TemporalType.DATE)
 	public Date getPdate() {
 		return pdate;
 	}
@@ -82,6 +97,12 @@ public class Product {
 		this.pdate = pdate;
 	}
 
+	// 映射单向 n-1 的关联关系
+	// 使用 @ManyToOne 来映射多对一的关联关系
+	// 使用 @JoinColumn 来映射外键.
+	// 可使用 @ManyToOne 的 fetch 属性来修改默认的关联属性的加载策略
+	@JoinColumn(name = "csid")
+	@ManyToOne(fetch = FetchType.LAZY)
 	public CategorySecond getCategorySecond() {
 		return categorySecond;
 	}

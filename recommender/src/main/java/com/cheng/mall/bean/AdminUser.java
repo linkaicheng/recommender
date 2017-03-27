@@ -7,6 +7,8 @@ import javax.persistence.Table;
 
 /**
  * 后台用户登录实体
+ * 
+ * @author linkc
  *
  */
 @Table(name = "adminuser")

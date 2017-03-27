@@ -3,6 +3,15 @@ package com.cheng.mall.bean;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
 /**
  * 用户名模块实体类:
  * 
@@ -13,8 +22,13 @@ import java.util.Set;
  * DEFAULT NULL, `code` varchar(64) DEFAULT NULL, PRIMARY KEY (`uid`) )
  * ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
  */
+@Table(name = "user")
+@Entity
 public class User {
 	private Integer uid;
+	private Integer age;
+	private String sex;
+
 	private String username;
 	private String password;
 	private String name;
@@ -26,12 +40,30 @@ public class User {
 	// 一个用户对应多个订单:
 	private Set<Order> orders = new HashSet<Order>();
 
+	@GeneratedValue
+	@Id
 	public Integer getUid() {
 		return uid;
 	}
 
 	public void setUid(Integer uid) {
 		this.uid = uid;
+	}
+
+	public Integer getAge() {
+		return age;
+	}
+
+	public void setAge(Integer age) {
+		this.age = age;
+	}
+
+	public String getSex() {
+		return sex;
+	}
+
+	public void setSex(String sex) {
+		this.sex = sex;
 	}
 
 	public String getUsername() {
@@ -98,6 +130,11 @@ public class User {
 		this.code = code;
 	}
 
+	// 映射单向1-n的关联关系
+	// 使用@OneToMany来映射1-n的关联关系
+	// 使用@joinColumn来映射外键列的名称
+	@JoinColumn(name = "uid")
+	@OneToMany(fetch = FetchType.EAGER, cascade = { CascadeType.REMOVE })
 	public Set<Order> getOrders() {
 		return orders;
 	}
