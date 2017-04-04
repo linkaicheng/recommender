@@ -1,0 +1,144 @@
+﻿<!DOCTYPE html>
+<head>
+<meta charset="utf-8">
+    <link href="static/plugins/bootstrap-3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <link href="static/css/page-layout.css" rel="stylesheet">
+    <link href="static/css/login.css" rel="stylesheet">
+</head>
+<body ng-app="loginApp" ng-controller="loginAppCtrl">
+    <div>
+        <div class="row row-header">
+            <div class="col-md-6 text-right narrow-format">
+                <label class="txt banner">易淘电子商城</label>
+                <label class="txt separator">|</label>
+                <label class="txt title">欢迎登陆</label>
+            </div>
+        </div>
+        
+        <div class="row form-container nomargin">
+            <div class="col-md-6">
+               
+            </div>
+            <div class="col-md-6 form-inner-container signin">
+                <div class="signin-block">
+                	<form  id="submitFrom" action="/login" method="post">
+	                     <div class="form-horizontal " role="form" >
+	                         <div class="row" style="margin-top:50px">
+	
+	                        </div>
+	                         
+	                        <div class="form-group left-inner-addon" style="margin:15px">
+	                            <i class="glyphicon glyphicon-user"></i>
+	                            <input type="text" class="form-control txt title" id="userName" name="userName" placeholder="用户名" onfocus="cleanErrInfo()" required autofocus/>
+	                        </div>
+	                         
+	                         <div class="form-group left-inner-addon" style="margin:15px">
+	                            <i class="  glyphicon glyphicon-lock"></i>
+	                            <input type="password" class="form-control txt title" id="password" name="password" placeholder="密码"  onfocus="cleanErrInfo()" required autofocus/>
+	                        </div>
+	                        
+	                        <div class="form-group left-inner-addon" style="margin:15px">
+	                        	<span id="errInfo"></span>
+	                        </div>
+	                        
+	                        <div class="row" style="margin:15px">
+	                            <button id="loginBtn" class="btn btn-normal btn-block" type="submit">登录</button>
+	                        </div>
+	                     </div>
+                     </form>
+                </div>
+            </div>
+        </div>
+        <div class="row row-header">
+            <div class="text-center">
+                <label class="label minor">COPYRIGHT@2017-2017 易淘电子商城 版权所有</label>
+            </div>
+        </div>
+    </div> 
+	
+    <script type="text/javascript" src="static/plugins/jquery-2.1.4/jquery.min.js"></script>
+    <script type="text/javascript" src="static/plugins/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    
+    <script type="text/javascript">
+    
+    //验证页面是否已经登陆
+	/*
+    $(function(){
+    	var identity = localStorage.identity;
+    	if(identity != null && identity != ""){
+	    	$.ajax({                
+	        	url: ihUrlHost+"/ihapi/user/verify/"+identity+"?rseq="+ Math.random(),
+	            type: "GET",
+	            contentType: "charset=UTF-8",
+	            success: function(data){
+	            	if(data.value != null){
+	            		window.location.href = ihUrlHost+"/ih/console/main.html";
+	            	}
+	            },
+	            error: function(er){
+	            	localStorage.clear();
+	            	window.location.href = ihUrlHost+"/ih/common/error.html";
+	            }
+	        });
+    	}
+    });
+	*/
+    $("#loginBtn").bind("click",function(){
+	    	var userName = $.trim($("#userName").val());
+			var password = $.trim($("#password").val());
+			if(validateLogin(userName,password)){
+				/*
+	        	$.ajax({	                            	
+	        		url: ihUrlHost+"/ihapi/user/verify?rseq="+ Math.random(),
+	                method: "POST",
+	                data: '{"name":'+'\"'+userName+'\"'+',"password":'+'\"'+password+'\"'+'}',
+	               	dataType:'json',
+	                contentType: "application/json;charset=UTF-8",
+	                success: function(data){
+	                	if(data.value != null && data.value != ""){
+	                		//用于验证登录信息
+	                		localStorage.token = data.value;
+	                		//如果勾选了记住密码则将信息写入localStorage
+	                		if($("#checkbox").is(":checked")){
+	                			localStorage.identity = data.value;
+	                			localStorage.userName = userName;
+	                			localStorage.password = password;
+	                		}
+	                		window.location.href = ihUrlHost+"/ih/console/main.html";
+	                	}else{
+	                		$("#errInfo").html("<font color='red'>用户名密码输入有误</font>");
+	                	}
+	                },
+	                error: function(er){
+	                    $.error(er)
+	                }
+	            });
+				*/
+				//hard-code, 打开demo页面
+				//window.location.href = "/demo.html";
+				$("#submitFrom").submit();
+				
+			}
+    });
+    
+    var cleanErrInfo = function(){
+    	$("#errInfo").html("");
+    }
+    
+    var validateLogin = function(userName,password){
+		if(userName == null || userName == ""){
+			$.warn("请输入用户名");
+			return false;
+		}
+
+		if(password == null || password == ""){
+			$.warn("请输入密码");
+			return false;
+		}
+		return true;
+	
+}
+
+    </script>
+    </body>
+</html>

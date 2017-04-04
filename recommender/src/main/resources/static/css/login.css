@@ -1,0 +1,87 @@
+.row.row-header{
+ padding-top: 20px;
+ padding-bottom: 20px;
+ width: 100%;
+}
+
+.txt.title{
+ color: #4D4D4D;
+ font-size: 18px;
+ font-family: Microsoft YaHei;
+ font-weight: normal；
+}
+
+.txt.minor{
+ color: #8C8C8C;
+ font-size: 14px;
+ font-family: Microsoft YaHei;
+ font-weight:normal；
+}
+
+.txt.banner{
+ color: #2183F6;
+ font-size: 26px;
+ font-family: Microsoft YaHei;
+ font-weight: normal；
+}
+
+.txt.separator{
+ color: #e3e3e3;
+ font-size: 32px;
+ font-family: Microsoft YaHei;
+ margin-left: 20px;
+ margin-right: 20px;
+ font-weight: normal；
+}
+
+.txt.slogan{
+ color: #ffffff;
+ font-size: 48px;
+ font-family: Microsoft YaHei;
+ font-weight: bold；
+ padding-right: 20px;
+}
+.txt.slogan.first{
+ padding-right: 120px;
+}
+
+.form-container{
+ height: 470px;
+ width: 100%;
+ background: url(../img/login.png);
+ background-color: #0c50a6;
+ background-repeat: no-repeat;
+}
+.form-inner-container{
+ height: 100%;
+ display: box; 
+ display: -webkit-box; 
+ display: -moz-box; 
+ -webkit-box-align:center; /*垂直方向*/
+ -moz-box-align:center; /*垂直方向*/
+}
+
+.form-inner-container.signin{
+ padding-left: 150px;
+ -webkit-box-pack:begin; /*水平方向*/
+ -moz-box-pack:begin; /*水平方向*/
+}
+
+.form-inner-container.slogan{
+ padding-right: 50px;
+ -webkit-box-pack:end; /*水平方向*/
+ -moz-box-pack:end; /*水平方向*/
+}
+
+.signin-block{
+ background-color: #ffffff;
+ height:350px;
+ width: 340px;
+ padding: 15px;
+}
+
+.narrow-format{
+ width:50%;
+ float:left
+}
+    

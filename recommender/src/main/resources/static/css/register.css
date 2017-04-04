@@ -1,0 +1,21 @@
+.logoBar{height:85px; background-color:#1D7AD9;}
+.logo{padding-left:41px; padding-top:13px;}
+.comWidth{width:1000px; margin-left:auto; margin-right:auto;}
+.welcome_title{font:22px/85px "Microsoft YaHei", "微软雅黑"; color:#FFF;padding-left:24px;}
+.red_logo .comWidth{width:630px;}
+.regBox{width:628px; margin:10px auto; border:#CCC solid 1px;}
+.regBox .login_cont{padding:45px 76px 20px 76px;}
+.reg_item{font:14px/34px "宋体"; width:110px; text-align:right; float:left;}
+.reg_item i{color:red; font-style:normal; margin-right:5px;}
+.input_item{width:306px; float:left;}
+.regBox li{height:70px; vertical-align:top;}
+.login_input{border:#999 solid 1px; height:32px; line-height:32px\9; text-indent:5px; width:100%;}
+.agreement {
+	height: 96px;
+	line-height: 24px;
+	padding: 0px 4px;
+	color: #999999;
+	overflow-y: scroll;
+	border: 1px solid #e6e6e6;
+}
+

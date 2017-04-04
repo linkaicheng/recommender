@@ -1,0 +1,58 @@
+div.container .span24 {
+	width: 970px;
+	margin-right: 0px;
+}
+div.cart .step {
+	height: 38px;
+	margin-bottom: 10px;
+}
+div.cart table {
+	width: 100%;
+	margin-bottom: 10px;
+}
+
+div.cart table img {
+	width: 60px;
+	height: 60px;
+}
+div.cart .total {
+	padding: 10px 0px;
+	margin-bottom: 10px;
+	text-align: right;
+}
+div.cart .total em {
+	margin-right: 14px;
+	color: #ff6600;
+	font-style: normal;
+}
+
+div.cart .total strong {
+	color: #ef0101;
+	font-size: 14px;
+}
+div.cart .bottom {
+	height: 39px;
+	line-height: 30px;
+	margin-bottom: 10px;
+	text-align: right;
+	overflow: hidden;
+	border: 1px dotted #e4e4e4;
+	background-color: #fdfdfd;
+}
+/**订单**/
+div.cart p {
+	line-height: 60px;
+	margin-bottom: 10px;
+	border-top: 1px solid #185598;
+	border-bottom: 1px solid #185598;
+}
+
+img {
+    image-rendering: optimizequality;
+    vertical-align: middle;
+}
+
+div.cart table th {
+    background-color: #fafafa;
+  
+}

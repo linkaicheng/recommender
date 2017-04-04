@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8" />
+		<title>商城</title>
+		<link href="static/css/common.css" rel="stylesheet">
+		<link href="static/css/reset.css" rel="stylesheet">
+		<link href="static/css/product.css" rel="stylesheet">
+		<link href="static/plugins/bootstrap-3.3.6/css/bootstrap.min.css" rel="stylesheet">
+	</head>
+
+	<body>
+		<!--首行menu-->
+		<div id="menu" class="menu"></div>
+
+		<!--
+	-----------------------------------------------------------
+-->
+
+		<div class="comWidth clearfix products">
+			<!--左部-->
+			<div class="leftArea">
+				<div class="recommend">
+					<h3 class="tit">同类推荐</h3>
+					<div class="item">
+						<div class="item_cont">
+							<div class="img_item">
+								<a href="#">
+									<img src="static/img/products/23224089-1_w.jpg" alt="">
+								</a>
+							</div>
+							<p>
+								<a href="#">文字介绍文字介绍文字介绍文字介绍文字介绍文字介绍</a>
+							</p>
+							<p class="money">￥888</p>
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+
+			<!--右部区域-->
+			<div class="rightArea">
+				<div class="last">
+					<div class="productImage">
+						<img src="static/img/products/23254532-1_w.jpg" />
+					</div>
+					<div class="name">Head First Servlets and JSP</div>
+					<div class="sn">
+						<div>编号：118</div>
+					</div>
+					<div class="info">
+						<dl>
+							<dt>商城价:</dt>
+							<dd>
+								<strong>￥：75.0元</strong> 参 考 价：
+								<del>￥84.9元</del>
+							</dd>
+						</dl>
+						<dl>
+							<dt>促销:</dt>
+							<dd>
+								<a target="_blank" title="限时抢购 (2017-03-30 ~ 2017-07-01)">限时抢购</a>
+							</dd>
+						</dl>
+						<dl>
+							<dt> </dt>
+							<dd>
+								<span> </span>
+							</dd>
+						</dl>
+					</div>
+					<form id="cartForm" action="" method="post">
+						<input type="hidden" name="pid" value="" />
+						<div class="action">
+							<dl class="quantity">
+								<dt>购买数量:</dt>
+								<dd>
+									<input id="count" name="count" value="1" maxlength="4" onpaste="return false;" type="text" />
+								</dd>
+								<dd>
+									件
+								</dd>
+							</dl>
+
+							<div class="buy">
+								<input id="addCart" class="addCart" value="加入购物车" type="button" onclick="saveCart()" />
+							</div>
+
+						</div>
+					</form>
+					<div id="bar" class="bar">
+						<ul>
+							<li id="introductionTab">
+								<a href="#introduction">商品介绍</a>
+							</li>
+
+						</ul>
+					</div>
+					<div id="introduction" name="introduction" class="introduction">
+						<div class="title">
+							<strong>出版社: 中国电力出版社; 第1版 (2010年8月1日) 外文书名: Head First Servlets & JSP 平装: 879页 语种： 简体中文 开本: 20 ISBN: 7508388976, 9787508388977 条形码: 9787508388977 商品尺寸: 23.3 x 20.2 x 4 cm 商品重量: 1.5 Kg 品牌: 中国电力出版社 ASIN: B0042WNHGG</strong>
+						</div>
+						<div>
+							<img src="static/img/products/20756351-1_w_1.jpg">
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+		<!--底部-->
+		<div id="bottom" class="bottom-bar"></div>
+
+		<script type="text/javascript" src="static/plugins/jquery-2.1.4/jquery.min.js"></script>
+		<script type="text/javascript" src="static/plugins/angular-1.5.8/angular.min.js"></script>
+		<script type="text/javascript">
+			$(function() {
+				$("#menu").load("menu.html");
+				$("#bottom").load("bottom.html");
+			});
+		</script>
+
+	</body>
+
+</html>

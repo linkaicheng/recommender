@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html ng-app="modulesApp" ng-controller="modulesAppCtrl">
+
+	<head>
+		<meta charset="utf-8">
+		<link href="../static/plugins/bootstrap-3.3.6/css/bootstrap.min.css" rel="stylesheet">
+		<link href="../static/css/category.css" rel="stylesheet">
+		<link href="../static/css/reset.css" rel="stylesheet">
+		<link href="../static/css/adminProduct.css" rel="stylesheet">
+		<script type="text/javascript" src="../static/plugins/jquery-2.1.4/jquery.min.js"></script>
+		<script type="text/javascript" src="../static/plugins/angular-1.5.8/angular.min.js"></script>
+	</head>
+
+	<body>
+		<div class="main-body">
+			<!--菜单栏-->
+			<div id="menu" class="row menu-bar">
+				<div class="col-md-6 col menu-bar-col banner">
+					<label class="txt banner">后台管理系统</label>
+				</div>
+			</div>
+			<div class="container main full-size">
+				<div class="row">
+					<div class="jumbotron">
+						<div class="col-md-12 column">
+							<ul class="breadcrumb" style="background-color: #fff">
+								<li>
+									<a href="category.html">一级分类管理</a>
+								</li>
+								<li>
+									<a href="categorysecond.html">二级分类管理</a>
+								</li>
+								<li>
+									<a href="product.html">商品管理</a>
+								</li>
+
+								<li class="active">
+									订单管理
+								</li>
+							</ul>
+						</div>
+
+						<table class="table table-condensed table-bordered">
+							<thead>
+								<tr>
+									<th>
+										序号
+									</th>
+									<th>
+										订单编号
+									</th>
+									<th>
+										订单金额
+									</th>
+									<th>
+										收货人
+									</th>
+									<th>
+										订单状态
+									</th>
+									<th>
+										订单详情
+									</th>
+
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>
+										1
+									</td>
+									<td>
+										10
+									</td>
+
+									<td>
+										75.0
+									</td>
+									<td>
+										林凯城
+									</td>
+									<td>
+										<div ng-if="!edit">
+											<span>未付款</span>
+										</div>
+										<a href="" ng-show="!edit" ng-click="edit=true">
+											<span class="glyphicon glyphicon-pencil"></span>
+										</a>
+										<div ng-if="edit">
+											<select id="status" class="form-control">
+												  <option>未付款</option>
+												  <option>订单完成</option>
+												</select>
+										</div>
+										<a href="" ng-show="edit" ng-click="edit=false">
+											<span class="glyphicon glyphicon-saved"></span>保存
+										</a>
+									</td>
+									<td style="width: 160px;">
+										<button class="btn btn-default" ng-click="showDetail()" ng-if="!info">订单详情</button>
+										<div ng-if="info">
+											<div><img width="30" height="45" src="../static/img/products/22606835-1_w.jpg"></div>
+											<div>Head First Servlets and JSP</div>
+											<div>数量：1</div>
+											<div>总金额：75.5</div>
+											
+											<div>
+												<button class="btn btn-default" ng-click="closeDetail()">收起</button>
+											</div>
+										</div>
+									</td>
+
+								</tr>
+								<!--一行--->
+								<!--分页-->
+								<tr>
+									<td colspan="7" style="text-align: right;">
+										<ul class="pagination pagination-sm">
+											<li>
+												<a href="#">Prev</a>
+											</li>
+											<li>
+												<a href="#">1</a>
+											</li>
+											<li>
+												<a href="#">2</a>
+											</li>
+											<li>
+												<a href="#">3</a>
+											</li>
+											<li>
+												<a href="#">4</a>
+											</li>
+											<li>
+												<a href="#">5</a>
+											</li>
+											<li>
+												<a href="#">Next</a>
+											</li>
+										</ul>
+									</td>
+								</tr>
+
+							</tbody>
+						</table>
+
+					</div>
+				</div>
+
+			</div>
+		</div>
+		<!--add{{add}} edit{{edit}}
+		<div id="bottom" class="bottom-bar">
+			<div>
+				<span>Copyright © 2017-2017 易淘版权所有&nbsp;|&nbsp;版本:Beta1</span>
+			</div>
+		</div>-->
+
+		<script>
+			var myModule = angular.module("modulesApp", []);
+			myModule.controller('modulesAppCtrl', function($scope) {
+				$scope.aa = 123;
+				$scope.edit = false;
+				$scope.info = false;
+				$scope.showDetail = function() {
+					$scope.info = true;
+				}
+				$scope.closeDetail = function() {
+					$scope.info = false;
+				}
+
+			});
+		</script>
+	</body>
+
+</html>

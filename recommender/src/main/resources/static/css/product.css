@@ -1,0 +1,279 @@
+.comWidth {
+	width: 964px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.leftArea {
+	float: left;
+}
+
+.rightArea {
+	float: right;
+	border: #D7D7D7 solid 1px;
+	margin-left: 5px;
+}
+/*产品分类*/
+.products .leftArea{width:200px;}
+.products .rightArea{width:758px;}
+
+
+.recommend {
+	border: #CCC solid 1px;
+	background-color: #FFF;
+	padding-bottom: 15px;
+}
+
+.recommend .tit {
+	height: 39px;
+	border-bottom: solid 1px #ccc;
+	line-height: 39px;
+	text-indent: 15px;
+	font-size: 14px;
+	background-color: #F3F3F3;
+	margin-top: 0px;
+}
+
+.recommend .item {
+	float: none;
+	height: auto;
+}
+
+.recommend .money {
+	padding-top: 0;
+}
+
+
+/*推荐位商品*/
+
+.item {
+	float: left;
+	height: 265px;
+	position: relative;
+}
+
+.img_item {
+	height: 170px;
+	text-align: center;
+}
+
+.img_item img {
+	height: 170px;
+}
+
+.item p {
+	line-height: 20px;
+}
+
+.item a {
+	color: #000;
+}
+
+.item a:hover {
+	text-decoration: underline;
+}
+
+.money {
+	color: #D4105A;
+	font-weight: bold;
+	padding-top: 10px;
+}
+/*详情商品*/
+.productImage {
+	width: 302px;
+	height: 370px;
+	float: left;
+	margin-right: 10px;
+	margin-bottom: 10px;
+}
+.name {
+	width: 398px;
+	line-height: 26px;
+	float: right;
+	clear: right;
+	color: #414141;
+	font-size: 14px;
+	font-weight: bold;
+}
+.sn {
+	width: 398px;
+	float: right;
+	clear: right;
+	color: #616161;
+	border-bottom: 1px dotted #dddddd;
+}
+.sn div {
+	height: 24px;
+	line-height: 24px;
+	float: left;
+	margin-right: 10px;
+}
+.info {
+	width: 398px;
+	line-height: 24px;
+	float: right;
+	clear: right;
+}
+.info dt {
+	width: 54px;
+	float: left;
+	margin-right: 6px;
+	color: #888888;
+	white-space: nowrap;
+}
+.info dd {
+	width: 338px;
+	float: left;
+	color: #666666;
+}
+.info strong {
+	color: #ef0101;
+	font-size: 16px;
+	font-weight: bold;
+	margin-right: 10px;
+}
+.info span {
+	color: #ff6600;
+}
+.info del {
+	color: #a5a5a5;
+	text-decoration: line-through;
+}
+.info a {
+	padding: 1px 2px;
+	color: #ffffff;
+	background-color: #f07373;
+}
+.action {
+	width: 392px;
+	line-height: 34px;
+	float: right;
+	clear: right;
+	padding: 2px;
+	color: #333333;
+	border: 1px solid #e7dbb1;
+	background-color: #fffee6;
+}
+.quantity {
+	height: 18px;
+	line-height: 18px;
+	padding: 10px 0px;
+	border-bottom: 1px solid #faeac7;
+}
+.quantity dt {
+	width: 60px;
+	float: left;
+	margin-right: 10px;
+	color: #888888;
+	text-align: right;
+	white-space: nowrap;
+}
+
+.quantity dd {
+	float: left;
+	margin-right: 4px;
+	color: #666666;
+}
+
+.quantity input {
+	width: 22px;
+	height: 18px;
+	line-height: 18px;
+	float: left;
+	padding: 0px 2px;
+	text-align: center;
+	ime-mode: disabled;
+	border: 1px solid #dbdbdb;
+}
+
+.quantity div {
+	height: 18px;
+	float: left;
+	padding-left: 2px;
+}
+.buy {
+	height: 36px;
+	line-height: 36px;
+	padding: 8px 10px 8px 70px;
+	border-top: 2px solid #ffffff;
+}
+
+.buy .addCart {
+	width: 127px;
+	height: 36px;
+	line-height: 34px;
+	float: left;
+	padding-left: 20px;
+	color: #ffffff;
+	font-size: 15px;
+	font-weight: bold;
+	font-family: "Microsoft YaHei";
+	cursor: pointer;
+	border: none;
+	background: url(../img/product.gif) 0px -600px no-repeat;
+}
+
+.buy a {
+	float: right;
+	color: #666666;
+}
+.bar {
+	height: 36px;
+	clear: both;
+	margin-bottom: 10px;
+}
+
+.bar ul {
+	width: 758px;
+	height: 32px;
+	padding: 1px 0px;
+	border: 1px solid #dddddd;
+	background: url(../img/product.gif) 0px -150px repeat-x;
+}
+
+.bar li {
+	height: 32px;
+	line-height: 32px;
+	float: left;
+	padding: 0px 20px;
+	border-right: 1px solid #dddddd;
+	border-left: 1px solid #ffffff;
+}
+
+.bar li.current {
+	background: url(../images/product.gif) 0px -210px repeat-x;
+}
+
+.bar li.current a {
+	color: #cc0000;
+	font-weight: bold;
+}
+
+.introduction .title {
+	height: 29px;
+	line-height: 29px;
+	margin-bottom: 10px;
+	border-top: 1px solid #aaa8a9;
+	background-color: #d3d3d3;
+}
+
+.introduction .title strong {
+	display: block;
+	float: left;
+	padding: 0px 20px;
+	color: #ffffff;
+	font-size: 14px;
+	font-weight: bold;
+	font-family: "Microsoft YaHei";
+	background-color: #aaa8a9;
+}
+
+.introduction {
+	width: 758px;
+	margin-bottom: 10px;
+	overflow: hidden;
+}
+
+.introduction strong {
+	font-weight: bold;
+}

@@ -1,0 +1,94 @@
+html {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    background-color: #f1f1f1;
+    font-family: Microsoft YaHei;
+    margin: 0px;
+    height: 100%;
+    min-width: 1000px;
+}
+.main-body {
+    width: 100%;
+    min-height: 100%;
+    height: 100%;
+    margin: 0 auto -48px;
+    /*bottom-bar 的负值等于footer高度*/
+}
+/*顶部*/
+.row.menu-bar{
+
+ height: 85px;
+ width:100%;
+ padding: 0px;
+ margin: 0px;
+ min-width:927px;
+  background: url(../img/menu.png);
+}
+.txt.banner{
+ font-size: 30px;
+ font-family: Microsoft YaHei;
+ font-weight: bold;
+ color: #fff;
+}
+.col.banner{
+ padding-left:140px;
+ padding-top:20px;
+}
+/**中间**/
+.container.main {
+    width: 100%;
+    margin-top: 10px;
+}
+.container.main.full-size {
+    width: 100%;
+    padding-left: 20px;
+    padding-right: 20px;
+    height: 84%;
+}
+.jumbotron {
+    padding-left: 0px;
+    padding-right: 0px;
+    padding-top: 10px;
+    margin-left: 20px;
+    margin-right: 20px;
+    background-color: #fff;
+    height: 100%;
+    overflow-y: auto;
+    max-height: 100%;
+}
+.breadcrumb li{
+	font-size: 15px;
+}
+.breadcrumb{
+	text-align: right;
+}
+/**底部**/
+.bottom-bar{
+    height: 48px;
+    width: 100%;
+    background-color: #e6eef3;
+    color: #808080;
+    font-size: 12px;
+    font-weight: bold;
+    text-align: center;
+    line-height: 48px;
+    padding: 0px;
+    overflow: hidden;
+    margin: 0px;
+   margin-bottom: 0px;
+}
+.container table{
+	width: 900px;
+	margin-left: 100px;
+}
+.container table td{
+	text-align: center;
+}
+.container table th{
+	text-align: center;
+}
+
+

@@ -1,0 +1,34 @@
+div.header .cart {
+	width: 100px;
+	height: 28px;
+	line-height: 28px;
+	_display: inline;
+	float: left;
+	padding-left: 30px;
+	margin-left: 0px;
+	margin-bottom: 4px;
+	background: url(../img/common.gif) -210px -180px no-repeat;
+}
+
+div.container {
+    margin: 0 auto;
+    width: 1000px;
+}
+div.header .phone {
+	height: 28px;
+	line-height: 28px;
+	float: right;
+	margin-bottom: 4px;
+	padding: 0px 10px 0px 26px;
+	white-space: nowrap;
+	border: solid 1px #f0f0f0;
+	background: url(../img/common.gif) -210px -210px no-repeat #fcfcfc;
+}
+.footer{text-align:center; background-color:#D4D4D4; line-height:24px; padding:50px 0;}
+.footer i{font-style:normal; margin:0 5px; }
+.footer a{color:#000;}
+.footer a:hover{color:#F60;}
+div.container .span24 {
+	width: 1000px;
+	margin-right: 0px;
+}
