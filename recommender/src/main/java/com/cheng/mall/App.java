@@ -4,6 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.web.HttpMessageConverters;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.converter.HttpMessageConverter;
 
 import com.alibaba.fastjson.serializer.SerializerFeature;
@@ -17,6 +18,8 @@ import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
  *
  */
 @SpringBootApplication
+// 使用ComponentScan覆盖SpringBootApplication的默认扫描路径
+@ComponentScan({ "com.cheng.mall" })
 public class App {
 	/**
 	 * 这是springloader的配置方式：-javaagent:.\lib\springloaded-1.2.4.RELEASE.jar

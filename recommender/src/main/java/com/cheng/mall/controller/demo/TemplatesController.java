@@ -1,4 +1,4 @@
-package com.cheng.mall.controller;
+package com.cheng.mall.controller.demo;
 
 import java.util.Map;
 

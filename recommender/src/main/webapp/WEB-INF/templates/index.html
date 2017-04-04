@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8" />
+		<title>商城</title>
+		<link href="static/css/common.css" rel="stylesheet"/>
+		<link href="static/css/index.css" rel="stylesheet"/>
+		<link href="static/css/reset.css" rel="stylesheet"/>
+		<link href="static/plugins/bootstrap-3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
+	</head>
+
+	<body>
+		<!--首行menu-->
+		<div id="menu" class="menu"></div>
+
+		<!--
+	*******************************************
+-->
+		
+
+		<div class="container index">
+			<div class="span24">
+				<div id="reCommenderProduct" class="reCommenderProduct clearfix">
+					<div class="title" style=""><strong>推荐商品</strong></div>
+					<ul class="tabContent" style="display: block;">
+						<li>
+							<a href="" target="_blank"><img src="static/img/products/2016121201.jpg" style="display: block;"/></a>
+						</li>
+						<li>
+							<a href="" target="_blank"><img src="static/img/products/2016121202.jpg" style="display: block;"/></a>
+						</li>
+						<li>
+							<a href="" target="_blank"><img src="static/img/products/20637368-1_w_2.jpg" style="display: block;"/></a>
+						</li>
+						<li>
+							<a href="" target="_blank"><img src="static/img/products/2016121201.jpg" style="display: block;"/></a>
+						</li>
+						<li>
+							<a href="" target="_blank"><img src="static/img/products/2016121201.jpg" style="display: block;"/></a>
+						</li>
+						<li>
+							<a href="" target="_blank"><img src="static/img/products/2016121201.jpg" style="display: block;"/></a>
+						</li>
+						<li>
+							<a href="" target="_blank"><img src="static/img/products/2016121201.jpg" style="display: block;"/></a>
+						</li>
+						<li>
+							<a href="" target="_blank"><img src="static/img/products/2016121201.jpg" style="display: block;"/></a>
+						</li>
+
+					</ul>
+
+				</div>
+
+			</div>
+			<div class="span24">
+				<div id="reCommenderProduct" class="reCommenderProduct clearfix">
+					<div class="title" style="background-color: #ab7156"><strong>最新商品</strong></div>
+					<ul class="tabContent" style="display: block;">
+						<li>
+							<a href="" target="_blank"><img src="static/img/products/2016121201.jpg" style="display: block;"/></a>
+						</li>
+						<li>
+							<a href="" target="_blank"><img src="static/img/products/2016121202.jpg" style="display: block;"/></a>
+						</li>
+						<li>
+							<a href="" target="_blank"><img src="static/img/products/20637368-1_w_2.jpg" style="display: block;"/></a>
+						</li>
+						<li>
+							<a href="" target="_blank"><img src="static/img/products/2016121201.jpg" style="display: block;"/></a>
+						</li>
+						<li>
+							<a href="" target="_blank"><img src="static/img/products/2016121201.jpg" style="display: block;"/></a>
+						</li>
+						<li>
+							<a href="" target="_blank"><img src="static/img/products/2016121201.jpg" style="display: block;"/></a>
+						</li>
+						<li>
+							<a href="" target="_blank"><img src="static/img/products/2016121201.jpg" style="display: block;"/></a>
+						</li>
+
+					</ul>
+
+				</div>
+
+			</div>
+
+			<div class="span24"></div>
+		</div>
+		
+		<!--底部-->
+		<div id="bottom" class="bottom-bar"></div>
+
+		<script type="text/javascript" src="static/plugins/jquery-2.1.4/jquery.min.js"></script>
+		<script type="text/javascript" src="static/plugins/angular-1.5.8/angular.min.js"></script>
+		<script type="text/javascript">
+			$(function() {
+				$("#menu").load("/menu");
+				$("#bottom").load("/bottom");
+			});
+		</script>
+
+	</body>
+
+</html>
