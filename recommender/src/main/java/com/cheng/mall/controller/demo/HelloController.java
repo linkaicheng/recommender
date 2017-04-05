@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cheng.mall.bean.AdminUser;
 import com.cheng.mall.bean.demo.Demo;
-import com.cheng.mall.service.CatService;
+import com.cheng.mall.service.demo.CatService;
 
 /**
  * 在这里我们使用RestController （等待于 @Controller 和 @RequestBody）

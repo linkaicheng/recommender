@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.NotNull;
 
 /**
  * 用户名模块实体类:
@@ -22,14 +24,16 @@ import javax.persistence.Table;
  * DEFAULT NULL, `code` varchar(64) DEFAULT NULL, PRIMARY KEY (`uid`) )
  * ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
  */
-@Table(name = "user")
+@Table(name = "user", uniqueConstraints = { @UniqueConstraint(columnNames = { "username" }) })
 @Entity
 public class User {
 	private Integer uid;
 	private Integer age;
 	private String sex;
 
+	@NotNull
 	private String username;
+	@NotNull
 	private String password;
 	private String name;
 	private String email;

@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cheng.mall.bean.demo.Cat;
-import com.cheng.mall.service.CatService;
+import com.cheng.mall.service.demo.CatService;
 
 @RestController
 @RequestMapping("/cat")

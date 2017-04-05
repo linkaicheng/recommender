@@ -1,4 +1,4 @@
-package com.cheng.mall.service;
+package com.cheng.mall.service.demo;
 
 import java.util.List;
 
