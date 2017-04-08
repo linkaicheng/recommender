@@ -1,7 +1,5 @@
 package com.cheng.mall.service;
 
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,12 +29,13 @@ public class UserServiceTest {
 		userService.deleteUser(user);
 	}
 
-	@Test
-	public void testLogin() {
-		User user = new User();
-		user.setName("cheng");
-		user.setPassword("2852575");
-		assertEquals(userService.findUserByUsername("cheng"), userService.login(user));
-	}
+	// @Test
+	// public void testLogin() {
+	// User user = new User();
+	// user.setName("cheng");
+	// user.setPassword("2852575");
+	// assertEquals(userService.findUserByUsername("cheng"),
+	// userService.login(user));
+	// }
 
 }

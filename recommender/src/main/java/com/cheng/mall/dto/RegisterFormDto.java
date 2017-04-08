@@ -2,10 +2,6 @@ package com.cheng.mall.dto;
 
 import java.io.Serializable;
 
-import org.hibernate.annotations.Check;
-import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.NotBlank;
-
 public class RegisterFormDto implements Serializable {
 
 	/**
@@ -14,15 +10,9 @@ public class RegisterFormDto implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Integer age;
 	private String sex;
-	@NotBlank(message = "用户名不能为空")
-	@Length(max = 32, message = "姓名超过长度限制32")
 	private String username;
-	@NotBlank(message = "密码不能为空")
 	private String password;
-	@Check(constraints = "conpassword==password")
 	private String conPassword;
-	@NotBlank(message = "姓名不能为空")
-	@Length(max = 32, message = "姓名超过长度限制32")
 	private String name;
 	private String email;
 
@@ -103,6 +93,13 @@ public class RegisterFormDto implements Serializable {
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+
+	@Override
+	public String toString() {
+		return "RegisterFormDto [age=" + age + ", sex=" + sex + ", username=" + username + ", password=" + password
+				+ ", conPassword=" + conPassword + ", name=" + name + ", email=" + email + ", phone=" + phone
+				+ ", addr=" + addr + "]";
 	}
 
 }

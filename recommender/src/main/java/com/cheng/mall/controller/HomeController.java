@@ -52,6 +52,19 @@ public class HomeController {
 	}
 
 	/**
+	 * 后台登录
+	 * 
+	 * @author linkaicheng
+	 * @date 2017年4月8日 下午3:21:56
+	 * @return
+	 *
+	 */
+	@RequestMapping(value = { "/toAdmin" }, method = RequestMethod.GET)
+	public String toAdminLogin() {
+		return "/admin/adminLogin";
+	}
+
+	/**
 	 * 进入注册页
 	 * 
 	 * @return

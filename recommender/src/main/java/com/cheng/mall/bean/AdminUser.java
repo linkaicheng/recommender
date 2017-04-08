@@ -17,6 +17,7 @@ public class AdminUser {
 	private Integer uid;
 	private String username;
 	private String password;
+	private Integer authority;
 
 	@GeneratedValue
 	@Id
@@ -26,6 +27,14 @@ public class AdminUser {
 
 	public void setUid(Integer uid) {
 		this.uid = uid;
+	}
+
+	public Integer getAuthority() {
+		return authority;
+	}
+
+	public void setAuthority(Integer authority) {
+		this.authority = authority;
 	}
 
 	public String getUsername() {

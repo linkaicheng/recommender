@@ -27,14 +27,14 @@
 									一级分类管理
 								</li>
 								<li>
-									<a href="categorysecond.html">二级分类管理</a>
+									<a href="toCategorysecond">二级分类管理</a>
 								</li>
 								<li>
-									<a href="product.html">商品管理</a>
+									<a href="toProduct">商品管理</a>
 								</li>
 
 								<li>
-									<a href="order.html">订单管理</a>
+									<a href="toOrder">订单管理</a>
 								</li>
 							</ul>
 						</div>
@@ -56,25 +56,25 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr>
+								<tr ng-repeat="category in categoryList">
 									<td>
-										1
+										{{category.cid}}
 									</td>
 									<td>
-										<span ng-if="!edit">程序设计</span>
-										<div ng-if="edit"><input class="form-control" type="text"></div>
+										<span ng-if="!edit">{{category.cname}}</span>
+										<div ng-if="edit"><input class="form-control" type="text" ng-model="category.cname"></div>
 									</td>
 
 									<td style="width: 65px;text-align: center;">
 										<a href="" ng-show="!edit" ng-click="edit=true">
 											<span class="glyphicon glyphicon-pencil"></span>编辑
 										</a>
-										<a href="" ng-show="edit" ng-click="edit=false">
+										<a href="" ng-show="edit"  ng-click="updateCategory(category)">
 											<span class="glyphicon glyphicon-saved"></span>保存
 										</a>
 									</td>
 									<td style="width: 65px;text-align: center;">
-										<a href="">
+										<a href="" ng-click="deleteCategory(category)">
 											<span class="glyphicon glyphicon-remove"></span>删除
 										</a>
 									</td>
@@ -86,23 +86,22 @@
 						<div style="text-align: right;margin-right: 200px;">
 							<button ng-show="!add" class="btn btn-default" ng-click="add=true">添加</button>
 						</div>
-						<form class="form-horizontal" role="form" ng-if="add">
+						<div class="form-horizontal" role="form" ng-show="add">
 							<div class="form-group">
 								<label for="cotegoryName" class="col-sm-2 control-label">一级分类名</label>
 								<div class="col-sm-10" style="width: 500px;">
-									<input type="text" class="form-control" id="cotegoryName" />
+									<input type="text" class="form-control" id="cotegoryName" ng-model="newCategory.cname" />
 								</div>
 								<button type="submit" class="btn btn-default" ng-click="addCategory()">添加</button>
 							</div>
 
-						</form>
+						</div>
 
 					</div>
 				</div>
 
 			</div>
 		</div>
-
 		<!--底部-->
 		<div id="bottom" class="bottom-bar">
 			<div>
@@ -112,13 +111,59 @@
 
 		<script>
 			var myModule = angular.module("modulesApp", []);
-			myModule.controller('modulesAppCtrl', function($scope) {
-				$scope.aa = 123;
+			myModule.controller('modulesAppCtrl', function($scope, $http) {
 				$scope.edit = false;
 				$scope.add = false;
-				$scope.addCategory=function(){
-					$scope.add=false;
+				$scope.newCategory = {};
+				$scope.updateCategory={}
+				//加载一级分类列表
+				$http.get("getCategoryList")
+					.success(function(response) {
+						$scope.categoryList = response;
+
+					});
+				//修改一级分类
+				$scope.updateCategory = function(category) {
+						$scope.edit = false;
+						$http({
+							method: 'POST',
+							url: 'updateCategory',
+							data: $.param(category), // pass in data as strings
+							headers: {
+								'Content-Type': 'application/x-www-form-urlencoded'
+							} // set the headers so angular passing info as form data (not request payload)
+						}).success(function(response) {
+							$scope.categoryList = response;
+						});
+					}
+				//删除一级分类
+				$scope.deleteCategory=function(category){
+					$http({
+							method: 'POST',
+							url: 'deleteCategory',
+							data: $.param(category), // pass in data as strings
+							headers: {
+								'Content-Type': 'application/x-www-form-urlencoded'
+							} // set the headers so angular passing info as form data (not request payload)
+						}).success(function(response) {
+							$scope.categoryList = response;
+						});
 				}
+				//添加一级分类
+				$scope.addCategory = function() {
+					$scope.add = false;
+					$http({
+							method: 'POST',
+							url: 'addCategory',
+							data: $.param($scope.newCategory), // pass in data as strings
+							headers: {
+								'Content-Type': 'application/x-www-form-urlencoded'
+							} // set the headers so angular passing info as form data (not request payload)
+						}).success(function(response) {
+							$scope.categoryList = response;
+						});
+				}
+
 			});
 		</script>
 	</body>

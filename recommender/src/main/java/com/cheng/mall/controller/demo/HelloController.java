@@ -1,14 +1,12 @@
 package com.cheng.mall.controller.demo;
 
 import java.util.Date;
-import java.util.List;
 
 import javax.annotation.Resource;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cheng.mall.bean.AdminUser;
 import com.cheng.mall.bean.demo.Demo;
 import com.cheng.mall.service.demo.CatService;
 
@@ -58,15 +56,15 @@ public class HelloController {
 		return demo;
 	}
 
-	/**
-	 * Spring Boot默认使用的json解析框架是jackson
-	 * 
-	 * @return
-	 */
-	@RequestMapping("/getAdmin")
-	public List<AdminUser> getAdmin() {
-
-		return catService.getAllAdmin();
-	}
+	// /**
+	// * Spring Boot默认使用的json解析框架是jackson
+	// *
+	// * @return
+	// */
+	// @RequestMapping("/getAdmin")
+	// public List<AdminUser> getAdmin() {
+	//
+	// return catService.getAllAdmin();
+	// }
 
 }

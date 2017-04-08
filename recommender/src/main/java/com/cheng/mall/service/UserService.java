@@ -20,8 +20,8 @@ public class UserService {
 	}
 
 	// 用户登录的方法
-	public User login(User user) {
-		return userRepository.login(user.getUsername(), user.getPassword());
+	public User login(String username, String password) {
+		return userRepository.login(username, password);
 	}
 
 	// 删除user
