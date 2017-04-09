@@ -107,7 +107,7 @@ public class Product implements Serializable {
 	// 使用 @JoinColumn 来映射外键.
 	// 可使用 @ManyToOne 的 fetch 属性来修改默认的关联属性的加载策略
 	@JoinColumn(name = "csid")
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	public CategorySecond getCategorySecond() {
 		return categorySecond;
 	}

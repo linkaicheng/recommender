@@ -35,7 +35,6 @@ public class CategoryController {
 
 	@RequestMapping(value = { "/updateCategory" }, method = RequestMethod.POST)
 	public List<Category> updateCategory(Category category) {
-		System.out.println(category + "****************");
 		categoryService.updateCategory(category);
 		return categoryService.findAllCategory();
 	}

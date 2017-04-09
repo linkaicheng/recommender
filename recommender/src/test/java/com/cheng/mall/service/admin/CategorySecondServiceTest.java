@@ -47,4 +47,22 @@ public class CategorySecondServiceTest {
 
 	}
 
+	@Test
+	public void testDeleteCategorySecond() {
+		CategorySecond categorySecond = new CategorySecond();
+		categorySecond.setCsid(7);
+		// categorySecond.setCsname("77777777");
+		// Category category = new Category();
+		// category.setCid(2);
+		// category.setCname("程序设计");
+		// categorySecond.setCategory(category);
+		categorySecondService.deleteCategorySecond(2);
+
+	}
+
+	@Test
+	public void testFindCategorySecondByCsid() {
+		System.out.println(categorySecondService.findCategorySecondByCsid(1));
+	}
+
 }

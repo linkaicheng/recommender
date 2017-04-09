@@ -28,6 +28,19 @@ public class CategorySecondService {
 	}
 
 	/**
+	 * 查
+	 * 
+	 * @author linkaicheng
+	 * @date 2017年4月9日 下午3:18:24
+	 * @param csid
+	 * @return
+	 *
+	 */
+	public CategorySecond findCategorySecondByCsid(Integer csid) {
+		return categorySecondRepository.findOne(csid);
+	}
+
+	/**
 	 * save,update ,delete 方法需要绑定事务.
 	 * 
 	 * @author linkaicheng
@@ -45,6 +58,15 @@ public class CategorySecondService {
 	public CategorySecond updateCategorySecond(CategorySecond categorySecond) {
 		if (categorySecond.getCsid() != null && categorySecond.getCategory() != null) {
 			return categorySecondRepository.save(categorySecond);
+		}
+		return null;
+	}
+
+	@Transactional
+	public CategorySecond deleteCategorySecond(Integer csid) {
+		CategorySecond categorySesondDelete = categorySecondRepository.findOne(csid);
+		if (categorySesondDelete != null) {
+			categorySecondRepository.deleteCategorySecondByCsid(categorySesondDelete.getCsid());
 		}
 		return null;
 	}

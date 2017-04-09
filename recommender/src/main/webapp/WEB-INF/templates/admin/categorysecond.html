@@ -56,84 +56,168 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr>
+								<tr ng-repeat="categorySecond in csList">
 									<td>
-										1
+										{{categorySecond.csid}}
 									</td>
 									<td>
-										<span>电子商务 电子政务</span>
+										<span>{{categorySecond.csname}}</span>
 									</td>
 
 									<td style="width: 65px;text-align: center;">
-										<a href="" ng-show="!edit" ng-click="edit=true">
+										<a href="" ng-click="toEdit(categorySecond)">
 											<span class="glyphicon glyphicon-pencil"></span>编辑
-										</a>
-										<a href="" ng-show="edit" ng-click="edit=false">
-											<span class="glyphicon glyphicon-saved"></span>保存
 										</a>
 									</td>
 									<td style="width: 65px;text-align: center;">
-										<a href="">
+										<a href="" ng-click="deleteCs(categorySecond)">
 											<span class="glyphicon glyphicon-remove"></span>删除
 										</a>
 									</td>
 								</tr>
+								
 								<!--一行--->
 
 							</tbody>
 						</table>
 						<div style="text-align: right;margin-right: 200px;">
-							<button ng-show="!add && !edit" class="btn btn-default" ng-click="add=true">添加</button>
+							<button ng-show="!add && !edit2" class="btn btn-default" ng-click="add=true">添加</button>
 						</div>
-						<form class="form-horizontal" role="form" ng-if="add || edit">
+						<!--修改-->
+						<div class="form-horizontal" role="form" ng-show="edit">
 							<div class="form-group">
-								<label for="categoryName" class="col-sm-2 control-label">二级分类名</label>
+								<label for="csName" class="col-sm-2 control-label">二级分类名</label>
 								<div class="col-sm-10" style="width: 400px;">
-									<input type="text" class="form-control" id="categoryName" />
+									<input type="text" class="form-control" id="csName" ng-model="updateCs.csname" />
 								</div>
 							</div>
 							<div class="form-group">
 								<label for="category" class="col-sm-2 control-label">所属一级分类</label>
 								<div class="col-sm-10" style="width: 300px;">
-									<select id="category" class="form-control">
-									  <option>程序设计</option>
-									  <option>办公室用书</option>
-									  <option>图形 图像 多媒体</option>
-									  <option>操作系统 系统开发</option>
-									  <option>数据库 数据通讯</option>
-									</select>
+									<select id="category" class="form-control" ng-model="updateCs.cid" ng-options="category.cid as category.cname for category in cList">
+								      <option value="" >-- 选择所属一级分类 --</option>
+								    </select>
 								</div>
 							</div>
-							
+
 							<div class="form-group">
 								<div class="col-sm-offset-2 col-sm-10">
-									<button type="submit" class="btn btn-default" ng-click="saveCategorysecond()">保存</button>
+									<button type="submit" class="btn btn-default" ng-click="updateCategorysecond(updateCs)">保存</button>
 								</div>
 							</div>
-						</form>
+						</div>
+						<!--新增-->
+						<div class="form-horizontal" role="form" ng-show="add">
+							<div class="form-group">
+								<label for="csName" class="col-sm-2 control-label">二级分类名</label>
+								<div class="col-sm-10" style="width: 400px;">
+									<input type="text" class="form-control" id="csName" ng-model="newCs.csname" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="category" class="col-sm-2 control-label">所属一级分类</label>
+								<div class="col-sm-10" style="width: 300px;">
+									<select id="category" class="form-control" ng-model="newCs.cid" ng-options="category.cid as category.cname for category in cList">
+								      <option value="" >-- 选择所属一级分类 --</option>
+								    </select>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<div class="col-sm-offset-2 col-sm-10">
+									<button type="submit" class="btn btn-default" ng-click="saveCategorysecond(newCs)">保存</button>
+								</div>
+							</div>
+						</div>
 
 					</div>
 				</div>
 
 			</div>
 		</div>
+		{{csid}}
 		<!--底部-->
-		<div id="bottom" class="bottom-bar">
+		<!--<div id="bottom" class="bottom-bar">
 			<div>
 				<span>Copyright © 2017-2017 易淘版权所有&nbsp;|&nbsp;版本:Beta1</span>
 			</div>
-		</div>
+		</div>-->
 
 		<script>
 			var myModule = angular.module("categorysecondApp", []);
-			myModule.controller('categorysecondCtrl', function($scope) {
-				$scope.aa = 123;
+			myModule.controller('categorysecondCtrl', function($scope, $http) {
 				$scope.edit = false;
 				$scope.add = false;
-				$scope.saveCategorysecond=function(){
-					$scope.edit=false;
-					$scope.add=false;
+				$scope.detele={};
+				$scope.updateCs={};
+				//加载二级分类列表
+				$http.get("getCategorySecondList")
+					.success(function(response) {
+						$scope.csList = response;
+
+					});
+
+				//加载一级分类列表
+				$http.get("getCategoryList")
+					.success(function(response) {
+						$scope.cList = response;
+
+					});
+				//显示编辑表
+				$scope.toEdit=function(categorySecond){
+					$scope.edit=true;
+					
+					$scope.updateCs.csname=categorySecond.csname;
+					$scope.updateCs.csid=categorySecond.csid;
+					$scope.updateCs.cid=categorySecond.category.cid;
+					
 				}
+				//删除二级分类
+				$scope.deleteCs = function(categorySecond) {
+					$scope.detele.csid=categorySecond.csid;
+						$http({
+							method: 'POST',
+							url: 'deleteCategorySecond',
+							data: $.param($scope.detele), // pass in data as strings
+							headers: {
+								'Content-Type': 'application/x-www-form-urlencoded'
+							} // set the headers so angular passing info as form data (not request payload)
+						}).success(function(response) {
+							$scope.csList = response;
+						});
+					}
+				//修改二级分类
+				$scope.updateCategorysecond = function(updateCs) {
+						$scope.edit = false;
+						$http({
+							method: 'POST',
+							url: 'updateCategorySecond',
+							data: $.param(updateCs), // pass in data as strings
+							headers: {
+								'Content-Type': 'application/x-www-form-urlencoded'
+							} // set the headers so angular passing info as form data (not request payload)
+						}).success(function(response) {
+							$scope.csList = response;
+						});
+					}
+				//添加二级分类
+				$scope.saveCategorysecond = function(newCs) {
+					$scope.edit = false;
+					$scope.add = false;
+					$http({
+						method: 'POST',
+						url: 'addCategorySecond',
+						data: $.param(newCs), // pass in data as strings
+						headers: {
+							'Content-Type': 'application/x-www-form-urlencoded'
+						} // set the headers so angular passing info as form data (not request payload)
+					}).success(function(response) {
+						$scope.csList = response;
+					});
+				}
+
+				//
+
 			});
 		</script>
 	</body>

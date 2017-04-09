@@ -43,6 +43,7 @@ public class CategorySecondController {
 	 */
 	@RequestMapping(value = { "/addCategorySecond" }, method = RequestMethod.POST)
 	public List<CategorySecond> addCategorySecond(String csname, Integer cid) {
+
 		CategorySecond categorySecond = new CategorySecond();
 		categorySecond.setCsname(csname);
 		Category category = categoryService.findCategoryByCid(cid);
@@ -53,10 +54,41 @@ public class CategorySecondController {
 		return categorySecondService.findAllCategorySecond();
 	}
 
+	/**
+	 * 改
+	 * 
+	 * @author linkaicheng
+	 * @date 2017年4月9日 上午10:47:36
+	 * @param categorySecond
+	 * @return
+	 *
+	 */
 	@RequestMapping(value = { "/updateCategorySecond" }, method = RequestMethod.POST)
-	public List<CategorySecond> updateCategorySecond(CategorySecond categorySecond) {
-		if (categorySecond != null) {
+	public List<CategorySecond> updateCategorySecond(Integer csid, String csname, Integer cid) {
+		CategorySecond categorySecond = categorySecondService.findCategorySecondByCsid(csid);
+		Category category = categoryService.findCategoryByCid(cid);
+		if (categorySecond != null && category != null) {
+			categorySecond.setCsname(csname);
+			categorySecond.setCategory(category);
 			categorySecondService.saveCategorySecond(categorySecond);
+		}
+		return categorySecondService.findAllCategorySecond();
+	}
+
+	/**
+	 * 删
+	 * 
+	 * @author linkaicheng
+	 * @date 2017年4月9日 上午10:49:52
+	 * @param categorySecond
+	 * @return
+	 *
+	 */
+	@RequestMapping(value = { "/deleteCategorySecond" }, method = RequestMethod.POST)
+	public List<CategorySecond> deleteCategorySecond(Integer csid) {
+		// System.out.println(csid);
+		if (csid != null) {
+			categorySecondService.deleteCategorySecond(csid);
 		}
 		return categorySecondService.findAllCategorySecond();
 	}
