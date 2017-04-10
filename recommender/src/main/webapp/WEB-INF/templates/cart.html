@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="modulesApp" ng-controller="modulesAppCtrl">
 
 	<head>
 		<meta charset="UTF-8" />
@@ -12,8 +12,93 @@
 
 	<body>
 		<!--首行menu-->
-		<div id="menu" class="menu"></div>
-<!--------------------------------------------------->
+		<div id="menu" class="menu">
+
+			<div class="container header">
+				<div class="row clearfix">
+					<div class="col-md-2 column">
+						<div class="span5">
+							<div class="logo">
+								<a href="">
+									<img src="static/img/logo.png" alt="易淘" />
+								</a>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-5 column">
+
+						<div class="headerAd">
+							<img src="static/img/header.jpg" width="320" height="50" alt="正品保障" title="正品保障" />
+						</div>
+					</div>
+					<div class="col-md-5 column">
+						<div class="topNav clearfix">
+							<ul class="breadcrumb">
+								<li>
+									<a href="toLogin" ng-show="!isLogin">登录</a>
+									<a href="" ng-show="isLogin">{{user.username}}</a>
+								</li>
+								<li>
+									<a href="toRegister" ng-show="!isLogin">注册</a>
+									<a href="" ng-show="isLogin">我的订单</a>
+								</li>
+								<li ng-show="isLogin">
+									<a href="logout">退出</a>
+								</li>
+								<li>
+									<a href="#">会员中心</a>
+								</li>
+								<li>
+									<a href="#">购物指南</a>
+								</li>
+							</ul>
+						</div>
+
+						<div class="row clearfix">
+							<div class="col-md-6 column">
+								<div class="cart">
+									<a href="cart.html">购物车</a>
+								</div>
+							</div>
+							<div class="col-md-6 column">
+								<div class="phone">
+									客服热线: <strong>968666666</strong>
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+			<div class="container header" style="height: 40px">
+
+				<ul class="breadcrumb">
+					<li>
+						<a href="index.html">首页</a>
+					</li>
+					<li>
+						<a href="#">程序设计</a>
+					</li>
+					<li>
+						<a href="#">办公室用书</a>
+					</li>
+					<li>
+						<a href="#">图形 图象 多媒体</a>
+					</li>
+					<li>
+						<a href="#">操作系统  系统开发</a>
+					</li>
+					<li>
+						<a href="#"> 数据库</a>
+					</li>
+					<li class="active">
+						网络与数据通讯
+					</li>
+				</ul>
+			</div>
+
+		</div>
+		<!--------------------------------------------------->
 		<div class="container cart">
 			<div class="span24">
 				<div class="step step1"> 购物车信息 </div>
@@ -45,17 +130,17 @@
 							<td width="60">
 								<img src="static/img/products/20637368-1_w_2.jpg" />
 							</td>
-							<td >
+							<td>
 								Java从入门到精通（第3版）
 							</td>
 							<td>
-								￥41.3 
+								￥41.3
 							</td>
 							<td>
 								1
 							</td>
 							<td>
-								￥41.3 
+								￥41.3
 							</td>
 							<td>
 								删除
@@ -84,9 +169,28 @@
 		<script type="text/javascript" src="static/plugins/jquery-2.1.4/jquery.min.js"></script>
 		<script type="text/javascript" src="static/plugins/angular-1.5.8/angular.min.js"></script>
 		<script type="text/javascript">
+			var myModule = angular.module("modulesApp", []);
+
+			myModule.controller('modulesAppCtrl', function($scope, $http) {
+				//加载用户信息
+				$http.get("getUserFromSession")
+					.success(function(response) {
+						$scope.user = response;
+						if (angular.isObject(response)) { //是object且不为null
+							$scope.user = response;
+							$scope.isLogin = true;
+						} else { //不是对象或为null
+							$scope.isLogin = false;
+
+						}
+
+					});
+			});
+
+			//jQuery加载头部和底部
 			$(function() {
-				$("#menu").load("menu.html");
-				$("#bottom").load("bottom.html");
+				//				$("#menu").load("/menu");
+				$("#bottom").load("/bottom");
 			});
 		</script>
 

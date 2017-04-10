@@ -60,6 +60,15 @@ public class UserController {
 		return "error";
 	}
 
+	/**
+	 * 返回session中保存的用户
+	 * 
+	 * @author linkaicheng
+	 * @date 2017年4月10日 下午10:56:52
+	 * @param request
+	 * @return
+	 *
+	 */
 	@ResponseBody
 	@RequestMapping(value = { "/getUserFromSession" }, method = RequestMethod.GET)
 	public User getUserFromSession(HttpServletRequest request) {
