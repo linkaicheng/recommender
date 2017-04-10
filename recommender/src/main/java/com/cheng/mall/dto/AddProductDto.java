@@ -1,27 +1,11 @@
-package com.cheng.mall.bean;
+package com.cheng.mall.dto;
 
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
 import org.springframework.format.annotation.DateTimeFormat;
 
-/**
- * 商品的实体对象
- *
- */
-@Table(name = "product")
-@Entity
-public class Product implements Serializable {
+public class AddProductDto implements Serializable {
 	/**
 	 * 
 	 */
@@ -35,11 +19,8 @@ public class Product implements Serializable {
 	private Integer is_hot;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date pdate;
-	// 二级分类的外键:使用二级分类的对象.
-	private CategorySecond categorySecond = new CategorySecond();
+	private Integer csid;
 
-	@GeneratedValue
-	@Id
 	public Integer getPid() {
 		return pid;
 	}
@@ -96,7 +77,6 @@ public class Product implements Serializable {
 		this.is_hot = is_hot;
 	}
 
-	@Temporal(TemporalType.DATE)
 	public Date getPdate() {
 		return pdate;
 	}
@@ -105,25 +85,19 @@ public class Product implements Serializable {
 		this.pdate = pdate;
 	}
 
-	// 映射单向 n-1 的关联关系
-	// 使用 @ManyToOne 来映射多对一的关联关系
-	// 使用 @JoinColumn 来映射外键.
-	// 可使用 @ManyToOne 的 fetch 属性来修改默认的关联属性的加载策略
-	@JoinColumn(name = "csid")
-	@ManyToOne(fetch = FetchType.EAGER)
-	public CategorySecond getCategorySecond() {
-		return categorySecond;
+	public Integer getCsid() {
+		return csid;
 	}
 
-	public void setCategorySecond(CategorySecond categorySecond) {
-		this.categorySecond = categorySecond;
+	public void setCsid(Integer csid) {
+		this.csid = csid;
 	}
 
 	@Override
 	public String toString() {
-		return "Product [pid=" + pid + ", pname=" + pname + ", market_price=" + market_price + ", shop_price="
+		return "AddProductDto [pid=" + pid + ", pname=" + pname + ", market_price=" + market_price + ", shop_price="
 				+ shop_price + ", image=" + image + ", pdesc=" + pdesc + ", is_hot=" + is_hot + ", pdate=" + pdate
-				+ ", categorySecond=" + categorySecond + "]";
+				+ ", csid=" + csid + "]";
 	}
 
 }

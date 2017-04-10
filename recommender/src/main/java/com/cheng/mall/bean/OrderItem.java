@@ -1,5 +1,7 @@
 package com.cheng.mall.bean;
 
+import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -14,7 +16,11 @@ import javax.persistence.Table;
  */
 @Table(name = "orderitem")
 @Entity
-public class OrderItem {
+public class OrderItem implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private Integer itemid;
 	private Integer count;
 	private Double subtotal;
@@ -54,7 +60,7 @@ public class OrderItem {
 	// 使用 @JoinColumn 来映射外键.
 	// 可使用 @ManyToOne 的 fetch 属性来修改默认的关联属性的加载策略
 	@JoinColumn(name = "pid")
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	public Product getProduct() {
 		return product;
 	}
@@ -68,7 +74,7 @@ public class OrderItem {
 	// 使用 @JoinColumn 来映射外键.
 	// 可使用 @ManyToOne 的 fetch 属性来修改默认的关联属性的加载策略
 	@JoinColumn(name = "oid")
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	public Order getOrder() {
 		return order;
 	}

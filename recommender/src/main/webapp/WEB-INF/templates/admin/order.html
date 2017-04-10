@@ -44,9 +44,6 @@
 							<thead>
 								<tr>
 									<th>
-										序号
-									</th>
-									<th>
 										订单编号
 									</th>
 									<th>
@@ -65,47 +62,53 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr>
+								<tr ng-repeat="order in orderList">
 									<td>
-										1
-									</td>
-									<td>
-										10
+										{{order.order.oid}}
 									</td>
 
 									<td>
-										75.0
+										{{order.order.total}}
 									</td>
 									<td>
-										林凯城
+										{{order.order.user.name}}
 									</td>
 									<td>
 										<div ng-if="!edit">
-											<span>未付款</span>
+											<div ng-switch="order.order.state">
+												<span ng-switch-when=1>未付款</span>
+												<span ng-switch-when=2>待发货</span>
+												<span ng-switch-when=3>待签收</span>
+												<span ng-switch-when=4>订单完成</span>
+											</div>
 										</div>
 										<a href="" ng-show="!edit" ng-click="edit=true">
 											<span class="glyphicon glyphicon-pencil"></span>
 										</a>
-										<div ng-if="edit">
-											<select id="status" class="form-control">
-												  <option>未付款</option>
-												  <option>订单完成</option>
-												</select>
+										<div ng-show="edit">
+											<select id="status" class="form-control" ng-model="order.order.state">
+												  <option value="1">未付款</option>
+												  <option value="2">待发货</option>
+												  <option value="3">待签收</option>
+												  <option value="4">订单完成</option>
+											</select>
 										</div>
-										<a href="" ng-show="edit" ng-click="edit=false">
+										<a href="" ng-show="edit" ng-click="updateOrderState(order.order)">
 											<span class="glyphicon glyphicon-saved"></span>保存
 										</a>
 									</td>
 									<td style="width: 160px;">
-										<button class="btn btn-default" ng-click="showDetail()" ng-if="!info">订单详情</button>
-										<div ng-if="info">
-											<div><img width="30" height="45" src="../static/img/products/22606835-1_w.jpg"></div>
-											<div>Head First Servlets and JSP</div>
-											<div>数量：1</div>
-											<div>总金额：75.5</div>
-											
+										<button class="btn btn-default" ng-click="showDetail(order)" ng-if="!order.info">订单详情</button>
+										<div ng-if="order.info">
+											<div ng-repeat="orderItem in order.orderItems">
+
+												<div><img width="30" height="45" ng-src="{{orderItem.product.image}}"></div>
+												<div>{{orderItem.product.pname}}</div>
+												<div>数量：{{orderItem.count}}</div>
+												<div>总金额：{{orderItem.subtotal}}</div>
+											</div>
 											<div>
-												<button class="btn btn-default" ng-click="closeDetail()">收起</button>
+												<button class="btn btn-default" ng-click="closeDetail(order)">收起</button>
 											</div>
 										</div>
 									</td>
@@ -158,15 +161,39 @@
 
 		<script>
 			var myModule = angular.module("modulesApp", []);
-			myModule.controller('modulesAppCtrl', function($scope) {
+			myModule.controller('modulesAppCtrl', function($scope, $http) {
 				$scope.aa = 123;
 				$scope.edit = false;
-				$scope.info = false;
-				$scope.showDetail = function() {
-					$scope.info = true;
-				}
-				$scope.closeDetail = function() {
-					$scope.info = false;
+				$scope.update={};
+				//加载订单列表
+				$http.get("getOrderList")
+					.success(function(response) {
+						$scope.orderList = response;
+
+					});
+				//修改订单状态
+				$scope.updateOrderState = function(order) {
+						$scope.edit = false;
+						$scope.update.oid=order.oid;
+						$scope.update.state=order.state;
+						$http({
+							method: 'POST',
+							url: 'updateOrder',
+							data: $.param($scope.update), // pass in data as strings
+							headers: {
+								'Content-Type': 'application/x-www-form-urlencoded'
+							} // set the headers so angular passing info as form data (not request payload)
+						}).success(function(response) {
+							$scope.orderList = response;
+						});
+					}
+					//显示订单详情
+				$scope.showDetail = function(order) {
+						order.info = true;
+					}
+					//收起订单详情
+				$scope.closeDetail = function(order) {
+					order.info = false;
 				}
 
 			});

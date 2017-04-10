@@ -1,15 +1,10 @@
 package com.cheng.mall.bean;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.io.Serializable;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
@@ -26,7 +21,11 @@ import javax.validation.constraints.NotNull;
  */
 @Table(name = "user", uniqueConstraints = { @UniqueConstraint(columnNames = { "username" }) })
 @Entity
-public class User {
+public class User implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private Integer uid;
 	private Integer age;
 	private String sex;
@@ -41,8 +40,8 @@ public class User {
 	private String addr;
 	private Integer state;
 	private String code;
-	// 一个用户对应多个订单:
-	private Set<Order> orders = new HashSet<Order>();
+	// // 一个用户对应多个订单:
+	// private Set<Order> orders = new HashSet<Order>();
 
 	@GeneratedValue
 	@Id
@@ -134,24 +133,24 @@ public class User {
 		this.code = code;
 	}
 
-	// 映射单向1-n的关联关系
-	// 使用@OneToMany来映射1-n的关联关系
-	// 使用@joinColumn来映射外键列的名称
-	@JoinColumn(name = "uid")
-	@OneToMany(fetch = FetchType.EAGER, cascade = { CascadeType.REMOVE })
-	public Set<Order> getOrders() {
-		return orders;
-	}
-
-	public void setOrders(Set<Order> orders) {
-		this.orders = orders;
-	}
-
 	@Override
 	public String toString() {
-		return "User [uid=" + uid + ", username=" + username + ", password=" + password + ", name=" + name + ", email="
-				+ email + ", phone=" + phone + ", addr=" + addr + ", state=" + state + ", code=" + code + ", orders="
-				+ orders + "]";
+		return "User [uid=" + uid + ", age=" + age + ", sex=" + sex + ", username=" + username + ", password="
+				+ password + ", name=" + name + ", email=" + email + ", phone=" + phone + ", addr=" + addr + ", state="
+				+ state + ", code=" + code + "]";
 	}
+
+	// // 映射单向1-n的关联关系
+	// // 使用@OneToMany来映射1-n的关联关系
+	// // 使用@joinColumn来映射外键列的名称
+	// @JoinColumn(name = "uid")
+	// @OneToMany(fetch = FetchType.EAGER, cascade = { CascadeType.REMOVE })
+	// public Set<Order> getOrders() {
+	// return orders;
+	// }
+	//
+	// public void setOrders(Set<Order> orders) {
+	// this.orders = orders;
+	// }
 
 }

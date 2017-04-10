@@ -1,6 +1,7 @@
 package com.cheng.mall.controller;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.BeanUtils;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cheng.mall.bean.User;
 import com.cheng.mall.dto.RegisterFormDto;
@@ -56,6 +58,13 @@ public class UserController {
 			return "index";
 		}
 		return "error";
+	}
+
+	@ResponseBody
+	@RequestMapping(value = { "/getUserFromSession" }, method = RequestMethod.GET)
+	public User getUserFromSession(HttpServletRequest request) {
+		User user = (User) request.getSession().getAttribute("user");
+		return user;
 	}
 
 	public boolean validateDto(RegisterFormDto dto) {
