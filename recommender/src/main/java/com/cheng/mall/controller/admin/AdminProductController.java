@@ -4,6 +4,7 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -19,11 +20,12 @@ import org.springframework.web.multipart.MultipartFile;
 import com.cheng.mall.bean.CategorySecond;
 import com.cheng.mall.bean.Product;
 import com.cheng.mall.dto.AddProductDto;
-import com.cheng.mall.service.admin.CategorySecondService;
-import com.cheng.mall.service.admin.ProductService;
+import com.cheng.mall.service.CategorySecondService;
+import com.cheng.mall.service.ProductService;
 import com.cheng.mall.util.Message;
 
 @RestController
+@RequestMapping("/admin")
 public class AdminProductController {
 	@Resource
 	private ProductService productService;
@@ -39,8 +41,18 @@ public class AdminProductController {
 	 *
 	 */
 	@RequestMapping(value = { "/getProductList" }, method = RequestMethod.GET)
-	public List<Product> getProductList() {
-		return productService.findAllProduct();
+	public List<AddProductDto> getProductList() {
+		List<Product> products = productService.findAllProduct();
+		List<AddProductDto> addProductDtos = new ArrayList<>();
+		for (Product product : products) {
+			AddProductDto addProductDto = new AddProductDto();
+			BeanUtils.copyProperties(product, addProductDto);
+			addProductDto.setCsid(product.getCategorySecond().getCsid());
+			addProductDto.setCsname(product.getCategorySecond().getCsname());
+			addProductDtos.add(addProductDto);
+
+		}
+		return addProductDtos;
 	}
 
 	/**
@@ -97,7 +109,7 @@ public class AdminProductController {
 	 *
 	 */
 	@RequestMapping(value = { "/addProduct" }, method = RequestMethod.POST)
-	public List<Product> addOrUpdateProduct(AddProductDto productDto) {
+	public List<AddProductDto> addOrUpdateProduct(AddProductDto productDto) {
 		String imagePath = null;
 		if (productDto != null && productDto.getImage() != null) {
 			imagePath = "../static/img/products/" + productDto.getImage();
@@ -115,7 +127,18 @@ public class AdminProductController {
 		CategorySecond categorySecond = categorySecondService.findCategorySecondByCsid(productDto.getCsid());
 		product.setCategorySecond(categorySecond);
 		productService.addProduct(product);
-		return productService.findAllProduct();
+		// 返回商品展示页面所需信息
+		List<Product> products = productService.findAllProduct();
+		List<AddProductDto> addProductDtos = new ArrayList<>();
+		for (Product product2 : products) {
+			AddProductDto addProductDto = new AddProductDto();
+			BeanUtils.copyProperties(product2, addProductDto);
+			addProductDto.setCsid(product2.getCategorySecond().getCsid());
+			addProductDto.setCsname(product2.getCategorySecond().getCsname());
+			addProductDtos.add(addProductDto);
+
+		}
+		return addProductDtos;
 	}
 
 	/**

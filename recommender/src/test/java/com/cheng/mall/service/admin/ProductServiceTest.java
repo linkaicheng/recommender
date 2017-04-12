@@ -12,6 +12,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.cheng.mall.bean.CategorySecond;
 import com.cheng.mall.bean.Product;
+import com.cheng.mall.service.CategorySecondService;
+import com.cheng.mall.service.ProductService;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
@@ -22,6 +24,20 @@ public class ProductServiceTest {
 	private CategorySecondService categorySecondService;
 
 	@Test
+	public void testFindNew() {
+		for (Product p : productService.findNew()) {
+			System.out.println(p.getPid());
+		}
+	}
+
+	// @Test
+	public void testFindHot() {
+		for (Product p : productService.findHot()) {
+			System.out.println(p.getPid());
+		}
+	}
+
+	// @Test
 	public void testFindAllProduct() {
 		fail("Not yet implemented");
 	}

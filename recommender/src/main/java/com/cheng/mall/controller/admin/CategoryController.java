@@ -9,9 +9,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cheng.mall.bean.Category;
-import com.cheng.mall.service.admin.CategoryService;
+import com.cheng.mall.service.CategoryService;
 
 @RestController
+@RequestMapping("/admin")
 public class CategoryController {
 	@Resource
 	private CategoryService categoryService;
@@ -28,8 +29,8 @@ public class CategoryController {
 	}
 
 	@RequestMapping(value = { "/deleteCategory" }, method = RequestMethod.POST)
-	public List<Category> deleteCategory(Category category) {
-		categoryService.deleteCategory(category);
+	public List<Category> deleteCategory(Integer cid) {
+		categoryService.deleteCategory(cid);
 		return categoryService.findAllCategory();
 	}
 

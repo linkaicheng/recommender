@@ -1,4 +1,4 @@
-package com.cheng.mall.dao.admin;
+package com.cheng.mall.dao;
 
 import java.util.List;
 

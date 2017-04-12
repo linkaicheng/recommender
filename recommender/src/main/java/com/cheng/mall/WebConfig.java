@@ -5,9 +5,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
+
+import com.cheng.mall.interceptor.AdminUserSecurityInterceptor;
+import com.cheng.mall.interceptor.UserSecurityInterceptor;
 
 /**
  * 
@@ -20,7 +24,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	@Bean
 	public ViewResolver viewResolver() {
 		InternalResourceViewResolver resolver = new InternalResourceViewResolver();
-		resolver.setPrefix("WEB-INF/templates/");
+		resolver.setPrefix("/WEB-INF/templates/");
 		resolver.setSuffix(".html");
 		resolver.setExposeContextBeansAsAttributes(true);
 		return resolver;
@@ -36,5 +40,18 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	@Override
 	public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
 		configurer.enable();
+	}
+
+	/**
+	 * 配置拦截器
+	 * 
+	 * @author lance
+	 * @param registry
+	 */
+	public void addInterceptors(InterceptorRegistry registry) {
+		// 普通用户是否登录
+		registry.addInterceptor(new UserSecurityInterceptor()).addPathPatterns("/user/**");
+		// 管理员用户是否登录
+		registry.addInterceptor(new AdminUserSecurityInterceptor()).addPathPatterns("/admin/**");
 	}
 }

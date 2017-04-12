@@ -43,11 +43,14 @@
 								<li>
 									<a href="toOrder">订单管理</a>
 								</li>
+								<li>
+									<a href="adminLogout">退出</a>
+								</li>
 							</ul>
 						</div>
-						<div>
+						<!--<div>
 							{{message.info}}
-						</div>
+						</div>-->
 						<div style="text-align: right;margin-right: 200px;margin-bottom: 10px;">
 							<button ng-show="!add&&!edit" class="btn btn-default" ng-click="add=true">添加</button>
 						</div>
@@ -56,6 +59,9 @@
 								<tr>
 									<th>
 										编号
+									</th>
+									<th>
+										所属二级分类
 									</th>
 									<th>
 										商品图片
@@ -81,6 +87,9 @@
 								<tr ng-repeat="product in pList">
 									<td>
 										{{product.pid}}
+									</td>
+									<td>
+										{{product.csname}}
 									</td>
 									<td>
 										<img ng-src="{{product.image}}" style="height: 60px;" />
@@ -111,7 +120,7 @@
 								<!--一行--->
 								<!--分页-->
 								<tr>
-									<td colspan="7" style="text-align: right;">
+									<td colspan="8" style="text-align: right;">
 										<ul class="pagination pagination-sm">
 											<li>
 												<a href="#">Prev</a>
@@ -224,7 +233,6 @@
 
 			</div>
 		</div>
-		{{aa}}
 
 		<!--add{{add}} edit{{edit}}
 		<div id="bottom" class="bottom-bar">
@@ -241,13 +249,13 @@
 				$scope.add = false;
 				$scope.detele = {};
 				//加载商品列表
-				$http.get("getProductList")
+				$http.get("admin/getProductList")
 					.success(function(response) {
 						$scope.pList = response;
 
 					});
 				//加载二级分类列表
-				$http.get("getCategorySecondList")
+				$http.get("admin/getCategorySecondList")
 					.success(function(response) {
 						$scope.csList = response;
 					});
@@ -256,7 +264,7 @@
 						$scope.detele.pid = product.pid;
 						$http({
 							method: 'POST',
-							url: 'deleteProduct',
+							url: 'admin/deleteProduct',
 							data: $.param($scope.detele), // pass in data as strings
 							headers: {
 								'Content-Type': 'application/x-www-form-urlencoded'
@@ -282,7 +290,7 @@
 					fd.append('file', file);
 					$http({
 						method: 'POST',
-						url: 'uploadImage',
+						url: 'admin/uploadImage',
 						data: fd, // pass in data as strings
 						headers: {
 							'Content-Type': undefined
@@ -294,7 +302,7 @@
 						$scope.newProduct.image = response.param;
 						$http({
 							method: 'POST',
-							url: 'addProduct',
+							url: 'admin/addProduct',
 							data: $.param(newProduct), // pass in data as strings
 							headers: {
 								'Content-Type': 'application/x-www-form-urlencoded'

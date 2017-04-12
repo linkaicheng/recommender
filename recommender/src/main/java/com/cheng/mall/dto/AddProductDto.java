@@ -5,6 +5,9 @@ import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+/**
+ * 添加商品是页面填写的信息 和管理商品页面所需要显示的信息
+ */
 public class AddProductDto implements Serializable {
 	/**
 	 * 
@@ -20,6 +23,15 @@ public class AddProductDto implements Serializable {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date pdate;
 	private Integer csid;
+	private String csname;
+
+	public String getCsname() {
+		return csname;
+	}
+
+	public void setCsname(String csname) {
+		this.csname = csname;
+	}
 
 	public Integer getPid() {
 		return pid;
@@ -97,7 +109,7 @@ public class AddProductDto implements Serializable {
 	public String toString() {
 		return "AddProductDto [pid=" + pid + ", pname=" + pname + ", market_price=" + market_price + ", shop_price="
 				+ shop_price + ", image=" + image + ", pdesc=" + pdesc + ", is_hot=" + is_hot + ", pdate=" + pdate
-				+ ", csid=" + csid + "]";
+				+ ", csid=" + csid + ", csname=" + csname + "]";
 	}
 
 }

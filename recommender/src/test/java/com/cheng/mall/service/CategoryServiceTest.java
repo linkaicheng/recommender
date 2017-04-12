@@ -8,7 +8,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.cheng.mall.bean.Category;
-import com.cheng.mall.service.admin.CategoryService;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
@@ -21,7 +20,7 @@ public class CategoryServiceTest {
 		Category category = new Category();
 		category.setCname("test2");
 		categoryService.saveCategory(category);
-		categoryService.deleteCategory(category);
+		categoryService.deleteCategory(category.getCid());
 
 	}
 
@@ -38,7 +37,7 @@ public class CategoryServiceTest {
 		Category category = new Category();
 		category.setCname("test2");
 		categoryService.saveCategory(category);
-		categoryService.deleteCategory(category);
+		categoryService.deleteCategory(category.getCid());
 	}
 
 	// @Test

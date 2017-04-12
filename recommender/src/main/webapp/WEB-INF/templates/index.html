@@ -42,7 +42,7 @@
 									<a href="" ng-show="isLogin">我的订单</a>
 								</li>
 								<li ng-show="isLogin">
-									<a href="logout" >退出</a>
+									<a href="logout">退出</a>
 								</li>
 								<li>
 									<a href="#">会员中心</a>
@@ -73,26 +73,12 @@
 
 				<ul class="breadcrumb">
 					<li>
-						<a href="index.html">首页</a>
+						<a href="index">首页</a>
 					</li>
-					<li>
-						<a href="#">程序设计</a>
+					<li ng-repeat="category in cList">
+						<a href="">{{category.cname}}</a>
 					</li>
-					<li>
-						<a href="#">办公室用书</a>
-					</li>
-					<li>
-						<a href="#">图形 图象 多媒体</a>
-					</li>
-					<li>
-						<a href="#">操作系统  系统开发</a>
-					</li>
-					<li>
-						<a href="#"> 数据库</a>
-					</li>
-					<li class="active">
-						网络与数据通讯
-					</li>
+
 				</ul>
 			</div>
 
@@ -107,33 +93,10 @@
 				<div id="reCommenderProduct" class="reCommenderProduct clearfix">
 					<div class="title" style=""><strong>推荐商品</strong></div>
 					<ul class="tabContent" style="display: block;">
-						<li>
-							<a href="" target="_blank"><img src="static/img/products/2016121201.jpg" style="display: block;" /></a>
+						<li ng-repeat="hotProduct in hotList">
+							<a href="" target="_blank"><img ng-src="{{hotProduct.image}}" style="display: block;" /></a>
 						</li>
-						<li>
-							<a href="" target="_blank"><img src="static/img/products/2016121202.jpg" style="display: block;" /></a>
-						</li>
-						<li>
-							<a href="" target="_blank"><img src="static/img/products/20637368-1_w_2.jpg" style="display: block;" /></a>
-						</li>
-						<li>
-							<a href="" target="_blank"><img src="static/img/products/2016121201.jpg" style="display: block;" /></a>
-						</li>
-						<li>
-							<a href="" target="_blank"><img src="static/img/products/2016121201.jpg" style="display: block;" /></a>
-						</li>
-						<li>
-							<a href="" target="_blank"><img src="static/img/products/2016121201.jpg" style="display: block;" /></a>
-						</li>
-						<li>
-							<a href="" target="_blank"><img src="static/img/products/2016121201.jpg" style="display: block;" /></a>
-						</li>
-						<li>
-							<a href="" target="_blank"><img src="static/img/products/2016121201.jpg" style="display: block;" /></a>
-						</li>
-
 					</ul>
-
 				</div>
 
 			</div>
@@ -141,34 +104,12 @@
 				<div id="reCommenderProduct" class="reCommenderProduct clearfix">
 					<div class="title" style="background-color: #ab7156"><strong>最新商品</strong></div>
 					<ul class="tabContent" style="display: block;">
-						<li>
-							<a href="" target="_blank"><img src="static/img/products/2016121201.jpg" style="display: block;" /></a>
+						<li ng-repeat="newProduct in newList">
+							<a href="" target="_blank"><img ng-src="{{newProduct.image}}" style="display: block;" /></a>
 						</li>
-						<li>
-							<a href="" target="_blank"><img src="static/img/products/2016121202.jpg" style="display: block;" /></a>
-						</li>
-						<li>
-							<a href="" target="_blank"><img src="static/img/products/20637368-1_w_2.jpg" style="display: block;" /></a>
-						</li>
-						<li>
-							<a href="" target="_blank"><img src="static/img/products/2016121201.jpg" style="display: block;" /></a>
-						</li>
-						<li>
-							<a href="" target="_blank"><img src="static/img/products/2016121201.jpg" style="display: block;" /></a>
-						</li>
-						<li>
-							<a href="" target="_blank"><img src="static/img/products/2016121201.jpg" style="display: block;" /></a>
-						</li>
-						<li>
-							<a href="" target="_blank"><img src="static/img/products/2016121201.jpg" style="display: block;" /></a>
-						</li>
-
 					</ul>
-
 				</div>
-
 			</div>
-
 			<div class="span24"></div>
 		</div>
 		<!--底部-->
@@ -178,10 +119,9 @@
 		<script type="text/javascript" src="static/plugins/angular-1.5.8/angular.min.js"></script>
 		<script type="text/javascript">
 			var myModule = angular.module("modulesApp", []);
-
 			myModule.controller('modulesAppCtrl', function($scope, $http) {
 				//加载用户信息
-				$http.get("getUserFromSession")
+				$http.get("/user/getUserFromSession")
 					.success(function(response) {
 						$scope.user = response;
 						if (angular.isObject(response)) { //是object且不为null
@@ -189,15 +129,28 @@
 							$scope.isLogin = true;
 						} else { //不是对象或为null
 							$scope.isLogin = false;
-
 						}
-
+					});
+				//加载一级分类
+				$http.get("/getCategoryList")
+					.success(function(response) {
+						$scope.cList = response;
+					});
+				//加载热门商品
+				$http.get("/getProductHot")
+					.success(function(response) {
+						$scope.hotList = response;
+					});
+				//加载最新商品
+				$http.get("/getProductNew")
+					.success(function(response) {
+						$scope.newList = response;
 					});
 			});
 
 			//jQuery加载头部和底部
 			$(function() {
-//				$("#menu").load("/menu");
+				//				$("#menu").load("/menu");
 				$("#bottom").load("/bottom");
 			});
 		</script>

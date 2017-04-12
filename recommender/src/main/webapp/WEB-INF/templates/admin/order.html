@@ -37,6 +37,9 @@
 								<li class="active">
 									订单管理
 								</li>
+								<li>
+									<a href="adminLogout">退出</a>
+								</li>
 							</ul>
 						</div>
 
@@ -166,7 +169,7 @@
 				$scope.edit = false;
 				$scope.update={};
 				//加载订单列表
-				$http.get("getOrderList")
+				$http.get("admin/getOrderList")
 					.success(function(response) {
 						$scope.orderList = response;
 
@@ -178,7 +181,7 @@
 						$scope.update.state=order.state;
 						$http({
 							method: 'POST',
-							url: 'updateOrder',
+							url: 'admin/updateOrder',
 							data: $.param($scope.update), // pass in data as strings
 							headers: {
 								'Content-Type': 'application/x-www-form-urlencoded'

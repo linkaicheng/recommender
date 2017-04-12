@@ -1,4 +1,4 @@
-package com.cheng.mall.service.admin;
+package com.cheng.mall.service;
 
 import java.util.List;
 
@@ -8,7 +8,7 @@ import javax.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import com.cheng.mall.bean.CategorySecond;
-import com.cheng.mall.dao.admin.CategorySecondRepository;
+import com.cheng.mall.dao.CategorySecondRepository;
 
 @Service
 public class CategorySecondService {

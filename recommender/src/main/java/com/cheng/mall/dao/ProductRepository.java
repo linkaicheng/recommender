@@ -1,13 +1,14 @@
-package com.cheng.mall.dao.admin;
+package com.cheng.mall.dao;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.cheng.mall.bean.Product;
 
-public interface ProductRepository extends JpaRepository<Product, Integer> {
+public interface ProductRepository extends JpaRepository<Product, Integer>, JpaSpecificationExecutor<Product> {
 
 	@Modifying(clearAutomatically = true)
 	@Query(value = "delete from Product p where p.pid=:pid")

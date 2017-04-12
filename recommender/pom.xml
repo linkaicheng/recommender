@@ -39,11 +39,12 @@
 			<scope>true</scope>
 		</dependency>
 
-		<!-- 添加MySQL数据库驱动依赖包. -->
+		<!-- 添加MySQL数据库驱动依赖包.-->
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-		</dependency>
+		</dependency> 
+
 		<!-- 添加Spring-data-jpa依赖. -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

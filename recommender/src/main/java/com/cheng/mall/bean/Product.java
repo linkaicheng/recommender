@@ -15,12 +15,15 @@ import javax.persistence.TemporalType;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 /**
  * 商品的实体对象
  *
  */
 @Table(name = "product")
 @Entity
+@JsonIgnoreProperties(value = { "categorySecond" })
 public class Product implements Serializable {
 	/**
 	 * 
@@ -36,7 +39,7 @@ public class Product implements Serializable {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date pdate;
 	// 二级分类的外键:使用二级分类的对象.
-	private CategorySecond categorySecond = new CategorySecond();
+	private CategorySecond categorySecond;
 
 	@GeneratedValue
 	@Id

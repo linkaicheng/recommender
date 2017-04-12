@@ -10,6 +10,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.cheng.mall.bean.Category;
 import com.cheng.mall.bean.CategorySecond;
+import com.cheng.mall.service.CategorySecondService;
+import com.cheng.mall.service.CategoryService;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)

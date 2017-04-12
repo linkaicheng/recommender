@@ -36,6 +36,9 @@
 								<li>
 									<a href="toOrder">订单管理</a>
 								</li>
+								<li>
+									<a href="adminLogout">退出</a>
+								</li>
 							</ul>
 						</div>
 						<table class="table table-condensed table-bordered">
@@ -112,12 +115,13 @@
 		<script>
 			var myModule = angular.module("modulesApp", []);
 			myModule.controller('modulesAppCtrl', function($scope, $http) {
+				$scope.deleteC={};
 				$scope.edit = false;
 				$scope.add = false;
 				$scope.newCategory = {};
-				$scope.updateCategory={}
+				$scope.updateCategory={};
 				//加载一级分类列表
-				$http.get("getCategoryList")
+				$http.get("admin/getCategoryList")
 					.success(function(response) {
 						$scope.categoryList = response;
 
@@ -127,7 +131,7 @@
 						$scope.edit = false;
 						$http({
 							method: 'POST',
-							url: 'updateCategory',
+							url: 'admin/updateCategory',
 							data: $.param(category), // pass in data as strings
 							headers: {
 								'Content-Type': 'application/x-www-form-urlencoded'
@@ -138,10 +142,11 @@
 					}
 				//删除一级分类
 				$scope.deleteCategory=function(category){
+					$scope.deleteC.cid=category.cid
 					$http({
 							method: 'POST',
-							url: 'deleteCategory',
-							data: $.param(category), // pass in data as strings
+							url: 'admin/deleteCategory',
+							data: $.param($scope.deleteC), // pass in data as strings
 							headers: {
 								'Content-Type': 'application/x-www-form-urlencoded'
 							} // set the headers so angular passing info as form data (not request payload)
@@ -154,7 +159,7 @@
 					$scope.add = false;
 					$http({
 							method: 'POST',
-							url: 'addCategory',
+							url: 'admin/addCategory',
 							data: $.param($scope.newCategory), // pass in data as strings
 							headers: {
 								'Content-Type': 'application/x-www-form-urlencoded'

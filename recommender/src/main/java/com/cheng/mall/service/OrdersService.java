@@ -1,4 +1,4 @@
-package com.cheng.mall.service.admin;
+package com.cheng.mall.service;
 
 import java.util.List;
 
@@ -7,7 +7,7 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import com.cheng.mall.bean.Order;
-import com.cheng.mall.dao.admin.OrdersRepository;
+import com.cheng.mall.dao.OrdersRepository;
 
 @Service
 public class OrdersService {

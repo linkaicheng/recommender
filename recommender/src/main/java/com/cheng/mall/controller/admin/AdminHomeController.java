@@ -1,6 +1,8 @@
 package com.cheng.mall.controller.admin;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
@@ -22,18 +24,30 @@ public class AdminHomeController {
 	private AdminUserService adminUserService;
 
 	/**
-	 * 进入首页
+	 * 登录 进入首页
 	 * 
 	 * @return
 	 */
 	@RequestMapping(value = { "/adminLogin" }, method = RequestMethod.POST)
-	public String adminLogin(String userName, String password, HttpSession session) {
+	public String adminLogin(String userName, String password, HttpSession session, HttpServletRequest request,
+			HttpServletResponse response) {
 		AdminUser adminUser = adminUserService.login(userName, password);
 		if (adminUser != null) {
 			session.setAttribute("adminUser", adminUser);
 			return "/admin/product";
 		}
 		return "error";
+	}
+
+	/**
+	 * 登录 进入首页
+	 * 
+	 * @return
+	 */
+	@RequestMapping(value = { "/adminLogout" }, method = RequestMethod.GET)
+	public String adminLogout(HttpServletRequest request) {
+		request.getSession().invalidate();
+		return "/admin/adminLogin";
 	}
 
 	/**

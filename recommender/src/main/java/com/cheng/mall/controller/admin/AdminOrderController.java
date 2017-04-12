@@ -12,10 +12,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.cheng.mall.bean.Order;
 import com.cheng.mall.bean.OrderItem;
 import com.cheng.mall.dto.AdminOrderDto;
-import com.cheng.mall.service.admin.OrderItemService;
-import com.cheng.mall.service.admin.OrdersService;
+import com.cheng.mall.service.OrderItemService;
+import com.cheng.mall.service.OrdersService;
 
 @RestController
+@RequestMapping("/admin")
 public class AdminOrderController {
 	@Resource
 	private OrdersService ordersService;

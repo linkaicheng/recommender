@@ -1,4 +1,4 @@
-package com.cheng.mall.service.admin;
+package com.cheng.mall.service;
 
 import java.util.List;
 
@@ -8,7 +8,7 @@ import javax.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import com.cheng.mall.bean.Category;
-import com.cheng.mall.dao.admin.CategoryRepository;
+import com.cheng.mall.dao.CategoryRepository;
 
 @Service
 public class CategoryService {
@@ -37,8 +37,8 @@ public class CategoryService {
 	 *
 	 */
 	@Transactional
-	public void deleteCategory(Category category) {
-		Category categoryDelete = categoryRepository.findCategoryByCname(category.getCname());
+	public void deleteCategory(Integer cid) {
+		Category categoryDelete = categoryRepository.findCategoryByCid(cid);
 		if (categoryDelete != null) {
 			categoryRepository.deleteCategoryByCid(categoryDelete.getCid());
 		}

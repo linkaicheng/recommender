@@ -70,7 +70,7 @@ public class UserController {
 	 *
 	 */
 	@ResponseBody
-	@RequestMapping(value = { "/getUserFromSession" }, method = RequestMethod.GET)
+	@RequestMapping(value = { "/user/getUserFromSession" }, method = RequestMethod.GET)
 	public User getUserFromSession(HttpServletRequest request) {
 		User user = (User) request.getSession().getAttribute("user");
 		return user;

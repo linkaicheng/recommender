@@ -1,5 +1,6 @@
 package com.cheng.mall.controller.admin;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -10,10 +11,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cheng.mall.bean.Category;
 import com.cheng.mall.bean.CategorySecond;
-import com.cheng.mall.service.admin.CategorySecondService;
-import com.cheng.mall.service.admin.CategoryService;
+import com.cheng.mall.dto.AdminCategorySecondDto;
+import com.cheng.mall.service.CategorySecondService;
+import com.cheng.mall.service.CategoryService;
 
 @RestController
+@RequestMapping("/admin")
 public class CategorySecondController {
 	@Resource
 	private CategorySecondService categorySecondService;
@@ -29,8 +32,19 @@ public class CategorySecondController {
 	 *
 	 */
 	@RequestMapping(value = { "/getCategorySecondList" }, method = RequestMethod.GET)
-	public List<CategorySecond> getCategorySecondList() {
-		return categorySecondService.findAllCategorySecond();
+	public List<AdminCategorySecondDto> getCategorySecondList() {
+		List<CategorySecond> categorySeconds = categorySecondService.findAllCategorySecond();
+		List<AdminCategorySecondDto> adminCategorySecondDtos = new ArrayList<>();
+		// 将页面需要的信息封装到dto
+		for (CategorySecond categorySecond : categorySeconds) {
+			AdminCategorySecondDto adminCategorySecondDto = new AdminCategorySecondDto();
+			adminCategorySecondDto.setCid(categorySecond.getCategory().getCid());
+			adminCategorySecondDto.setCname(categorySecond.getCategory().getCname());
+			adminCategorySecondDto.setCsid(categorySecond.getCsid());
+			adminCategorySecondDto.setCsname(categorySecond.getCsname());
+			adminCategorySecondDtos.add(adminCategorySecondDto);
+		}
+		return adminCategorySecondDtos;
 	}
 
 	/**
