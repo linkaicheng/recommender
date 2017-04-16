@@ -6,6 +6,13 @@ import java.util.List;
 import com.cheng.mall.bean.Order;
 import com.cheng.mall.bean.OrderItem;
 
+/**
+ * 返回给前台订单管理页面所需信息
+ * 
+ * @author linkaicheng
+ * @date 2017年4月16日 上午1:08:28
+ *
+ */
 public class AdminOrderDto implements Serializable {
 	/**
 	 * 

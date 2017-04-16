@@ -2,6 +2,13 @@ package com.cheng.mall.dto;
 
 import java.io.Serializable;
 
+/**
+ * 注册表单填写的信息
+ * 
+ * @author linkaicheng
+ * @date 2017年4月16日 上午1:10:14
+ *
+ */
 public class RegisterFormDto implements Serializable {
 
 	/**

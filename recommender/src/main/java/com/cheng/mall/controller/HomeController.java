@@ -81,4 +81,5 @@ public class HomeController {
 		request.getSession().invalidate();
 		return "index";
 	}
+
 }

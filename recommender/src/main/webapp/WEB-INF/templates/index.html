@@ -76,7 +76,7 @@
 						<a href="index">首页</a>
 					</li>
 					<li ng-repeat="category in cList">
-						<a href="">{{category.cname}}</a>
+						<a ng-href="toProductList?cid={{category.cid}}">{{category.cname}}</a>
 					</li>
 
 				</ul>

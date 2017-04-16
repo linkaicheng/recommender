@@ -1,7 +1,7 @@
 package com.cheng.mall.dto;
 
 /**
- * 传递给给台二级分类管理页面的对象
+ * 传递给后台二级分类管理页面的对象
  * 
  * @author linkaicheng
  * @date 2017年4月11日 下午6:04:59

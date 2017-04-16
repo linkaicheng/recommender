@@ -164,4 +164,95 @@ public class ProductService {
 
 	}
 
+	/**
+	 * 根据一级分类查询商品，分页
+	 * 
+	 * @author linkaicheng
+	 * @date 2017年4月13日 下午8:58:08
+	 * @param cid
+	 * @param pageNo
+	 *            从0开始
+	 * @param pageSize
+	 * @return
+	 *
+	 */
+	public List<Product> findProductsPageByCid(final Integer cid, Integer pageNo, Integer pageSize) {
+		// 根据pid排序，倒序
+		Order order = new Order(Direction.DESC, "pid");
+		Sort sort = new Sort(order);
+		// pageNo从0开始
+		PageRequest pageable = new PageRequest(pageNo, pageSize, sort);
+		// 通常使用 Specification 的匿名内部类
+		Specification<Product> specification = new Specification<Product>() {
+			@Override
+			public Predicate toPredicate(Root<Product> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+				Path path = root.get("categorySecond").get("category").get("cid");
+				Predicate predicate = cb.equal(path, cid);
+				return predicate;
+			}
+		};
+
+		Page<Product> page = productRepository.findAll(specification, pageable);
+		return page.getContent();
+
+	}
+
+	/**
+	 * 根据二级分类分页查询商品
+	 * 
+	 * @author linkaicheng
+	 * @date 2017年4月13日 下午8:58:08
+	 * @param cid
+	 * @param pageNo
+	 * @param pageSize
+	 * @return
+	 *
+	 */
+	public List<Product> findProductsPageByCsid(final Integer csid, Integer pageNo, Integer pageSize) {
+		// 根据pid排序，倒序
+		Order order = new Order(Direction.DESC, "pid");
+		Sort sort = new Sort(order);
+		// pageNo从0开始
+		PageRequest pageable = new PageRequest(pageNo, pageSize, sort);
+		// 通常使用 Specification 的匿名内部类
+		Specification<Product> specification = new Specification<Product>() {
+			@Override
+			public Predicate toPredicate(Root<Product> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+				Path path = root.get("categorySecond").get("csid");
+				Predicate predicate = cb.equal(path, csid);
+				return predicate;
+			}
+		};
+
+		Page<Product> page = productRepository.findAll(specification, pageable);
+		return page.getContent();
+
+	}
+
+	/**
+	 * 查询一级分类下的商品总数
+	 * 
+	 * @author linkaicheng
+	 * @date 2017年4月16日 下午3:55:31
+	 * @param cid
+	 * @return
+	 *
+	 */
+	public Integer findCountCid(Integer cid) {
+		return productRepository.findCountCid(cid);
+	}
+
+	/**
+	 * 查询二级分类下的商品总数
+	 * 
+	 * @author linkaicheng
+	 * @date 2017年4月16日 下午6:57:47
+	 * @param csid
+	 * @return
+	 *
+	 */
+	public Integer findCountCsid(Integer csid) {
+		return productRepository.findCountCsid(csid);
+	}
+
 }

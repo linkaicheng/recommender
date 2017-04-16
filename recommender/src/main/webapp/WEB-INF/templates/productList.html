@@ -13,7 +13,7 @@
 	<body>
 		<!--首行menu-->
 		<div id="menu" class="menu">
-			
+
 			<div class="container header">
 				<div class="row clearfix">
 					<div class="col-md-2 column">
@@ -74,181 +74,63 @@
 
 				<ul class="breadcrumb">
 					<li>
-						<a href="index.html">首页</a>
+						<a href="index">首页</a>
 					</li>
-					<li>
-						<a href="#">程序设计</a>
-					</li>
-					<li>
-						<a href="#">办公室用书</a>
-					</li>
-					<li>
-						<a href="#">图形 图象 多媒体</a>
-					</li>
-					<li>
-						<a href="#">操作系统  系统开发</a>
-					</li>
-					<li>
-						<a href="#"> 数据库</a>
-					</li>
-					<li class="active">
-						网络与数据通讯
+					<li ng-repeat="category in cList">
+						<a ng-href="toProductList?cid={{category.cid}}">{{category.cname}}</a>
 					</li>
 				</ul>
 			</div>
 		</div>
-
-		<div class="comWidth clearfix products" >
+		<div class="comWidth clearfix products">
 			<div class="leftArea">
 				<div class="leftNav">
-					<div class="nav_con">
-						<h3>手机通讯</h3>
+					<div class="nav_con" ng-repeat="cNavigation in cNavList">
+						<h4>{{cNavigation.cname}}</h4>
 						<ul class="navCont_list clearfix">
-							<li>
-								<a href="#">全部手机</a>
-							</li>
-							<li>
-								<a href="#">全部手机</a>
-							</li>
-							<li>
-								<a href="#">全部手机</a>
-							</li>
-						</ul>
-					</div>
-					<div class="nav_con">
-						<h3>手机通讯</h3>
-						<ul class="navCont_list clearfix">
-							<li>
-								<a href="#">全部手机</a>
-							</li>
-							<li>
-								<a href="#">全部手机</a>
-							</li>
-							<li>
-								<a href="#">全部手机</a>
+							<li ng-repeat="csNavigation in cNavigation.csSet">
+								<a href="javascript:void(0);" ng-click="loadByCsid(csNavigation.csid)">{{csNavigation.csname}}</a>
 							</li>
 						</ul>
 					</div>
 				</div>
 			</div>
-			<div class="rightArea" >
+			<div class="rightArea">
 				<div class="products_list clearfix">
-					<div class="item">
+					<div class="item" ng-repeat="product in pList">
 						<!--item-->
 						<div class="item_cont">
 							<div class="img_item">
 								<a href="#">
-									<img src="static/img/products/20637368-1_w_2.jpg" alt="">
+									<img ng-src="{{product.image}}" alt="">
 								</a>
 							</div>
 							<p>
-								<a href="#">文字介绍文字介绍文字介绍文字介绍文字介绍文字介绍</a>
+								<a href="#">{{product.pname}}</a>
 							</p>
-							<p class="money">￥888</p>
+							<p class="money">¥{{product.shop_price}}</p>
 						</div>
 					</div>
 					<!------------------------------------->
-					<div class="item">
-						<div class="item_cont">
-							<div class="img_item">
-								<a href="#">
-									<img src="static/img/products/20637368-1_w_2.jpg" alt="">
-								</a>
-							</div>
-							<p>
-								<a href="#">文字介绍文字介绍文字介绍文字介绍文字介绍文字介绍</a>
-							</p>
-							<p class="money">￥888</p>
-						</div>
-					</div>
-					<div class="item">
-						<div class="item_cont">
-							<div class="img_item">
-								<a href="#">
-									<img src="static/img/products/20637368-1_w_2.jpg" alt="">
-								</a>
-							</div>
-							<p>
-								<a href="#">文字介绍文字介绍文字介绍文字介绍文字介绍文字介绍</a>
-							</p>
-							<p class="money">￥888</p>
-						</div>
-					</div>
-					<div class="item">
-						<div class="item_cont">
-							<div class="img_item">
-								<a href="#">
-									<img src="static/img/products/20637368-1_w_2.jpg" alt="">
-								</a>
-							</div>
-							<p>
-								<a href="#">文字介绍文字介绍文字介绍文字介绍文字介绍文字介绍</a>
-							</p>
-							<p class="money">￥888</p>
-						</div>
-					</div>
-					<div class="item">
-						<div class="item_cont">
-							<div class="img_item">
-								<a href="#">
-									<img src="static/img/products/20637368-1_w_2.jpg" alt="">
-								</a>
-							</div>
-							<p>
-								<a href="#">文字介绍文字介绍文字介绍文字介绍文字介绍文字介绍</a>
-							</p>
-							<p class="money">￥888</p>
-						</div>
-					</div>
-					<div class="item">
-						<div class="item_cont">
-							<div class="img_item">
-								<a href="#">
-									<img src="static/img/products/20637368-1_w_2.jpg" alt="">
-								</a>
-							</div>
-							<p>
-								<a href="#">文字介绍文字介绍文字介绍文字介绍文字介绍文字介绍</a>
-							</p>
-							<p class="money">￥888</p>
-						</div>
-					</div>
 
-				
 				</div>
 
 			</div>
 		</div>
-	<!---分页-->
-					<div class="container text-right" >
-						<div class="row clearfix">
-							<div class="col-md-12 column" style="margin-top: -15px;">
-								<ul class="pagination"  >
-									<li>
-										<a href="#">Prev</a>
-									</li>
-									<li>
-										<a href="#">1</a>
-									</li>
-									<li>
-										<a href="#">2</a>
-									</li>
-									<li>
-										<a href="#">3</a>
-									</li>
-									<li>
-										<a href="#">4</a>
-									</li>
-									<li>
-										<a href="#">5</a>
-									</li>
-									<li>
-										<a href="#">Next</a>
-									</li>
-								</ul>
-							</div>
-						</div>
-					</div>
+		<!---分页-->
+		<div class="container text-right" style="margin-top: 15px;">
+			<div class="row clearfix">
+				<div class="col-md-12 column" style="margin-top: -15px;">
+					<!-- paging -->
+					<ul class="pagination" style="margin: 0px;">
+						<li ng-class="{true:'disabled'}[p_current==1]"><a href="javascript:void(0);" ng-click="p_index()">首页</a></li>
+						<li ng-repeat="page in pages" ng-class="{true:'active'}[p_current==page]"><a href="javascript:void(0);" ng-click="load_page(page)">{{ page }}</a></li>
+						<li ng-class="{true:'disabled'}[p_current==p_all_page]"><a href="javascript:void(0);" ng-click="p_last()">尾页</a></li>
+					</ul>
+					<span style="vertical-align: 12px;">  共：{{count}} 条</span>
+				</div>
+			</div>
+		</div>
 		<div id="bottom" class="bottom-bar"></div>
 
 		<script type="text/javascript" src="static/plugins/jquery-2.1.4/jquery.min.js"></script>
@@ -258,7 +140,7 @@
 
 			myModule.controller('modulesAppCtrl', function($scope, $http) {
 				//加载用户信息
-				$http.get("getUserFromSession")
+				$http.get("/user/getUserFromSession")
 					.success(function(response) {
 						$scope.user = response;
 						if (angular.isObject(response)) { //是object且不为null
@@ -266,15 +148,144 @@
 							$scope.isLogin = true;
 						} else { //不是对象或为null
 							$scope.isLogin = false;
+						}
+					});
+				//加载一级分类
+				$http.get("/getProductsByCid")
+					.success(function(response) {
+						$scope.pList = response;
+					});
+				//加载左侧分类导航
+				$http.get("/getCategoryNavigations")
+					.success(function(response) {
+						$scope.cNavList = response;
+					});
+				//加载商品
+				$http.get("/getCategoryList")
+					.success(function(response) {
+						$scope.cList = response;
+					});
+				//
+				//分页算法  
+				var calculateIndexes = function(current, length, displayLength) {
+					var indexes = [];
+					var start = Math.round(current - displayLength / 2);
+					var end = Math.round(current + displayLength / 2);
+					if (start <= 1) {
+						start = 1;
+						end = start + displayLength - 1;
+						if (end >= length - 1) {
+							end = length - 1;
+						}
+					}
+					if (end >= length - 1) {
+						end = length;
+						start = end - displayLength + 1;
+						if (start <= 1) {
+							start = 1;
+						}
+					}
+					for (var i = start; i <= end; i++) {
+						indexes.push(i);
+					}
+					return indexes;
+				};
+				//初始化页码  
+				var reloadPno = function() {
+					$scope.pages = calculateIndexes($scope.p_current, $scope.p_all_page, 5);
+				};
+				//获取数据  
+				var getProductListByCid = function(page, size, callback) {
+					$scope.loadByCs = false;
+					$http.get("getProductsPageByCid?status=0&pageNo=" + page + "&pageSize=" + size).success(function(res) {
+						if (res) {
+							$scope.count = res.totalCount;
+							$scope.pList = res.list;
+							$scope.p_current = page;
+							$scope.p_all_page = Math.ceil($scope.count / $scope.p_pernum);
+							reloadPno();
+							callback();
+						} else {
+							alert("加载失败")
+						}
+					});
+				};
+				//二级分类
+				var getProductListByCsid = function(csid, page, size, callback) {
+					$scope.loadByCs = true;
+					$http.get("getProductsPageByCsid?status=0&pageNo=" + page + "&pageSize=" + size + "&csid=" + csid).success(function(res) {
+						if (res) {
+							$scope.count = res.totalCount;
+							$scope.pList = res.list;
+							$scope.p_current = page;
+							$scope.p_all_page = Math.ceil($scope.count / $scope.p_pernum);
+							reloadPno();
+							callback();
+						} else {
+							alert("加载失败")
+						}
+					});
+				};
+				//配置  
+				$scope.count = 0;
+				$scope.p_pernum = 12;
+				//变量  
+				$scope.p_current = 1;
+				$scope.p_all_page = 0;
+				$scope.pages = [];
+				//用于判断是二级分类查还是一级分类查
+				$scope.loadByCs = false;
+				//初始化第一页  
+				getProductListByCid($scope.p_current, $scope.p_pernum, function() {
 
+				});
+
+				//首页  
+				$scope.p_index = function() {
+						if ($scope.loadByCs) {
+							$scope.loadPageByCsid(1);
+						} else {
+							$scope.load_page(1);
 						}
 
-					});
+					}
+					//尾页  
+				$scope.p_last = function() {
+						if ($scope.loadByCs) {
+							//二级分类
+							$scope.loadPageByCsid($scope.p_all_page)
+						} else {
+							//一级分类
+							$scope.load_page($scope.p_all_page);
+						}
+
+					}
+					//加载某一页  
+				$scope.load_page = function(page) {
+					if($scope.loadByCs){
+						$scope.loadPageByCsid(page);
+					}else{
+						getProductListByCid(page, $scope.p_pernum, function() {});
+					}
+					
+				};
+				//加载某一页  ，通过二级分类id
+				$scope.loadPageByCsid = function(page) {
+					getProductListByCsid($scope.csid, page, $scope.p_pernum, function() {});
+				};
+				//点击导航中的二级分类
+				$scope.loadByCsid = function(csid) {
+					$scope.csid = csid;
+					//变量  
+					$scope.p_current = 1;
+					getProductListByCsid(csid, $scope.p_current, $scope.p_pernum, function() {});
+				};
+
 			});
 
 			//jQuery加载头部和底部
 			$(function() {
-//				$("#menu").load("/menu");
+				//				$("#menu").load("/menu");
 				$("#bottom").load("/bottom");
 			});
 		</script>
