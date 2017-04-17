@@ -74,25 +74,10 @@
 
 				<ul class="breadcrumb">
 					<li>
-						<a href="index.html">首页</a>
+						<a href="index">首页</a>
 					</li>
-					<li>
-						<a href="#">程序设计</a>
-					</li>
-					<li>
-						<a href="#">办公室用书</a>
-					</li>
-					<li>
-						<a href="#">图形 图象 多媒体</a>
-					</li>
-					<li>
-						<a href="#">操作系统  系统开发</a>
-					</li>
-					<li>
-						<a href="#"> 数据库</a>
-					</li>
-					<li class="active">
-						网络与数据通讯
+					<li ng-repeat="category in cList">
+						<a ng-href="toProductList?cid={{category.cid}}&time={{timestamp}}">{{category.cname}}</a>
 					</li>
 				</ul>
 			</div>
@@ -130,18 +115,18 @@
 			<div class="rightArea">
 				<div class="last">
 					<div class="productImage">
-						<img src="static/img/products/23254532-1_w.jpg" />
+						<img ng-src="{{product.image}}" />
 					</div>
-					<div class="name">Head First Servlets and JSP</div>
+					<div class="name">{{product.pname}}</div>
 					<div class="sn">
-						<div>编号：118</div>
+						<div>编号：{{product.pid}}</div>
 					</div>
 					<div class="info">
 						<dl>
 							<dt>商城价:</dt>
 							<dd>
-								<strong>￥：75.0元</strong> 参 考 价：
-								<del>￥84.9元</del>
+								<strong>￥：{{product.shop_price}}元</strong> 参 考 价：
+								<del>￥:{{product.market_price}}元</del>
 							</dd>
 						</dl>
 						<dl>
@@ -186,17 +171,16 @@
 					</div>
 					<div id="introduction" name="introduction" class="introduction">
 						<div class="title">
-							<strong>出版社: 中国电力出版社; 第1版 (2010年8月1日) 外文书名: Head First Servlets & JSP 平装: 879页 语种： 简体中文 开本: 20 ISBN: 7508388976, 9787508388977 条形码: 9787508388977 商品尺寸: 23.3 x 20.2 x 4 cm 商品重量: 1.5 Kg 品牌: 中国电力出版社 ASIN: B0042WNHGG</strong>
+							<strong>{{product.pdesc}}</strong>
 						</div>
 						<div>
-							<img src="static/img/products/20756351-1_w_1.jpg">
+							<img ng-src="{{product.image}}">
 						</div>
 					</div>
 				</div>
 
 			</div>
 		</div>
-
 		<!--底部-->
 		<div id="bottom" class="bottom-bar"></div>
 
@@ -205,9 +189,9 @@
 		<script type="text/javascript">
 			var myModule = angular.module("modulesApp", []);
 
-			myModule.controller('modulesAppCtrl', function($scope, $http) {
+			myModule.controller('modulesAppCtrl', function($scope, $http, $location) {
 				//加载用户信息
-				$http.get("getUserFromSession")
+				$http.get("/user/getUserFromSession")
 					.success(function(response) {
 						$scope.user = response;
 						if (angular.isObject(response)) { //是object且不为null
@@ -215,15 +199,48 @@
 							$scope.isLogin = true;
 						} else { //不是对象或为null
 							$scope.isLogin = false;
-
 						}
-
 					});
+				//加载一级分类
+				$http.get("/getCategoryList")
+					.success(function(response) {
+						$scope.cList = response;
+					});
+				//
+				//
+				var absUrl = $location.absUrl();
+
+				function UrlSearch() {
+					var name, value;
+					var str = location.href; //取得整个地址栏
+					var num = str.indexOf("?");
+					str = str.substr(num + 1); //取得所有参数   stringvar.substr(start [, length ]
+
+					var arr = str.split("&"); //各个参数放到数组里
+					for (var i = 0; i < arr.length; i++) {
+						num = arr[i].indexOf("=");
+						if (num > 0) {
+							name = arr[i].substring(0, num);
+							value = arr[i].substr(num + 1);
+							this[name] = value;
+						}
+					}
+				}
+
+				var Request = new UrlSearch(); //实例化
+				//
+				$http.get("getProductByPid?pid=" + Request.pid)
+					.success(function(response) {
+						$scope.product = response;
+					}).error(function() {
+						alert("加载失败");
+					});
+				//
 			});
 
 			//jQuery加载头部和底部
 			$(function() {
-//				$("#menu").load("/menu");
+				//				$("#menu").load("/menu");
 				$("#bottom").load("/bottom");
 			});
 		</script>

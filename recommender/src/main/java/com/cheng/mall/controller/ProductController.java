@@ -82,8 +82,8 @@ public class ProductController {
 	 *
 	 */
 	@RequestMapping(value = { "/toProductList" }, method = RequestMethod.GET)
-	public String toProductList(Integer cid, HttpServletRequest request) {
-		request.getSession().setAttribute("cid", cid);
+	public String toProductList(Integer cid) {
+		// request.getSession().setAttribute("cid", cid);
 		return "/productList";
 	}
 
@@ -98,9 +98,10 @@ public class ProductController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = { "/getProductsPageByCid" }, method = RequestMethod.GET)
-	public PageDto<Product> getProductsPageByCid(HttpServletRequest request, Integer pageNo, Integer pageSize) {
+	public PageDto<Product> getProductsPageByCid(Integer cid, HttpServletRequest request, Integer pageNo,
+			Integer pageSize) {
 		PageDto<Product> pageDto = new PageDto<>();
-		Integer cid = (Integer) request.getSession().getAttribute("cid");
+		// Integer cid = (Integer) request.getSession().getAttribute("cid");
 		List<Product> products = productService.findProductsPageByCid(cid, pageNo - 1, pageSize);
 		Integer count = productService.findCountCid(cid);
 		pageDto.setList(products);
@@ -140,18 +141,55 @@ public class ProductController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = { "/getCategoryNavigations" }, method = RequestMethod.GET)
-	public List<CategoryNavigationDto> getCategoryNavigations() {
-		List<Category> categories = categoryService.findAllCategory();
-		List<CategoryNavigationDto> categoryNavigationDtos = new ArrayList<>();
-		for (Category category : categories) {
-			CategoryNavigationDto categoryNavigationDto = new CategoryNavigationDto();
-			categoryNavigationDto.setCname(category.getCname());
-			categoryNavigationDto.setCid(category.getCid());
-			categoryNavigationDto.setCsSet(category.getCategorySeconds());
-			categoryNavigationDtos.add(categoryNavigationDto);
+	public List<CategoryNavigationDto> getCategoryNavigations(HttpServletRequest request) {
+		if (request.getSession().getAttribute("categoryNavigationDtos") != null) {
+			return (List<CategoryNavigationDto>) request.getSession().getAttribute("categoryNavigationDtos");
+		} else {
+			List<Category> categories = categoryService.findAllCategory();
+			List<CategoryNavigationDto> categoryNavigationDtos = new ArrayList<>();
+			for (Category category : categories) {
+				CategoryNavigationDto categoryNavigationDto = new CategoryNavigationDto();
+				categoryNavigationDto.setCname(category.getCname());
+				categoryNavigationDto.setCid(category.getCid());
+				categoryNavigationDto.setCsSet(category.getCategorySeconds());
+				categoryNavigationDtos.add(categoryNavigationDto);
+			}
+			request.getSession().setAttribute("categoryNavigationDtos", categoryNavigationDtos);
+			return categoryNavigationDtos;
 		}
 
-		return categoryNavigationDtos;
+	}
+
+	// 商品详情页************************************
+	/**
+	 * 将商品id存到session，跳转到商品详情页
+	 * 
+	 * @author linkaicheng
+	 * @date 2017年4月16日 下午11:46:45
+	 * @param pid
+	 * @param request
+	 * @return
+	 *
+	 */
+	@RequestMapping(value = { "/toProductDetail" }, method = RequestMethod.GET)
+	public String toProduct(Integer pid, HttpServletRequest request) {
+		request.getSession().setAttribute("pid", pid);
+		return "/product";
+	}
+
+	/**
+	 * 
+	 * @author linkaicheng
+	 * @date 2017年4月17日 上午12:55:10
+	 * @param pid
+	 * @return
+	 *
+	 */
+	@ResponseBody
+	@RequestMapping(value = { "/getProductByPid" }, method = RequestMethod.GET)
+	public Product findProductByPid(Integer pid) {
+		System.out.println(productService.findProductByPid(pid) + "****************8");
+		return productService.findProductByPid(pid);
 	}
 
 }

@@ -1,6 +1,7 @@
 package com.cheng.mall.bean;
 
 import java.io.Serializable;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import javax.persistence.Entity;
@@ -31,7 +32,7 @@ public class Category implements Serializable {
 	@NotBlank
 	private String cname;
 	// 一级分类中存放二级分类的集合:
-	private Set<CategorySecond> categorySeconds;
+	private Set<CategorySecond> categorySeconds = new LinkedHashSet<>();
 
 	@GeneratedValue
 	@Id

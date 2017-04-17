@@ -1,6 +1,7 @@
 package com.cheng.mall.bean;
 
 import java.io.Serializable;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -34,7 +35,7 @@ public class CategorySecond implements Serializable {
 	private Category category;
 	// 配置商品集合
 
-	private Set<Product> products;
+	private Set<Product> products = new LinkedHashSet<>();
 
 	@GeneratedValue
 	@Id

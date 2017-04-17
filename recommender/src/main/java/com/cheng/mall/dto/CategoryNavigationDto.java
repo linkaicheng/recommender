@@ -1,5 +1,6 @@
 package com.cheng.mall.dto;
 
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import com.cheng.mall.bean.CategorySecond;
@@ -14,7 +15,7 @@ import com.cheng.mall.bean.CategorySecond;
 public class CategoryNavigationDto {
 	private String cname;
 	private Integer cid;
-	private Set<CategorySecond> csSet;
+	private Set<CategorySecond> csSet = new LinkedHashSet<>();
 
 	public Integer getCid() {
 		return cid;

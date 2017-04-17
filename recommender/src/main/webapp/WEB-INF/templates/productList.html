@@ -77,7 +77,7 @@
 						<a href="index">首页</a>
 					</li>
 					<li ng-repeat="category in cList">
-						<a ng-href="toProductList?cid={{category.cid}}">{{category.cname}}</a>
+						<a ng-href="toProductList?cid={{category.cid}}&time={{timestamp}}">{{category.cname}}</a>
 					</li>
 				</ul>
 			</div>
@@ -101,12 +101,12 @@
 						<!--item-->
 						<div class="item_cont">
 							<div class="img_item">
-								<a href="#">
+								<a ng-href="toProductDetail?pid={{product.pid}}">
 									<img ng-src="{{product.image}}" alt="">
 								</a>
 							</div>
 							<p>
-								<a href="#">{{product.pname}}</a>
+								<a ng-href="toProductDetail?pid={{product.pid}}">{{product.pname}}</a>
 							</p>
 							<p class="money">¥{{product.shop_price}}</p>
 						</div>
@@ -138,7 +138,7 @@
 		<script type="text/javascript">
 			var myModule = angular.module("modulesApp", []);
 
-			myModule.controller('modulesAppCtrl', function($scope, $http) {
+			myModule.controller('modulesAppCtrl', function($scope, $http,$location) {
 				//加载用户信息
 				$http.get("/user/getUserFromSession")
 					.success(function(response) {
@@ -150,11 +150,30 @@
 							$scope.isLogin = false;
 						}
 					});
-				//加载一级分类
-				$http.get("/getProductsByCid")
-					.success(function(response) {
-						$scope.pList = response;
-					});
+				//获取路径上的参数
+				var absUrl = $location.absUrl();
+
+				function UrlSearch() {
+					var name, value;
+					var str = location.href; //取得整个地址栏
+					var num = str.indexOf("?");
+					str = str.substr(num + 1); //取得所有参数   stringvar.substr(start [, length ]
+
+					var arr = str.split("&"); //各个参数放到数组里
+					for (var i = 0; i < arr.length; i++) {
+						num = arr[i].indexOf("=");
+						if (num > 0) {
+							name = arr[i].substring(0, num);
+							value = arr[i].substr(num + 1);
+							this[name] = value;
+						}
+					}
+				}
+
+				var Request = new UrlSearch(); //实例化
+				
+				//
+				
 				//加载左侧分类导航
 				$http.get("/getCategoryNavigations")
 					.success(function(response) {
@@ -196,8 +215,9 @@
 				};
 				//获取数据  
 				var getProductListByCid = function(page, size, callback) {
+					$scope.timestamp=new Date();
 					$scope.loadByCs = false;
-					$http.get("getProductsPageByCid?status=0&pageNo=" + page + "&pageSize=" + size).success(function(res) {
+					$http.get("getProductsPageByCid?status=0&pageNo=" + page + "&pageSize=" + size + "&cid=" + Request.cid).success(function(res) {
 						if (res) {
 							$scope.count = res.totalCount;
 							$scope.pList = res.list;
@@ -212,6 +232,7 @@
 				};
 				//二级分类
 				var getProductListByCsid = function(csid, page, size, callback) {
+					
 					$scope.loadByCs = true;
 					$http.get("getProductsPageByCsid?status=0&pageNo=" + page + "&pageSize=" + size + "&csid=" + csid).success(function(res) {
 						if (res) {
@@ -237,7 +258,7 @@
 				$scope.loadByCs = false;
 				//初始化第一页  
 				getProductListByCid($scope.p_current, $scope.p_pernum, function() {
-
+					
 				});
 
 				//首页  
@@ -262,12 +283,12 @@
 					}
 					//加载某一页  
 				$scope.load_page = function(page) {
-					if($scope.loadByCs){
+					if ($scope.loadByCs) {
 						$scope.loadPageByCsid(page);
-					}else{
+					} else {
 						getProductListByCid(page, $scope.p_pernum, function() {});
 					}
-					
+
 				};
 				//加载某一页  ，通过二级分类id
 				$scope.loadPageByCsid = function(page) {
