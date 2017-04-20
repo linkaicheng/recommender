@@ -188,7 +188,6 @@ public class ProductController {
 	@ResponseBody
 	@RequestMapping(value = { "/getProductByPid" }, method = RequestMethod.GET)
 	public Product findProductByPid(Integer pid) {
-		System.out.println(productService.findProductByPid(pid) + "****************8");
 		return productService.findProductByPid(pid);
 	}
 

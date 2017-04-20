@@ -37,7 +37,7 @@
 									<a href="toOrder">订单管理</a>
 								</li>
 								<li>
-									<a href="adminLogout">退出</a>
+									<a ng-href="adminLogout?time={{timestamplog}}">退出</a>
 								</li>
 							</ul>
 						</div>
@@ -154,6 +154,8 @@
 		<script>
 			var myModule = angular.module("categorysecondApp", []);
 			myModule.controller('categorysecondCtrl', function($scope, $http) {
+				//时间戳，加载url后解决缓存问题
+				$scope.timestamplog=new Date();
 				$scope.edit = false;
 				$scope.add = false;
 				$scope.detele={};

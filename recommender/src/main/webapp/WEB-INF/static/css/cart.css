@@ -2,10 +2,12 @@ div.container .span24 {
 	width: 970px;
 	margin-right: 0px;
 }
+
 div.cart .step {
 	height: 38px;
 	margin-bottom: 10px;
 }
+
 div.cart table {
 	width: 100%;
 	margin-bottom: 10px;
@@ -15,11 +17,13 @@ div.cart table img {
 	width: 60px;
 	height: 60px;
 }
+
 div.cart .total {
 	padding: 10px 0px;
 	margin-bottom: 10px;
 	text-align: right;
 }
+
 div.cart .total em {
 	margin-right: 14px;
 	color: #ff6600;
@@ -30,6 +34,7 @@ div.cart .total strong {
 	color: #ef0101;
 	font-size: 14px;
 }
+
 div.cart .bottom {
 	height: 39px;
 	line-height: 30px;
@@ -39,7 +44,10 @@ div.cart .bottom {
 	border: 1px dotted #e4e4e4;
 	background-color: #fdfdfd;
 }
+
+
 /**订单**/
+
 div.cart p {
 	line-height: 60px;
 	margin-bottom: 10px;
@@ -48,11 +56,59 @@ div.cart p {
 }
 
 img {
-    image-rendering: optimizequality;
-    vertical-align: middle;
+	image-rendering: optimizequality;
+	vertical-align: middle;
 }
 
 div.cart table th {
-    background-color: #fafafa;
-  
+	background-color: #fafafa;
 }
+
+
+
+.text-amount {
+    width: 39px;
+    height: 15px;
+    line-height: 15px;
+    border: 1px solid #aaa;
+    color: #343434;
+    text-align: center;
+    padding: 4px 0;
+    background-color: #fff;
+    left: 18px;
+}
+.item-amount a {
+	height: 23px;
+	width: 17px;
+	border: 1px solid #e5e5e5;
+	background: #f0f0f0;
+	text-align: center;
+	line-height: 23px;
+	color: #444;
+	top: 0;
+}
+/**
+.item-amount {
+	height: 25px;
+	overflow: hidden;
+	position: relative;
+	z-index: 1;
+}
+
+.item-amount .minus {
+	border-right-color: transparent;
+	left: 0;
+}
+
+.item-amount a {
+	display: block;
+	height: 23px;
+	width: 17px;
+	border: 1px solid #e5e5e5;
+	background: #f0f0f0;
+	text-align: center;
+	line-height: 23px;
+	color: #444;
+	position: absolute;
+	top: 0;
+}**/

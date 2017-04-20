@@ -43,7 +43,7 @@
 									<a href="" ng-show="isLogin">我的订单</a>
 								</li>
 								<li ng-show="isLogin">
-									<a href="logout">退出</a>
+									<a ng-href="logout?time={{timestamplog}}">退出</a>
 								</li>
 								<li>
 									<a href="#">会员中心</a>
@@ -139,6 +139,8 @@
 			var myModule = angular.module("modulesApp", []);
 
 			myModule.controller('modulesAppCtrl', function($scope, $http,$location) {
+				//时间戳，加载url后解决缓存问题
+				$scope.timestamplog=new Date();
 				//加载用户信息
 				$http.get("/user/getUserFromSession")
 					.success(function(response) {
@@ -179,7 +181,7 @@
 					.success(function(response) {
 						$scope.cNavList = response;
 					});
-				//加载商品
+				//加载一级分类
 				$http.get("/getCategoryList")
 					.success(function(response) {
 						$scope.cList = response;

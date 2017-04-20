@@ -43,7 +43,7 @@
 									<a href="" ng-show="isLogin">我的订单</a>
 								</li>
 								<li ng-show="isLogin">
-									<a href="logout">退出</a>
+									<a ng-href="logout?time={{timestamplog}}">退出</a>
 								</li>
 								<li>
 									<a href="#">会员中心</a>
@@ -142,13 +142,13 @@
 							</dd>
 						</dl>
 					</div>
-					<form id="cartForm" action="" method="post">
-						<input type="hidden" name="pid" value="" />
+					<form id="cartForm" action="/user/saveCart" method="post">
+						<input type="hidden" name="pid" value="{{product.pid}}"/>
 						<div class="action">
 							<dl class="quantity">
 								<dt>购买数量:</dt>
 								<dd>
-									<input id="count" name="count" value="1" maxlength="4" onpaste="return false;" type="text" />
+									<input id="count" name="count"  type="text" ng-model="count"/>
 								</dd>
 								<dd>
 									件
@@ -156,7 +156,7 @@
 							</dl>
 
 							<div class="buy">
-								<input id="addCart" class="addCart" value="加入购物车" type="button" onclick="saveCart()" />
+								<input id="addCart" class="addCart" value="加入购物车" type="submit"  />
 							</div>
 
 						</div>
@@ -190,6 +190,9 @@
 			var myModule = angular.module("modulesApp", []);
 
 			myModule.controller('modulesAppCtrl', function($scope, $http, $location) {
+				//时间戳，加载url后解决缓存问题
+				$scope.timestamplog=new Date();
+				$scope.count=1;
 				//加载用户信息
 				$http.get("/user/getUserFromSession")
 					.success(function(response) {
