@@ -6,6 +6,7 @@ import java.util.Set;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,6 +19,7 @@ import com.cheng.mall.bean.User;
 import com.cheng.mall.service.CartItemService;
 import com.cheng.mall.service.CartService;
 import com.cheng.mall.service.ProductService;
+import com.cheng.mall.util.Message;
 
 /**
  * 购物车相关操作
@@ -28,6 +30,8 @@ import com.cheng.mall.service.ProductService;
  */
 @Controller
 public class CartController {
+	private Logger logger = Logger.getLogger(CartController.class);
+
 	@Resource
 	private CartService cartService;
 	@Resource
@@ -105,6 +109,135 @@ public class CartController {
 	public Cart getCart(HttpServletRequest request) {
 		User user = (User) request.getSession().getAttribute("user");
 		return cartService.findCartByUid(user.getUid());
+	}
+
+	/**
+	 * 转到购物车页面
+	 * 
+	 * @author linkaicheng
+	 * @date 2017年4月21日 下午10:22:36
+	 * @param request
+	 * @return
+	 *
+	 */
+	@RequestMapping(value = { "/user/toCart" }, method = RequestMethod.GET)
+	public String toCart(HttpServletRequest request) {
+		return "/cart";
+	}
+
+	/**
+	 * 删除购物项
+	 * 
+	 * @author linkaicheng
+	 * @date 2017年4月22日 上午11:03:05
+	 * @param request
+	 * @param cartItemId
+	 * @return
+	 *
+	 */
+	@ResponseBody
+	@RequestMapping(value = { "/user/deleteCartItem" }, method = RequestMethod.GET)
+	public Cart deleteCartItem(HttpServletRequest request, Integer cartItemId) {
+		User user = (User) request.getSession().getAttribute("user");
+		Cart cart = cartService.findCartByUid(user.getUid());
+		CartItem cartItem = cartItemService.findCartItemById(cartItemId);
+		cart.setTotal(cart.getTotal() - cartItem.getSubtotal());
+		cartService.updateCart(cart);
+		// 将购物车中的购物项移除
+		cart.getCartItems().remove(cartItem);
+		cartItemService.deleteCartItemById(cartItemId);
+		return cart;
+	}
+
+	/**
+	 * 修改购物车中商品数量
+	 * 
+	 * @author linkaicheng
+	 * @date 2017年4月22日 上午1:12:50
+	 * @param request
+	 * @param cartItemId
+	 * @param count
+	 * @return
+	 *
+	 */
+	@ResponseBody
+	@RequestMapping(value = { "/user/changeCount" }, method = RequestMethod.GET)
+	public Cart changeCartItemCount(HttpServletRequest request, Integer cartItemId, Integer count) {
+		CartItem cartItem = cartItemService.findCartItemById(cartItemId);
+		cartItem.setCount(count);
+		cartItem.setSubtotal(cartItem.getProduct().getShop_price() * count);
+		cartItemService.updateCartItem(cartItem);
+		User user = (User) request.getSession().getAttribute("user");
+		Cart cart = cartService.findCartByUid(user.getUid());
+		double total = 0.0;
+		for (CartItem cartItem2 : cart.getCartItems()) {
+			total = total + cartItem2.getSubtotal();
+		}
+		cart.setTotal(total);
+		cartService.updateCart(cart);
+
+		return cart;
+	}
+
+	/**
+	 * 清空购物车
+	 * 
+	 * @author linkaicheng
+	 * @date 2017年4月22日 下午3:00:00
+	 * @param request
+	 * @return
+	 *
+	 */
+	@ResponseBody
+	@RequestMapping(value = { "/user/deleteCart" }, method = RequestMethod.GET)
+	public Cart deleteCart(HttpServletRequest request) {
+		User user = (User) request.getSession().getAttribute("user");
+		Cart cart = cartService.findCartByUid(user.getUid());
+		cart.setTotal(0.0);
+		cartService.updateCart(cart);
+		// 清空数据库中的购物车
+		cartItemService.deleteCartItemByCartId(cart.getCartId());
+		cart.setCartItems(null);
+		return cart;
+	}
+
+	/**
+	 * 提交订单，转到订单确认页面填写信息,交给订单controller
+	 * 
+	 * @author linkaicheng
+	 * @date 2017年4月22日 下午3:26:28
+	 * @param request
+	 * @param cartItemIds
+	 * @return
+	 *
+	 */
+	@ResponseBody
+	@RequestMapping(value = { "/user/saveCartItemIds" }, method = RequestMethod.POST)
+	public Message saveCartItemIdsToSession(HttpServletRequest request, Integer[] cartItemIds) {
+		Message message = new Message();
+		if (cartItemIds == null || cartItemIds.length == 0) {
+			logger.info("=================cartItemIds is null============================");
+			message.setInfo("failure");
+			return message;
+		}
+		// 将要购买的item存到session中
+		request.getSession().setAttribute("cartItemIds", cartItemIds);
+		message.setInfo("success");
+		return message;
+	}
+
+	/**
+	 * jump to order.html
+	 * 
+	 * @author linkaicheng
+	 * @date 2017年4月22日 下午7:45:24
+	 * @return
+	 *
+	 */
+	@RequestMapping(value = { "/user/toOrder" }, method = RequestMethod.GET)
+	public String toOrder() {
+		logger.info("=================jump to order.html============================");
+		return "/order";
 	}
 
 }

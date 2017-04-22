@@ -55,6 +55,7 @@ public class UserController {
 		User user = userService.login(userName, password);
 		if (user != null) {
 			session.setAttribute("user", user);
+			session.setMaxInactiveInterval(1800);// 30 分钟
 			return "index";
 		}
 		return "error";

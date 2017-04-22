@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.web.HttpMessageConverters;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
@@ -17,10 +18,25 @@ import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
  * @author linkc
  *
  */
+// 启注解事务管理，等同于xml配置方式的 <tx:annotation-driven />
+@EnableTransactionManagement
 @SpringBootApplication
 // 使用ComponentScan覆盖SpringBootApplication的默认扫描路径
 @ComponentScan({ "com.cheng.mall" })
 public class App {
+	// static {
+	// try {
+	// // 初始化log4j
+	// String log4jPath = App.class.getClassLoader().getResource("").getPath() +
+	// "/log4j.properties";
+	// System.out.println("初始化Log4j。。。。");
+	// System.out.println("path is " + log4jPath);
+	// PropertyConfigurator.configure(log4jPath);
+	// } catch (Exception e) {
+	// e.printStackTrace();
+	// }
+	// }
+
 	/**
 	 * 这是springloader的配置方式：-javaagent:.\lib\springloaded-1.2.4.RELEASE.jar
 	 * -noverify

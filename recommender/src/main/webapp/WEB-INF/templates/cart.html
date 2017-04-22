@@ -57,7 +57,7 @@
 						<div class="row clearfix">
 							<div class="col-md-6 column">
 								<div class="cart">
-									<a href="cart.html">购物车</a>
+									<a href="toCart">购物车</a>
 								</div>
 							</div>
 							<div class="col-md-6 column">
@@ -74,7 +74,7 @@
 
 				<ul class="breadcrumb">
 					<li>
-						<a href="index">首页</a>
+						<a href="../index">首页</a>
 					</li>
 					<li ng-repeat="category in cList">
 						<a ng-href="../toProductList?cid={{category.cid}}&time={{timestamp}}">{{category.cname}}</a>
@@ -114,10 +114,10 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr ng-repeat="cartItem in cart.cartItems">
+						<tr ng-repeat="cartItem in cart.cartItems |orderBy :'-cartItemId'">
 
 							<td>
-								<input type="checkbox" name="pCheckItem" />
+								<input type="checkbox" name="pCheckItem" ng-click="updateSelection($event,cartItem)" ng-checked="isChecked(cartItem.cartItemId)" />
 							</td>
 							<td width="60">
 								<img ng-src="{{cartItem.product.image}}" />
@@ -131,7 +131,7 @@
 							<td>
 								<div class="item-amount">
 									<a href="javascript:void(0);" class="J_Minus minus" ng-click="minusCount(cartItem)">-</a>
-									<input type="text" ng-model="cartItem.count" value="{{cartItem.count}}" class="text text-amount J_ItemAmount" style="color: rgb(60, 60, 60);">
+									<input ng-change="changeCount(cartItem)" type="text" ng-model="cartItem.count" value="{{cartItem.count}}" class="text text-amount J_ItemAmount" style="color: rgb(60, 60, 60);">
 									<a href="javascript:void(0);" class="J_Plus plus" ng-click="plusCount(cartItem)">+</a>
 								</div>
 							</td>
@@ -139,7 +139,7 @@
 								￥{{cartItem.subtotal | number:2}}
 							</td>
 							<td>
-								删除
+								<a href="javascript:void(0);" ng-click="deleteCartItem(cartItem)">删除</a>
 							</td>
 						</tr>
 					</tbody>
@@ -147,16 +147,15 @@
 				<div class="total">
 					<em id="promotion"></em>
 					<em> 登录后确认是否享有优惠 </em> 赠送积分:
-					<em id="effectivePoint">{{cart.total}}</em> 商品金额:
-					<strong id="effectivePrice">￥{{cart.total}}元</strong>
+					<em id="effectivePoint">{{total | number:2}}</em> 商品金额:
+					<strong id="effectivePrice">￥{{total | number:2}}元</strong>
 				</div>
 				<div class="bottom">
-					<a id="clear" class="btn btn-default btn-link" href="">清空购物车</a>
-					<a id="submit" class="btn btn-danger btn-default" href="">提交订单</a>
+					<a id="clear" class="btn btn-default btn-link" href="javascript:void(0);" ng-click="deleteCart()">清空购物车</a>
+					<a id="submit" class="btn btn-danger btn-default" ng-click="submitCartItemIds()">提交订单</a>
 				</div>
 			</div>
 		</div>
-
 		<!--底部-->
 		<div id="bottom" class="bottom-bar">
 			<div class="hr_25"></div>
@@ -174,9 +173,10 @@
 		<script type="text/javascript" src="../static/plugins/angular-1.5.8/angular.min.js"></script>
 		<script type="text/javascript">
 			var myModule = angular.module("modulesApp", []);
-			myModule.controller('modulesAppCtrl', function($scope, $http) {
+			myModule.controller('modulesAppCtrl', function($scope, $http, $location) {
 				//时间戳，加载url后解决缓存问题
 				$scope.timestamplog = new Date();
+				$scope.total = 0.0;
 				//加载用户信息
 				$http.get("getUserFromSession")
 					.success(function(response) {
@@ -193,39 +193,105 @@
 					.success(function(response) {
 						$scope.cList = response;
 					});
-				//
-
+				//加载购物车
 				$http.get("/user/getCart")
 					.success(function(response) {
 						$scope.cart = response;
 					});
+				//更新商品数量
+				$scope.changeCount = function(cartItem) {
+					if (cartItem.count < 1) {
+						cartItem.count = 1;
+					}
+					if (cartItem.count > 20) {
+						cartItem.count = 20;
+					}
+					$http.get("/user/changeCount?cartItemId=" + cartItem.cartItemId + "&count=" + cartItem.count)
+						.success(function(response) {
+							$scope.cart = response;
+							updateTotal();
+						});
+					
+
+				};
 				//减少商品数量
 				$scope.minusCount = function(cartItem) {
-						cartItem.count = cartItem.count - 1;
-						if (cartItem.count >= 1) {
-							cartItem.subtotal = cartItem.subtotal - cartItem.product.shop_price;
-							$scope.cart.total=$scope.cart.total- cartItem.product.shop_price;
-						} else if (cartItem.count < 1) {
-							cartItem.count = 1;
-							cartItem.subtotal = cartItem.product.shop_price;
-						}
-					}
-					//增加购买数量
+					cartItem.count = cartItem.count - 1;
+					$scope.changeCount(cartItem);
+
+				};
+				//增加购买数量
 				$scope.plusCount = function(cartItem) {
-						cartItem.count = cartItem.count + 1;
-						if (cartItem.count <= 20) { //最多买20件
-							cartItem.subtotal = cartItem.subtotal + cartItem.product.shop_price;
-							$scope.cart.total=$scope.cart.total+ cartItem.product.shop_price;
-						} else if (cartItem.count > 20) {
-							cartItem.count = 20;
-							cartItem.subtotal = cartItem.product.shop_price * 20;
-						}
+					cartItem.count = cartItem.count + 1;
+					$scope.changeCount(cartItem);
+
+				};
+				//删除某一购物项
+				$scope.deleteCartItem = function(cartItem) {
+					$http.get("/user/deleteCartItem?cartItemId=" + cartItem.cartItemId)
+						.success(function(response) {
+							$scope.cart = response;
+							var idx = $scope.cartItemIds.indexOf(cartItem.cartItemId);
+							if (idx >= 0) {
+								$scope.cartItemIds.splice(idx, 1);
+								updateTotal();
+							}
+
+						});
+				};
+				//清空购物车
+				$scope.deleteCart = function() {
+					$http.get("/user/deleteCart")
+						.success(function(response) {
+							$scope.cart = response;
+							$scope.cartItemIds.splice(0, $scope.cartItemIds.length);
+							updateTotal();
+						});
+				};
+				//处理checkbox
+				$scope.cartItemIds = [];
+				$scope.updateSelection = function($event, cartItem) {
+					var checkbox = $event.target;
+					var checked = checkbox.checked;
+					if (checked) {
+						$scope.cartItemIds.push(cartItem.cartItemId);
+					} else {
+						var idx = $scope.cartItemIds.indexOf(cartItem.cartItemId);
+						$scope.cartItemIds.splice(idx, 1);
 					}
-					//
+					updateTotal();
+				};
+				$scope.isChecked = function(cartItemId) {
+					return $scope.cartItemIds.indexOf(cartItemId) >= 0;
+				};
+				//提交cartItemIds
+				$scope.submitCartItemIds = function() {
+					var fd = new FormData(); // 使用angularJS的FormData封装要传送的数据
+					fd.append('cartItemIds', $scope.cartItemIds); //参数放入formData中
+					$http.post('/user/saveCartItemIds', fd, { //使用post方法 传送formdata对象
+						transformRequest: angular.identity, //使用angular传参认证
+						headers: {
+							'Content-Type': undefined //设置请求头
+						}
+					}).success(function(response) {
+						window.location = "/user/toOrder?time=" + $scope.timestamplog;
+					});
+				};
+				//更新总价
+				var updateTotal = function() {
+					$scope.total = 0.0;
+					angular.forEach($scope.cart.cartItems, function(data, index, array) {
+						//data等价于array[index]
+						if ($scope.cartItemIds.indexOf(data.cartItemId) >= 0) {
+							$scope.total = $scope.total + data.subtotal;
+						};
+					});
+				};
+				//
 			});
 			//jQuery加载头部和底部
 			$(function() {
-				//				$("#menu").load("/menu");
+				//	$("#menu").load("/menu");
 				//$("#bottom").load("/bottom");
 			});
 		</script>

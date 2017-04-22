@@ -1,6 +1,7 @@
 package com.cheng.mall.service;
 
 import javax.annotation.Resource;
+import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
@@ -32,10 +33,12 @@ public class CartService {
 	 * @return
 	 *
 	 */
+	@Transactional
 	public Cart createCart(Cart cart) {
 		return cartRespository.save(cart);
 	}
 
+	@Transactional
 	public Cart updateCart(Cart cart) {
 		return cartRespository.save(cart);
 	}

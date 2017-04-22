@@ -4,10 +4,10 @@
 	<head>
 		<meta charset="UTF-8" />
 		<title>商城</title>
-		<link href="static/css/common.css" rel="stylesheet">
-		<link href="static/css/reset.css" rel="stylesheet">
-		<link href="static/css/cart.css" rel="stylesheet">
-		<link href="static/plugins/bootstrap-3.3.6/css/bootstrap.min.css" rel="stylesheet">
+		<link href="../static/css/common.css" rel="stylesheet">
+		<link href="../static/css/reset.css" rel="stylesheet">
+		<link href="../static/css/cart.css" rel="stylesheet">
+		<link href="../static/plugins/bootstrap-3.3.6/css/bootstrap.min.css" rel="stylesheet">
 	</head>
 
 	<body>
@@ -19,7 +19,7 @@
 						<div class="span5">
 							<div class="logo">
 								<a href="">
-									<img src="static/img/logo.png" alt="易淘" />
+									<img src="../static/img/logo.png" alt="易淘" />
 								</a>
 							</div>
 						</div>
@@ -27,7 +27,7 @@
 					<div class="col-md-5 column">
 
 						<div class="headerAd">
-							<img src="static/img/header.jpg" width="320" height="50" alt="正品保障" title="正品保障" />
+							<img src="../static/img/header.jpg" width="320" height="50" alt="正品保障" title="正品保障" />
 						</div>
 					</div>
 					<div class="col-md-5 column">
@@ -42,7 +42,7 @@
 									<a href="" ng-show="isLogin">我的订单</a>
 								</li>
 								<li ng-show="isLogin">
-									<a ng-href="logout?time={{timestamplog}}" >退出</a>
+									<a ng-href="../logout?time={{timestamplog}}">退出</a>
 								</li>
 								<li>
 									<a href="#">会员中心</a>
@@ -56,7 +56,7 @@
 						<div class="row clearfix">
 							<div class="col-md-6 column">
 								<div class="cart">
-									<a href="cart.html">购物车</a>
+									<a href="toCart">购物车</a>
 								</div>
 							</div>
 							<div class="col-md-6 column">
@@ -73,25 +73,10 @@
 
 				<ul class="breadcrumb">
 					<li>
-						<a href="index.html">首页</a>
+						<a href="../index">首页</a>
 					</li>
-					<li>
-						<a href="#">程序设计</a>
-					</li>
-					<li>
-						<a href="#">办公室用书</a>
-					</li>
-					<li>
-						<a href="#">图形 图象 多媒体</a>
-					</li>
-					<li>
-						<a href="#">操作系统  系统开发</a>
-					</li>
-					<li>
-						<a href="#"> 数据库</a>
-					</li>
-					<li class="active">
-						网络与数据通讯
+					<li ng-repeat="category in cList">
+						<a ng-href="../toProductList?cid={{category.cid}}&time={{timestamp}}">{{category.cname}}</a>
 					</li>
 				</ul>
 			</div>
@@ -102,13 +87,13 @@
 			<div class="span24">
 				<div class="step step1">
 					<ul>
-						<li>生成订单成功</li>
+						<li>确认订单</li>
 					</ul>
 				</div>
 				<table class="table table-bordered">
 					<thead>
 						<tr>
-							<th colspan="5">订单编号:6 </th>
+							<th colspan="5">订单编号</th>
 						</tr>
 						<tr>
 							<th>
@@ -130,21 +115,21 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr>
+						<tr ng-repeat="cartItem in cart.cartItems |orderBy :'-cartItemId'">
 							<td width="60">
-								<img src="static/img/products/20637368-1_w_2.jpg" />
+								<img ng-src="{{cartItem.product.image}}" />
 							</td>
 							<td>
-								Java从入门到精通（第3版）
+								{{cartItem.product.pname}}
 							</td>
 							<td>
-								￥41.3
+								￥{{cartItem.product.shop_price}}
 							</td>
 							<td>
-								1
+								{{cartItem.count}}
 							</td>
 							<td>
-								￥41.3
+								￥{{cartItem.subtotal | number:2}}
 							</td>
 
 						</tr>
@@ -153,54 +138,54 @@
 				</table>
 				<div class="total">
 					<em id="promotion"></em> 商品金额:
-					<strong id="effectivePrice">￥41.3元</strong>
+					<strong id="effectivePrice">￥{{cart.total | number:2}}元</strong>
 				</div>
-				<hr  style="height:1px;border:none;border-top:1px solid #185598;" >
+				<hr style="height:1px;border:none;border-top:1px solid #185598;">
 				<form id="orderForm" class="form-horizontal" role="form" action="" method="post">
 					<div class="form-group" style="margin-left: -100px">
 						<label for="addr" class="col-sm-2 control-label">收货地址</label>
 						<div class="col-sm-10">
-							<input type="text" class="form-control" id="addr" name="addr" style="width: 350px;" />
+							<input type="text" class="form-control" id="addr" name="addr" style="width: 350px;" value="{{user.addr}}" />
 						</div>
 					</div>
 					<div class="form-group" style="margin-left: -100px">
 						<label for="name" class="col-sm-2 control-label">收货人</label>
 						<div class="col-sm-10">
-							<input type="text" class="form-control" id="name" name="name" style="width: 150px;" />
+							<input type="text" class="form-control" id="name" name="name" style="width: 150px;" value="{{user.name}}" />
 						</div>
 					</div>
 					<div class="form-group" style="margin-left: -100px">
 						<label for="phone" class="col-sm-2 control-label">联系方式</label>
 						<div class="col-sm-10">
-							<input type="text" class="form-control" id="phone" name="phone" style="width: 150px;" />
+							<input type="text" class="form-control" id="phone" name="phone" style="width: 150px;" value="{{user.phone}}" />
 						</div>
 					</div>
 					<p>
 						选择银行：
 						<br>
 						<input name="pd_FrpId" value="ICBC-NET-B2C" checked="checked" type="radio"> 工商银行
-						<img src="static/img/bank_img/icbc.bmp" align="middle">
+						<img src="../static/img/bank_img/icbc.bmp" align="middle">
 						<input name="pd_FrpId" value="BOC-NET-B2C" type="radio"> 中国银行
-						<img src="static/img/bank_img/bc.bmp" align="middle">
+						<img src="../static/img/bank_img/bc.bmp" align="middle">
 						<input name="pd_FrpId" value="ABC-NET-B2C" type="radio"> 农业银行
-						<img src="static/img/bank_img/abc.bmp" align="middle">
+						<img src="../static/img/bank_img/abc.bmp" align="middle">
 						<br>
 						<input name="pd_FrpId" value="BOCO-NET-B2C" type="radio"> 交通银行
-						<img src="static/img/bank_img/bcc.bmp" align="middle">
+						<img src="../static/img/bank_img/bcc.bmp" align="middle">
 						<input name="pd_FrpId" value="PINGANBANK-NET" type="radio"> 平安银行
-						<img src="static/img/bank_img/pingan.bmp" align="middle">
+						<img src="../static/img/bank_img/pingan.bmp" align="middle">
 						<input name="pd_FrpId" value="CCB-NET-B2C" type="radio"> 建设银行
-						<img src="static/img/bank_img/ccb.bmp" align="middle">
+						<img src="../static/img/bank_img/ccb.bmp" align="middle">
 						<br>
 						<input name="pd_FrpId" value="CEB-NET-B2C" type="radio"> 光大银行
-						<img src="static/img/bank_img/guangda.bmp" align="middle">
+						<img src="../static/img/bank_img/guangda.bmp" align="middle">
 						<input name="pd_FrpId" value="CMBCHINA-NET-B2C" type="radio"> 招商银行
-						<img src="static/img/bank_img/cmb.bmp" align="middle">
+						<img src="../static/img/bank_img/cmb.bmp" align="middle">
 					</p>
 					<div class="form-group" style="padding-right: 50px;">
 						<div class="total">
 							<em id="promotion"></em> 商品总金额:
-							<strong id="effectivePrice">￥41.3元</strong>
+							<strong id="effectivePrice">￥{{cart.total | number:2}}元</strong>
 						</div>
 					</div>
 					<div class="form-group">
@@ -214,16 +199,31 @@
 		</div>
 
 		<!--底部-->
-		<div id="bottom" class="bottom-bar"></div>
+		<div id="bottom" class="bottom-bar">
+			<div class="hr_25"></div>
+			<div class="footer">
+				<p><a href="#">易淘简介</a><i>|</i><a href="#">易淘公告</a><i>|</i> <a href="#">招纳贤士</a><i>|</i><a href="#">联系我们</a><i>|</i>客服热线：88888888</p>
+				<p>Copyright &copy; 2017 - 20147易淘版权所有&nbsp;&nbsp;&nbsp;京ICP备08888号&nbsp;&nbsp;&nbsp;京ICP证B1034-88888号&nbsp;&nbsp;&nbsp;某市公安局XX分局备案编号：123456789123</p>
+				<p>
+					<a href="#"><img src="../static/img/footer.jpg" alt="logo"></a>
+				</p>
+			</div>
 
-		<script type="text/javascript" src="static/plugins/jquery-2.1.4/jquery.min.js"></script>
-		<script type="text/javascript" src="static/plugins/angular-1.5.8/angular.min.js"></script>
+		</div>
+
+		<script type="text/javascript" src="../static/plugins/jquery-2.1.4/jquery.min.js"></script>
+		<script type="text/javascript" src="../static/plugins/angular-1.5.8/angular.min.js"></script>
 		<script type="text/javascript">
 			var myModule = angular.module("modulesApp", []);
 
 			myModule.controller('modulesAppCtrl', function($scope, $http) {
 				//时间戳，加载url后解决缓存问题
-				$scope.timestamplog=new Date();
+				$scope.timestamplog = new Date();
+				//加载一级分类
+				$http.get("/getCategoryList")
+					.success(function(response) {
+						$scope.cList = response;
+					});
 				//加载用户信息
 				$http.get("getUserFromSession")
 					.success(function(response) {
@@ -237,12 +237,18 @@
 						}
 
 					});
+				//加载购物项
+				$http.get("/user/getItemsToOrder")
+					.success(function(response) {
+						$scope.cart = response;
+					});
+				//
 			});
 
 			//jQuery加载头部和底部
 			$(function() {
-//				$("#menu").load("/menu");
-				$("#bottom").load("/bottom");
+				//				$("#menu").load("/menu");
+				//$("#bottom").load("/bottom");
 			});
 		</script>
 
