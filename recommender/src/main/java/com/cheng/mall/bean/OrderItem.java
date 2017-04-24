@@ -10,12 +10,15 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 /**
  * 订单项的实体
  *
  */
 @Table(name = "orderitem")
 @Entity
+@JsonIgnoreProperties(value = { "order" })
 public class OrderItem implements Serializable {
 	/**
 	 * 

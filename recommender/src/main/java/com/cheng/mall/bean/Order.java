@@ -2,6 +2,8 @@ package com.cheng.mall.bean;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -9,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -42,8 +45,8 @@ public class Order implements Serializable {
 	private String addr;
 	// 用户的外键:对象
 	private User user;
-	// // 配置订单项的集合
-	// private Set<OrderItem> orderItems = new HashSet<OrderItem>();
+	// 配置订单项的集合
+	private Set<OrderItem> orderItems = new HashSet<OrderItem>();
 
 	@GeneratedValue
 	@Id
@@ -124,17 +127,18 @@ public class Order implements Serializable {
 				+ name + ", phone=" + phone + ", addr=" + addr + ", user=" + user + "]";
 	}
 
-	// // 映射单向1-n的关联关系
-	// // 使用@OneToMany来映射1-n的关联关系
-	// // 使用@joinColumn来映射外键列的名称
-	// @JoinColumn(name = "oid")
+	// 映射单向1-n的关联关系
+	// 使用@OneToMany来映射1-n的关联关系
+	// 使用@joinColumn来映射外键列的名称
+	@JoinColumn(name = "oid")
 	// @OneToMany(fetch = FetchType.EAGER, cascade = { CascadeType.REMOVE })
-	// public Set<OrderItem> getOrderItems() {
-	// return orderItems;
-	// }
-	//
-	// public void setOrderItems(Set<OrderItem> orderItems) {
-	// this.orderItems = orderItems;
-	// }
+	@OneToMany(fetch = FetchType.EAGER)
+	public Set<OrderItem> getOrderItems() {
+		return orderItems;
+	}
+
+	public void setOrderItems(Set<OrderItem> orderItems) {
+		this.orderItems = orderItems;
+	}
 
 }

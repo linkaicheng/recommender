@@ -115,21 +115,21 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr ng-repeat="cartItem in cart.cartItems |orderBy :'-cartItemId'">
+						<tr ng-repeat="orderItem in order.orderItems |orderBy :'-itemid'">
 							<td width="60">
-								<img ng-src="{{cartItem.product.image}}" />
+								<img ng-src="{{orderItem.product.image}}" />
 							</td>
 							<td>
-								{{cartItem.product.pname}}
+								{{orderItem.product.pname}}
 							</td>
 							<td>
-								￥{{cartItem.product.shop_price}}
+								￥{{orderItem.product.shop_price}}
 							</td>
 							<td>
-								{{cartItem.count}}
+								{{orderItem.count}}
 							</td>
 							<td>
-								￥{{cartItem.subtotal | number:2}}
+								￥{{orderItem.subtotal | number:2}}
 							</td>
 
 						</tr>
@@ -138,7 +138,7 @@
 				</table>
 				<div class="total">
 					<em id="promotion"></em> 商品金额:
-					<strong id="effectivePrice">￥{{cart.total | number:2}}元</strong>
+					<strong id="effectivePrice">￥{{order.total | number:2}}元</strong>
 				</div>
 				<hr style="height:1px;border:none;border-top:1px solid #185598;">
 				<form id="orderForm" class="form-horizontal" role="form" action="" method="post">
@@ -185,7 +185,7 @@
 					<div class="form-group" style="padding-right: 50px;">
 						<div class="total">
 							<em id="promotion"></em> 商品总金额:
-							<strong id="effectivePrice">￥{{cart.total | number:2}}元</strong>
+							<strong id="effectivePrice">￥{{order.total | number:2}}元</strong>
 						</div>
 					</div>
 					<div class="form-group">
@@ -240,7 +240,7 @@
 				//加载购物项
 				$http.get("/user/getItemsToOrder")
 					.success(function(response) {
-						$scope.cart = response;
+						$scope.order = response;
 					});
 				//
 			});

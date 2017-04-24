@@ -34,8 +34,11 @@ public class OrdersService {
 	 * @return
 	 *
 	 */
-	public Order save(Order order) {
-		return ordersRepository.save(order);
+	public Order updateOrder(Order order) {
+		if (order.getOid() != null) {
+			return ordersRepository.save(order);
+		}
+		return null;
 	}
 
 	/**
@@ -48,5 +51,9 @@ public class OrdersService {
 	 */
 	public Order getOrderByOid(Integer oid) {
 		return ordersRepository.findOne(oid);
+	}
+
+	public Order createOrder(Order order) {
+		return ordersRepository.save(order);
 	}
 }

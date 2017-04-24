@@ -19,7 +19,6 @@ import com.cheng.mall.bean.User;
 import com.cheng.mall.service.CartItemService;
 import com.cheng.mall.service.CartService;
 import com.cheng.mall.service.ProductService;
-import com.cheng.mall.util.Message;
 
 /**
  * 购物车相关操作
@@ -199,45 +198,6 @@ public class CartController {
 		cartItemService.deleteCartItemByCartId(cart.getCartId());
 		cart.setCartItems(null);
 		return cart;
-	}
-
-	/**
-	 * 提交订单，转到订单确认页面填写信息,交给订单controller
-	 * 
-	 * @author linkaicheng
-	 * @date 2017年4月22日 下午3:26:28
-	 * @param request
-	 * @param cartItemIds
-	 * @return
-	 *
-	 */
-	@ResponseBody
-	@RequestMapping(value = { "/user/saveCartItemIds" }, method = RequestMethod.POST)
-	public Message saveCartItemIdsToSession(HttpServletRequest request, Integer[] cartItemIds) {
-		Message message = new Message();
-		if (cartItemIds == null || cartItemIds.length == 0) {
-			logger.info("=================cartItemIds is null============================");
-			message.setInfo("failure");
-			return message;
-		}
-		// 将要购买的item存到session中
-		request.getSession().setAttribute("cartItemIds", cartItemIds);
-		message.setInfo("success");
-		return message;
-	}
-
-	/**
-	 * jump to order.html
-	 * 
-	 * @author linkaicheng
-	 * @date 2017年4月22日 下午7:45:24
-	 * @return
-	 *
-	 */
-	@RequestMapping(value = { "/user/toOrder" }, method = RequestMethod.GET)
-	public String toOrder() {
-		logger.info("=================jump to order.html============================");
-		return "/order";
 	}
 
 }

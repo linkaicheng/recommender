@@ -61,7 +61,7 @@ public class AdminOrderController {
 			Order updateOrder = ordersService.getOrderByOid(oid);
 			if (updateOrder != null) {
 				updateOrder.setState(state);
-				ordersService.save(updateOrder);
+				ordersService.updateOrder(updateOrder);
 			}
 		}
 		// 返回订单列表

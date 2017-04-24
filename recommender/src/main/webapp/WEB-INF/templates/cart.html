@@ -268,7 +268,7 @@
 				$scope.submitCartItemIds = function() {
 					var fd = new FormData(); // 使用angularJS的FormData封装要传送的数据
 					fd.append('cartItemIds', $scope.cartItemIds); //参数放入formData中
-					$http.post('/user/saveCartItemIds', fd, { //使用post方法 传送formdata对象
+					$http.post('/user/saveOrder', fd, { //使用post方法 传送formdata对象
 						transformRequest: angular.identity, //使用angular传参认证
 						headers: {
 							'Content-Type': undefined //设置请求头

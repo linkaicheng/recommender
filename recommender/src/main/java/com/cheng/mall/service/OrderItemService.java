@@ -18,4 +18,8 @@ public class OrderItemService {
 		return orderItemRepository.findOrderItemByOid(oid);
 	}
 
+	public OrderItem createOrderItem(OrderItem orderItem) {
+		return orderItemRepository.save(orderItem);
+	}
+
 }
