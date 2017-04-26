@@ -4,10 +4,10 @@
 	<head>
 		<meta charset="UTF-8" />
 		<title>商城</title>
-		<link href="static/css/common.css" rel="stylesheet">
-		<link href="static/css/reset.css" rel="stylesheet">
-		<link href="static/css/cart.css" rel="stylesheet">
-		<link href="static/plugins/bootstrap-3.3.6/css/bootstrap.min.css" rel="stylesheet">
+		<link href="../static/css/common.css" rel="stylesheet">
+		<link href="../static/css/reset.css" rel="stylesheet">
+		<link href="../static/css/cart.css" rel="stylesheet">
+		<link href="../static/plugins/bootstrap-3.3.6/css/bootstrap.min.css" rel="stylesheet">
 	</head>
 
 	<body>
@@ -20,7 +20,7 @@
 						<div class="span5">
 							<div class="logo">
 								<a href="">
-									<img src="static/img/logo.png" alt="易淘" />
+									<img src="../static/img/logo.png" alt="易淘" />
 								</a>
 							</div>
 						</div>
@@ -28,22 +28,22 @@
 					<div class="col-md-5 column">
 
 						<div class="headerAd">
-							<img src="static/img/header.jpg" width="320" height="50" alt="正品保障" title="正品保障" />
+							<img src="../static/img/header.jpg" width="320" height="50" alt="正品保障" title="正品保障" />
 						</div>
 					</div>
 					<div class="col-md-5 column">
 						<div class="topNav clearfix">
 							<ul class="breadcrumb">
 								<li>
-									<a href="toLogin" ng-show="!isLogin">登录</a>
+									<a href="../toLogin" ng-show="!isLogin">登录</a>
 									<a href="" ng-show="isLogin">{{user.username}}</a>
 								</li>
 								<li>
-									<a href="toRegister" ng-show="!isLogin">注册</a>
-									<a href="" ng-show="isLogin">我的订单</a>
+									<a href="../toRegister" ng-show="!isLogin">注册</a>
+									<a href="/user/toMyOrders" ng-show="isLogin">我的订单</a>
 								</li>
 								<li ng-show="isLogin">
-									<a ng-href="logout?time={{timestamplog}}">退出</a>
+									<a ng-href="../logout?time={{timestamplog}}">退出</a>
 								</li>
 								<li>
 									<a href="#">会员中心</a>
@@ -57,7 +57,7 @@
 						<div class="row clearfix">
 							<div class="col-md-6 column">
 								<div class="cart">
-									<a href="cart.html">购物车</a>
+									<a href="toCart">购物车</a>
 								</div>
 							</div>
 							<div class="col-md-6 column">
@@ -74,25 +74,10 @@
 
 				<ul class="breadcrumb">
 					<li>
-						<a href="index.html">首页</a>
+						<a href="../index">首页</a>
 					</li>
-					<li>
-						<a href="#">程序设计</a>
-					</li>
-					<li>
-						<a href="#">办公室用书</a>
-					</li>
-					<li>
-						<a href="#">图形 图象 多媒体</a>
-					</li>
-					<li>
-						<a href="#">操作系统  系统开发</a>
-					</li>
-					<li>
-						<a href="#"> 数据库</a>
-					</li>
-					<li class="active">
-						网络与数据通讯
+					<li ng-repeat="category in cList">
+						<a ng-href="../toProductList?cid={{category.cid}}&time={{timestamplog}}">{{category.cname}}</a>
 					</li>
 				</ul>
 			</div>
@@ -109,51 +94,61 @@
 				<table class="table table-bordered" style="width: 970px;">
 					<thead>
 						<tr>
-							<th colspan="5">订单编号:9 订单金额:
-								<font color="red">122.6 </font>
-								<font color="red">
-									<a href="/book_shop_v1.1/order_findByOid.action?oid=9">付款</a>
-								</font>
-							</th>
-						</tr>
-						<tr>
-							<th>
-								图片
-							</th>
-							<th>
-								商品
-							</th>
-							<th>
-								价格
-							</th>
-							<th>
-								数量
-							</th>
-							<th>
-								小计
-							</th>
+							<table ng-repeat="order in orders |orderBy :'-oid'" class="table table-bordered">
+								<tr>
+									<th colspan="5">订单编号:{{order.oid}} 订单金额:
+										<font color="red">{{order.total}} </font>
+										<font color="red">
+											<span ng-switch="order.state">
+												<a href="javascript:void(0)" ng-click="toPayOrder(order)"><span ng-switch-when=1>付款</span></a>
+											<span ng-switch-when=2>待发货</span>
+											<a href="javascript:void(0)" ng-click="signIn(order)"><span ng-switch-when=3>签收</span></a>
+											<span ng-switch-when=4>订单完成</span>
+											</span>
+										</font>
+									</th>
+								</tr>
+								<tr>
+									<th>
+										图片
+									</th>
+									<th>
+										商品
+									</th>
+									<th>
+										价格
+									</th>
+									<th>
+										数量
+									</th>
+									<th>
+										小计
+									</th>
 
-						</tr>
+								</tr>
 					</thead>
 					<tbody>
-						<tr>
+						<tr ng-repeat="orderItem in order.orderItems">
 							<td width="60">
-								<img src="static/img/products/20637368-1_w_2.jpg" />
+								<img ng-src="{{orderItem.product.image}}" />
 							</td>
 							<td>
-								Java从入门到精通（第3版）
+								{{orderItem.product.pname}}
 							</td>
 							<td>
-								￥41.3
+								￥{{orderItem.product.shop_price}}
 							</td>
 							<td>
-								1
+								{{orderItem.count}}
 							</td>
 							<td>
-								￥41.3
+								￥{{orderItem.subtotal}}
 							</td>
 
 						</tr>
+						</table>
+						</tr>
+
 						<tr>
 							<th colspan="5">
 								<div class="row clearfix">
@@ -192,18 +187,48 @@
 			</div>
 
 		</div>
-
 		<!--底部-->
-		<div id="bottom" class="bottom-bar"></div>
+		<div id="bottom" class="bottom-bar">
+			<div class="hr_25"></div>
+			<div class="footer">
+				<p><a href="#">易淘简介</a><i>|</i><a href="#">易淘公告</a><i>|</i> <a href="#">招纳贤士</a><i>|</i><a href="#">联系我们</a><i>|</i>客服热线：88888888</p>
+				<p>Copyright &copy; 2017 - 20147易淘版权所有&nbsp;&nbsp;&nbsp;京ICP备08888号&nbsp;&nbsp;&nbsp;京ICP证B1034-88888号&nbsp;&nbsp;&nbsp;某市公安局XX分局备案编号：123456789123</p>
+				<p>
+					<a href="#"><img src="../static/img/footer.jpg" alt="logo"></a>
+				</p>
+			</div>
 
-		<script type="text/javascript" src="static/plugins/jquery-2.1.4/jquery.min.js"></script>
-		<script type="text/javascript" src="static/plugins/angular-1.5.8/angular.min.js"></script>
+		</div>
+
+		<script type="text/javascript" src="../static/plugins/jquery-2.1.4/jquery.min.js"></script>
+		<script type="text/javascript" src="../static/plugins/angular-1.5.8/angular.min.js"></script>
 		<script type="text/javascript">
 			var myModule = angular.module("modulesApp", []);
 
 			myModule.controller('modulesAppCtrl', function($scope, $http) {
 				//时间戳，加载url后解决缓存问题
-				$scope.timestamplog=new Date();
+				$scope.timestamplog = new Date();
+				// 签收
+				$scope.signIn = function(order) {
+					$http.get("/user/singnIn?oid="+order.oid+"&time="+$scope.timestamplog)
+						.success(function(response) {
+							$scope.orders = response;
+						});
+						return false;
+				};
+				//付款，转到相应的订单支付页面
+				$scope.toPayOrder = function(order) {
+					
+					$http.get("/user/toPayForOid?oid="+order.oid+"&time="+$scope.timestamplog)
+						.success(function(response) {
+							window.location = "/user/toOrder?time=" + $scope.timestamplog;
+						});
+				};
+				//加载一级分类
+				$http.get("/getCategoryList")
+					.success(function(response) {
+						$scope.cList = response;
+					});
 				//加载用户信息
 				$http.get("getUserFromSession")
 					.success(function(response) {
@@ -217,12 +242,18 @@
 						}
 
 					});
+				// 加载订单信息
+				$http.get("/user/findMyOrders")
+					.success(function(response) {
+						$scope.orders = response;
+					});
+				//
 			});
 
 			//jQuery加载头部和底部
 			$(function() {
-//				$("#menu").load("/menu");
-				$("#bottom").load("/bottom");
+				//				$("#menu").load("/menu");
+				//$("#bottom").load("/bottom");
 			});
 		</script>
 

@@ -34,12 +34,12 @@
 						<div class="topNav clearfix">
 							<ul class="breadcrumb">
 								<li>
-									<a href="toLogin" ng-show="!isLogin">登录</a>
+									<a href="../toLogin" ng-show="!isLogin">登录</a>
 									<a href="" ng-show="isLogin">{{user.username}}</a>
 								</li>
 								<li>
-									<a href="toRegister" ng-show="!isLogin">注册</a>
-									<a href="" ng-show="isLogin">我的订单</a>
+									<a href="../toRegister" ng-show="!isLogin">注册</a>
+									<a href="/user/toMyOrders" ng-show="isLogin">我的订单</a>
 								</li>
 								<li ng-show="isLogin">
 									<a ng-href="../logout?time={{timestamplog}}">退出</a>
@@ -76,7 +76,7 @@
 						<a href="../index">首页</a>
 					</li>
 					<li ng-repeat="category in cList">
-						<a ng-href="../toProductList?cid={{category.cid}}&time={{timestamp}}">{{category.cname}}</a>
+						<a ng-href="../toProductList?cid={{category.cid}}&time={{timestamplog}}">{{category.cname}}</a>
 					</li>
 				</ul>
 			</div>

@@ -1,6 +1,7 @@
 package com.cheng.mall.controller;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -38,7 +39,7 @@ public class OrderController {
 	private OrdersService ordersService;
 
 	/**
-	 * 提交订单，转到订单确认页面填写信息,交给订单controller
+	 * 提交订单，转到订单确认页面填写信息
 	 * 
 	 * @author linkaicheng
 	 * @date 2017年4月22日 下午3:26:28
@@ -104,6 +105,7 @@ public class OrderController {
 	}
 
 	/**
+	 * 订单支付页面，根据session中的orderId(购物车页面保存的或我的订单页面用户点击的)返回用户在购物车页面勾选的购物项
 	 * 
 	 * @author linkaicheng
 	 * @date 2017年4月24日 上午12:11:39
@@ -135,6 +137,82 @@ public class OrderController {
 		// cart.setCartItems(cartItems);
 		// cart.setTotal(total);
 		// return cart;
+	}
+
+	/**
+	 * 转到我的订单页面
+	 * 
+	 * @author linkaicheng
+	 * @date 2017年4月25日 下午10:33:11
+	 * @return
+	 *
+	 */
+	@RequestMapping(value = { "/user/toMyOrders" }, method = RequestMethod.GET)
+	public String toMyOrders() {
+		return "/orderList";
+	}
+
+	/**
+	 * 我的订单页面，返回该用户的所有订单
+	 * 
+	 * @author linkaicheng
+	 * @date 2017年4月25日 下午9:49:42
+	 * @return
+	 *
+	 */
+	@ResponseBody
+	@RequestMapping(value = { "/user/findMyOrders" }, method = RequestMethod.GET)
+	public List<Order> findMyOrders(HttpServletRequest request) {
+		User user = (User) request.getSession().getAttribute("user");
+		if (user != null) {
+			return ordersService.finOrdersByUid(user.getUid());
+		}
+
+		return null;
+	}
+
+	/**
+	 * 用户收货后在系统上点击签收，更改订单状态为订单已完成
+	 * 
+	 * @author linkaicheng
+	 * @date 2017年4月26日 下午11:50:06
+	 * @param request
+	 * @return
+	 *
+	 */
+	@ResponseBody
+	@RequestMapping(value = { "/user/singnIn" }, method = RequestMethod.GET)
+	public List<Order> signIn(HttpServletRequest request, Integer oid) {
+		Order order = ordersService.finOrdersByOid(oid);
+		if (order != null) {
+			order.setState(4);
+			ordersService.updateOrder(order);
+		}
+		User user = (User) request.getSession().getAttribute("user");
+		if (user != null) {
+			return ordersService.finOrdersByUid(user.getUid());
+		}
+
+		return null;
+	}
+
+	/**
+	 * 用户在我的订单页面点击付款，跳转到订单支付页面
+	 * 
+	 * @author linkaicheng
+	 * @date 2017年4月27日 上午12:29:56
+	 * @param request
+	 * @param oid
+	 * @return
+	 *
+	 */
+	@ResponseBody
+	@RequestMapping(value = { "/user/toPayForOid" }, method = RequestMethod.GET)
+	public Message toPayOrderByOid(HttpServletRequest request, Integer oid) {
+		Message message = new Message();
+		request.getSession().setAttribute("orderId", oid);
+		message.setInfo("success");
+		return message;
 	}
 
 }

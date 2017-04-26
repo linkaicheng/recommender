@@ -53,7 +53,39 @@ public class OrdersService {
 		return ordersRepository.findOne(oid);
 	}
 
+	/**
+	 * 
+	 * @author linkaicheng
+	 * @date 2017年4月26日 下午11:56:58
+	 * @param order
+	 * @return
+	 *
+	 */
 	public Order createOrder(Order order) {
 		return ordersRepository.save(order);
+	}
+
+	/**
+	 * 
+	 * @author linkaicheng
+	 * @date 2017年4月26日 下午11:57:01
+	 * @param uid
+	 * @return
+	 *
+	 */
+	public List<Order> finOrdersByUid(Integer uid) {
+		return ordersRepository.findOrdersByUid(uid);
+	}
+
+	/**
+	 * 
+	 * @author linkaicheng
+	 * @date 2017年4月26日 下午11:57:57
+	 * @param oid
+	 * @return
+	 *
+	 */
+	public Order finOrdersByOid(Integer oid) {
+		return ordersRepository.findOne(oid);
 	}
 }
