@@ -24,9 +24,9 @@ public class OrdersServiceTest {
 		fail("Not yet implemented");
 	}
 
-	@Test
+	// @Test
 	public void testGetOrderByOid() {
-		fail("Not yet implemented");
+		System.out.println(ordersService.finOrdersByOid("843a8e99-4d8b-4019-80d7-af9c701194d1"));
 	}
 
 	@Test

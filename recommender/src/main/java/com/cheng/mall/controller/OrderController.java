@@ -2,12 +2,14 @@ package com.cheng.mall.controller;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -20,6 +22,7 @@ import com.cheng.mall.service.CartItemService;
 import com.cheng.mall.service.OrderItemService;
 import com.cheng.mall.service.OrdersService;
 import com.cheng.mall.util.Message;
+import com.cheng.mall.util.PaymentUtil;
 
 /**
  * 订单相关操作
@@ -39,7 +42,7 @@ public class OrderController {
 	private OrdersService ordersService;
 
 	/**
-	 * 提交订单，转到订单确认页面填写信息
+	 * 生成订单，转到订单确认页面填写信息
 	 * 
 	 * @author linkaicheng
 	 * @date 2017年4月22日 下午3:26:28
@@ -62,6 +65,7 @@ public class OrderController {
 		// 存数据库
 		User user = (User) request.getSession().getAttribute("user");
 		Order order = new Order();
+		order.setOid(UUID.randomUUID().toString());
 		order.setOrdertime(new Date());
 		order.setState(1);
 		order.setUser(user);
@@ -116,7 +120,7 @@ public class OrderController {
 	@ResponseBody
 	@RequestMapping(value = { "/user/getItemsToOrder" }, method = RequestMethod.GET)
 	public Order findCartItems(HttpServletRequest request) {
-		Integer orderId = (Integer) request.getSession().getAttribute("orderId");
+		String orderId = (String) request.getSession().getAttribute("orderId");
 		if (orderId != null) {
 			return ordersService.getOrderByOid(orderId);
 		}
@@ -182,7 +186,7 @@ public class OrderController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = { "/user/singnIn" }, method = RequestMethod.GET)
-	public List<Order> signIn(HttpServletRequest request, Integer oid) {
+	public List<Order> signIn(HttpServletRequest request, String oid) {
 		Order order = ordersService.finOrdersByOid(oid);
 		if (order != null) {
 			order.setState(4);
@@ -208,10 +212,93 @@ public class OrderController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = { "/user/toPayForOid" }, method = RequestMethod.GET)
-	public Message toPayOrderByOid(HttpServletRequest request, Integer oid) {
+	public Message toPayOrderByOid(HttpServletRequest request, String oid) {
 		Message message = new Message();
 		request.getSession().setAttribute("orderId", oid);
 		message.setInfo("success");
+		return message;
+	}
+
+	@ResponseBody
+	@RequestMapping(value = { "/user/payOrder/{oid}/{pdFrpId}" }, method = RequestMethod.POST)
+	public Message payOrder(@PathVariable("oid") String oid, @PathVariable("pdFrpId") String pdFrpId, User user) {
+		System.out.println(oid + "================" + pdFrpId + "=============" + user);
+		// 修改订单信息
+		Order order = ordersService.finOrdersByOid(oid);
+		order.setAddr(user.getAddr());
+		order.setName(user.getName());
+		order.setPhone(user.getPhone());
+		ordersService.updateOrder(order);
+		logger.info("===========" + "order:" + order + "已修改====================");
+		// 2.完成付款:
+		// 付款需要的参数:
+		String p0_Cmd = "Buy"; // 业务类型:
+		String p1_MerId = "10001126856";// 商户编号:
+		String p2_Order = order.getOid();// 订单编号:
+		String p3_Amt = "0.01"; // 付款金额:
+		String p4_Cur = "CNY"; // 交易币种:
+		String p5_Pid = ""; // 商品名称:
+		String p6_Pcat = ""; // 商品种类:
+		String p7_Pdesc = ""; // 商品描述:
+		String p8_Url = "http://localhost:8081/user/orderCallBack"; // 商户接收支付成功数据的地址:
+		String p9_SAF = ""; // 送货地址:
+		String pa_MP = ""; // 商户扩展信息:
+		String pd_FrpId = pdFrpId;// 支付通道编码:
+		String pr_NeedResponse = "1"; // 应答机制:
+		String keyValue = "69cl522AV6q613Ii4W6u8K6XuW8vM1N6bFgyv769220IuYe9u37N4y7rI4Pl"; // 秘钥
+		String hmac = PaymentUtil.buildHmac(p0_Cmd, p1_MerId, p2_Order, p3_Amt, p4_Cur, p5_Pid, p6_Pcat, p7_Pdesc,
+				p8_Url, p9_SAF, pa_MP, pd_FrpId, pr_NeedResponse, keyValue); // hmac
+		// 向易宝发送请求:
+		StringBuffer sb = new StringBuffer("https://www.yeepay.com/app-merchant-proxy/node?");
+		sb.append("p0_Cmd=").append(p0_Cmd).append("&");
+		sb.append("p1_MerId=").append(p1_MerId).append("&");
+		sb.append("p2_Order=").append(p2_Order).append("&");
+		sb.append("p3_Amt=").append(p3_Amt).append("&");
+		sb.append("p4_Cur=").append(p4_Cur).append("&");
+		sb.append("p5_Pid=").append(p5_Pid).append("&");
+		sb.append("p6_Pcat=").append(p6_Pcat).append("&");
+		sb.append("p7_Pdesc=").append(p7_Pdesc).append("&");
+		sb.append("p8_Url=").append(p8_Url).append("&");
+		sb.append("p9_SAF=").append(p9_SAF).append("&");
+		sb.append("pa_MP=").append(pa_MP).append("&");
+		sb.append("pd_FrpId=").append(pd_FrpId).append("&");
+		sb.append("pr_NeedResponse=").append(pr_NeedResponse).append("&");
+		sb.append("hmac=").append(hmac);
+
+		Message message = new Message();
+		message.setInfo(sb.toString());
+		return message;
+	}
+
+	// 付款成功后跳转回来的路径:
+	@RequestMapping(value = { "/user/orderCallBack" }, method = RequestMethod.GET)
+	public String orderCallBack(HttpServletRequest request, String r6_Order, String r3_Amt) {
+		// 修改订单的状态:
+		Order currOrder = ordersService.finOrdersByOid(r6_Order);
+		// 修改订单状态为2:已经付款:
+		currOrder.setState(2);
+		ordersService.updateOrder(currOrder);
+		logger.info("==================" + "订单：" + currOrder + "已付款==================");
+		Message message = new Message();
+		message.setInfo("支付成功!订单编号为: " + r6_Order + " 付款金额为: " + r3_Amt);
+		logger.info("pay success .." + "=============" + message + "=================");
+		request.getSession().setAttribute("message", message);
+		return "/message";
+	}
+
+	/**
+	 * 返回支付结果
+	 * 
+	 * @author linkaicheng
+	 * @date 2017年4月29日 上午11:42:04
+	 * @param request
+	 * @return
+	 *
+	 */
+	@ResponseBody
+	@RequestMapping(value = { "/user/getPayResult" }, method = RequestMethod.GET)
+	public Message findPayResult(HttpServletRequest request) {
+		Message message = (Message) request.getSession().getAttribute("message");
 		return message;
 	}
 

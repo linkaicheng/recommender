@@ -55,7 +55,7 @@ public class AdminOrderController {
 	 *
 	 */
 	@RequestMapping(value = { "/updateOrder" }, method = RequestMethod.POST)
-	public List<AdminOrderDto> updateOrderState(Integer oid, Integer state) {
+	public List<AdminOrderDto> updateOrderState(String oid, Integer state) {
 		// 修改操作，允许改订单状态
 		if (oid != null && state != null) {
 			Order updateOrder = ordersService.getOrderByOid(oid);

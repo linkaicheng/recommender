@@ -49,8 +49,8 @@ public class OrdersService {
 	 * @return
 	 *
 	 */
-	public Order getOrderByOid(Integer oid) {
-		return ordersRepository.findOne(oid);
+	public Order getOrderByOid(String oid) {
+		return ordersRepository.findOrderByOid(oid);
 	}
 
 	/**
@@ -85,7 +85,7 @@ public class OrdersService {
 	 * @return
 	 *
 	 */
-	public Order finOrdersByOid(Integer oid) {
-		return ordersRepository.findOne(oid);
+	public Order finOrdersByOid(String oid) {
+		return ordersRepository.findOrderByOid(oid);
 	}
 }

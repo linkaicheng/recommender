@@ -10,5 +10,5 @@ import com.cheng.mall.bean.OrderItem;
 
 public interface OrderItemRepository extends JpaRepository<OrderItem, Integer> {
 	@Query("select oi from OrderItem oi where oi.order.oid=:oid")
-	List<OrderItem> findOrderItemByOid(@Param("oid") Integer oid);
+	List<OrderItem> findOrderItemByOid(@Param("oid") String oid);
 }

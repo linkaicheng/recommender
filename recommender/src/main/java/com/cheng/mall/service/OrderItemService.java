@@ -14,7 +14,7 @@ public class OrderItemService {
 	@Resource
 	private OrderItemRepository orderItemRepository;
 
-	public List<OrderItem> findOrderItemByOid(Integer oid) {
+	public List<OrderItem> findOrderItemByOid(String oid) {
 		return orderItemRepository.findOrderItemByOid(oid);
 	}
 

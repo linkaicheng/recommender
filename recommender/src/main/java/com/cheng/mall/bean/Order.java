@@ -7,7 +7,6 @@ import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -35,7 +34,7 @@ public class Order implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private Integer oid;
+	private String oid;
 	private Double total;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date ordertime;
@@ -48,13 +47,12 @@ public class Order implements Serializable {
 	// 配置订单项的集合
 	private Set<OrderItem> orderItems = new HashSet<OrderItem>();
 
-	@GeneratedValue
 	@Id
-	public Integer getOid() {
+	public String getOid() {
 		return oid;
 	}
 
-	public void setOid(Integer oid) {
+	public void setOid(String oid) {
 		this.oid = oid;
 	}
 

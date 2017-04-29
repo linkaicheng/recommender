@@ -11,4 +11,7 @@ import com.cheng.mall.bean.Order;
 public interface OrdersRepository extends JpaRepository<Order, Integer> {
 	@Query("select o from Order o where o.user.uid=:uid")
 	List<Order> findOrdersByUid(@Param("uid") Integer uid);
+
+	@Query("select o from Order o where o.oid=:oid")
+	Order findOrderByOid(@Param("oid") String oid);
 }

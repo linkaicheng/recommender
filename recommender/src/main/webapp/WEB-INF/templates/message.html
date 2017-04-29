@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html ng-app="modulesApp" ng-controller="modulesAppCtrl">
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+
+	<body>
+
+		<body>
+			<div id="divcontent">
+				<table width="850px" border="0" cellspacing="0">
+					<tr>
+						<td style="padding:30px; text-align:center">
+							<table width="73%" border="0" cellspacing="0" style="margin-top:70px">
+								<tr>
+									<td style="width:98"><img src="../static/img/IconTexto_WebDev_009.jpg" width="128" height="128" /></td>
+									<td style="padding-top:30px">
+										<font style="font-weight:bold; color:#FF0000">
+											{{message.info}}
+										</font>
+										<br />
+										<br />
+										<a href="../index">首页</a>
+										<a href="toCart">购物车</a>
+										<a href="/user/toMyOrders">我的订单</a>
+									</td>
+								</tr>
+							</table>
+							<h1>&nbsp;</h1></td>
+					</tr>
+				</table>
+			</div>
+			<script type="text/javascript" src="../static/plugins/angular-1.5.8/angular.min.js"></script>
+			<script type="text/javascript">
+				var myModule = angular.module("modulesApp", []);
+				myModule.controller('modulesAppCtrl', function($scope, $http) {
+					//获取message
+					$http.get("/user/getPayResult")
+						.success(function(response) {
+							$scope.message = response;
+						});
+
+				});
+			</script>
+		</body>
+
+</html>
