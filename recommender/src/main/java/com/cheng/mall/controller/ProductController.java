@@ -13,10 +13,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cheng.mall.bean.Category;
 import com.cheng.mall.bean.Product;
+import com.cheng.mall.bean.RecommenderItem;
+import com.cheng.mall.bean.User;
 import com.cheng.mall.dto.CategoryNavigationDto;
 import com.cheng.mall.dto.PageDto;
 import com.cheng.mall.service.CategoryService;
 import com.cheng.mall.service.ProductService;
+import com.cheng.mall.service.recommender.RecommenderItemService;
 
 /**
  * 
@@ -30,6 +33,8 @@ public class ProductController {
 	private CategoryService categoryService;
 	@Resource
 	private ProductService productService;
+	@Resource
+	private RecommenderItemService recommenderItemService;
 
 	/**
 	 * 
@@ -42,6 +47,24 @@ public class ProductController {
 	@RequestMapping(value = { "/getCategoryList" }, method = RequestMethod.GET)
 	public List<Category> getCategoryList() {
 		return categoryService.findAllCategory();
+	}
+
+	/**
+	 * 
+	 * @author linkaicheng
+	 * @date 2017年5月3日 下午4:58:27
+	 * @return
+	 *
+	 */
+	@ResponseBody
+	@RequestMapping(value = { "/getRecommender" }, method = RequestMethod.GET)
+	public List<RecommenderItem> getRecommender(HttpServletRequest request) {
+		User user = (User) request.getSession().getAttribute("user");
+		List<RecommenderItem> items = recommenderItemService.findRecommenderItemByUid(user.getUid());
+		if (items != null && items.size() != 0) {
+			return items;
+		}
+		return null;
 	}
 
 	/**

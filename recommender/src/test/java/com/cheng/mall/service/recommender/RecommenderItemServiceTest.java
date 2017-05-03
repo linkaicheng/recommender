@@ -40,4 +40,12 @@ public class RecommenderItemServiceTest {
 		System.out.println(recommenderItemService.findAllRecommenderItems());
 	}
 
+	// @Test
+	public void testFindItemByUid() {
+		for (RecommenderItem item : recommenderItemService.findRecommenderItemByUid(5)) {
+
+			System.out.println(item.getRecommenderItemId());
+		}
+	}
+
 }

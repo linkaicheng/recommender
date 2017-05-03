@@ -40,7 +40,27 @@ public class RecommenderItemService {
 
 	}
 
+	/**
+	 * 删除所有记录
+	 * 
+	 * @author linkaicheng
+	 * @date 2017年5月3日 下午4:35:51
+	 *
+	 */
 	public void deleteAllItem() {
 		recommenderItemRepository.deleteAll();
+	}
+
+	/**
+	 * 根据用户id查推荐
+	 * 
+	 * @author linkaicheng
+	 * @date 2017年5月3日 下午4:37:07
+	 * @param uid
+	 * @return
+	 *
+	 */
+	public List<RecommenderItem> findRecommenderItemByUid(Integer uid) {
+		return recommenderItemRepository.findRecommenderItemByUid(uid);
 	}
 }

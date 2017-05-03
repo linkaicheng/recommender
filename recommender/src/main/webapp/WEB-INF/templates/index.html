@@ -87,20 +87,19 @@
 		<!--
 	*******************************************
 -->
-
 		<div class="container index">
-			<div class="span24">
+			<div class="span24"  ng-if="isLogin && recommend">
 				<div id="reCommenderProduct" class="reCommenderProduct clearfix">
 					<div class="title" style=""><strong>推荐商品</strong></div>
 					<ul class="tabContent" style="display: block;">
-						<li ng-repeat="hotProduct in hotList">
-							<a ng-href="toProductDetail?pid={{hotProduct.pid}}" target="_blank"><img ng-src="{{hotProduct.image}}" style="display: block;" /></a>
+						<li ng-repeat="rProduct in recommenderList">
+							<a ng-href="toProductDetail?pid={{rProduct.product.pid}}" target="_blank"><img ng-src="{{rProduct.product.image}}" style="display: block;" /></a>
 						</li>
 					</ul>
 				</div>
 
 			</div>
-			<div class="span24">
+				<div class="span24">
 				<div id="reCommenderProduct" class="reCommenderProduct clearfix">
 					<div class="title" style="background-color: #ab7156"><strong>最新商品</strong></div>
 					<ul class="tabContent" style="display: block;">
@@ -110,6 +109,18 @@
 					</ul>
 				</div>
 			</div>
+			<div class="span24">
+				<div id="reCommenderProduct" class="reCommenderProduct clearfix">
+					<div class="title" style=""><strong>热门商品</strong></div>
+					<ul class="tabContent" style="display: block;">
+						<li ng-repeat="hotProduct in hotList">
+							<a ng-href="toProductDetail?pid={{hotProduct.pid}}" target="_blank"><img ng-src="{{hotProduct.image}}" style="display: block;" /></a>
+						</li>
+					</ul>
+				</div>
+
+			</div>
+		
 			<div class="span24"></div>
 		</div>
 		<!--底部-->
@@ -122,6 +133,7 @@
 			myModule.controller('modulesAppCtrl', function($scope, $http) {
 				//时间戳，加载url后解决缓存问题
 				$scope.timestamplog=new Date();
+				$scope.recommend=false;
 				//加载用户信息
 				$http.get("/user/getUserFromSession")
 					.success(function(response) {
@@ -143,11 +155,21 @@
 					.success(function(response) {
 						$scope.hotList = response;
 					});
+					//加载推荐商品
+				$http.get("/getRecommender")
+					.success(function(response) {
+						if(angular.isObject(response)){
+							$scope.recommend = true;
+						}
+						$scope.recommenderList = response;
+						
+					});
 				//加载最新商品
 				$http.get("/getProductNew")
 					.success(function(response) {
 						$scope.newList = response;
 					});
+					//
 			});
 
 			//jQuery加载头部和底部
