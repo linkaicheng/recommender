@@ -10,22 +10,28 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-@Table(name = "record")
+import org.springframework.format.annotation.DateTimeFormat;
+
+@Table(name = "recommenderitem")
 @Entity
-public class Record {
-	private Integer rid;
+public class RecommenderItem {
+	private Integer recommenderItemId;
+	private Float score;
+	// 商品外键:对象
 	private Product product;
+	// 用户外键:对象
 	private User user;
-	private Date purchaseDate;// 购买日期
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date recommenderDate;
 
 	@GeneratedValue
 	@Id
-	public Integer getRid() {
-		return rid;
+	public Integer getRecommenderItemId() {
+		return recommenderItemId;
 	}
 
-	public void setRid(Integer rid) {
-		this.rid = rid;
+	public void setRecommenderItemId(Integer recommenderItemId) {
+		this.recommenderItemId = recommenderItemId;
 	}
 
 	// 映射单向 n-1 的关联关系
@@ -56,18 +62,26 @@ public class Record {
 		this.user = user;
 	}
 
-	public Date getPurchaseDate() {
-		return purchaseDate;
+	public Date getRecommenderDate() {
+		return recommenderDate;
 	}
 
-	public void setPurchaseDate(Date purchaseDate) {
-		this.purchaseDate = purchaseDate;
+	public void setRecommenderDate(Date recommenderDate) {
+		this.recommenderDate = recommenderDate;
+	}
+
+	public Float getScore() {
+		return score;
+	}
+
+	public void setScore(Float score) {
+		this.score = score;
 	}
 
 	@Override
 	public String toString() {
-		return "Record [rid=" + rid + ", product=" + product + ", user=" + user + ", purchaseDate=" + purchaseDate
-				+ "]";
+		return "RecommenderItem [recommenderItemId=" + recommenderItemId + ", score=" + score + ", product=" + product
+				+ ", user=" + user + ", recommenderDate=" + recommenderDate + "]";
 	}
 
 }

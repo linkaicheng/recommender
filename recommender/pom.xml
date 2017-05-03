@@ -56,13 +56,33 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<!-- mahout依赖 <dependency> <groupId>org.apache.mahout</groupId> <artifactId>mahout-core</artifactId> 
-			<version>${mahout.version}</version> </dependency> <dependency> <groupId>org.apache.mahout</groupId> 
-			<artifactId>mahout-integration</artifactId> <version>${mahout.version}</version> 
-			<exclusions> <exclusion> <groupId>org.mortbay.jetty</groupId> <artifactId>jetty</artifactId> 
-			</exclusion> <exclusion> <groupId>org.apache.cassandra</groupId> <artifactId>cassandra-all</artifactId> 
-			</exclusion> <exclusion> <groupId>me.prettyprint</groupId> <artifactId>hector-core</artifactId> 
-			</exclusion> </exclusions> </dependency> -->
+		<!-- mahout依赖 -->
+		<dependency>
+			<groupId>org.apache.mahout</groupId>
+			<artifactId>mahout-core</artifactId>
+			<version>${mahout.version}</version>
+		</dependency>
+		
+		<dependency>
+		<!-- 连接器，如mysql database依赖 -->
+			<groupId>org.apache.mahout</groupId>
+			<artifactId>mahout-integration</artifactId>
+			<version>${mahout.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.mortbay.jetty</groupId>
+					<artifactId>jetty</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.cassandra</groupId>
+					<artifactId>cassandra-all</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>me.prettyprint</groupId>
+					<artifactId>hector-core</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
 
 	</dependencies>
 	<!-- 构建节点. -->

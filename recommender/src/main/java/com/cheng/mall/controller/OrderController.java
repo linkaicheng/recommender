@@ -17,10 +17,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.cheng.mall.bean.CartItem;
 import com.cheng.mall.bean.Order;
 import com.cheng.mall.bean.OrderItem;
+import com.cheng.mall.bean.Record;
 import com.cheng.mall.bean.User;
 import com.cheng.mall.service.CartItemService;
 import com.cheng.mall.service.OrderItemService;
 import com.cheng.mall.service.OrdersService;
+import com.cheng.mall.service.recommender.RecordService;
 import com.cheng.mall.util.Message;
 import com.cheng.mall.util.PaymentUtil;
 
@@ -40,6 +42,8 @@ public class OrderController {
 	private OrderItemService orderItemService;
 	@Resource
 	private OrdersService ordersService;
+	@Resource
+	private RecordService recordService;
 
 	/**
 	 * 生成订单，转到订单确认页面填写信息
@@ -73,6 +77,7 @@ public class OrderController {
 		double total = 0.0;
 		for (Integer id : cartItemIds) {
 			CartItem cartItem = cartItemService.findCartItemById(id);
+			// 由cartItem生成orderItem
 			if (cartItem != null) {
 				total += cartItem.getSubtotal();
 				OrderItem orderItem = new OrderItem();
@@ -83,6 +88,13 @@ public class OrderController {
 				orderItemService.createOrderItem(orderItem);
 				// 删除购物车中的购物项
 				cartItemService.deleteCartItemById(id);
+
+				// 为测试方便，在这里将购买记录存进数据库，实际应在用户支付成功后记录入库
+				Record record = new Record();
+				record.setProduct(cartItem.getProduct());
+				record.setPurchaseDate(new Date());
+				record.setUser(user);
+				recordService.createRecord(record);
 			}
 		}
 		order.setTotal(total);

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html ng-app="modulesApp" ng-controller="modulesAppCtrl">
+
+	<head>
+		<meta charset="utf-8">
+		<link href="../static/plugins/bootstrap-3.3.6/css/bootstrap.min.css" rel="stylesheet">
+		<link href="../static/css/category.css" rel="stylesheet">
+		<link href="../static/css/reset.css" rel="stylesheet">
+		<link href="../static/css/adminProduct.css" rel="stylesheet">
+		<script type="text/javascript" src="../static/plugins/jquery-2.1.4/jquery.min.js"></script>
+		<script type="text/javascript" src="../static/plugins/angular-1.5.8/angular.min.js"></script>
+		<script type="text/javascript" src="../static/plugins/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+
+	</head>
+
+	<body>
+		<div class="main-body">
+
+			<!--菜单栏-->
+			<div id="menu" class="row menu-bar">
+				<div class="col-md-6 col menu-bar-col banner">
+					<label class="txt banner">后台管理系统</label>
+				</div>
+			</div>
+			<div class="container main full-size">
+				<div class="row">
+					<div class="jumbotron">
+						<div class="col-md-12 column">
+							<ul class="breadcrumb" style="background-color: #fff">
+								<li>
+									<a href="toCategory">一级分类管理</a>
+								</li>
+								<li>
+									<a href="toCategorysecond">二级分类管理</a>
+								</li>
+								<li>
+									<a href="toProduct">商品管理</a>
+								</li>
+
+								<li>
+									<a href="toOrder">订单管理</a>
+								</li>
+								<li class="active">
+									推荐管理
+								</li>
+								<li>
+									<a ng-href="adminLogout?time={{timestamplog}}">退出</a>
+								</li>
+							</ul>
+						</div>
+						<!--<div>
+							{{message.info}}
+						</div>-->
+						<div style="text-align: right;margin-right: 200px;margin-bottom: 10px;">
+							<button  class="btn btn-default" ng-click="upDateRecommender()">更新推荐</button>
+						</div>
+						{{timestamplog}}===={{rList}}
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+		<!--add{{add}} edit{{edit}}
+		<div id="bottom" class="bottom-bar">
+			<div>
+				<span>Copyright © 2017-2017 易淘版权所有&nbsp;|&nbsp;版本:Beta1</span>
+			</div>
+		</div>-->
+
+		<script type="text/javascript">
+			var myModule = angular.module("modulesApp",[]);
+
+			myModule.controller('modulesAppCtrl', function($scope, $http) {
+				//时间戳，加载url后解决缓存问题
+				$scope.timestamplog=new Date();
+				//
+				$scope.upDateRecommender=function(){
+					//加载商品列表
+				$http.get("admin/getRecommenderList")
+					.success(function(response) {
+						$scope.rList = response;
+
+					});
+				};
+//
+			});
+		</script>
+	</body>
+
+</html>

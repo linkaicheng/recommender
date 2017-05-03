@@ -98,4 +98,9 @@ public class AdminHomeController {
 		return "/admin/product";
 	}
 
+	@RequestMapping(value = { "/toRecommend" }, method = RequestMethod.GET)
+	public String toRecommend() {
+		return "/admin/recommender";
+	}
+
 }
