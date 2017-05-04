@@ -1,11 +1,19 @@
 package com.cheng.mall.controller;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.log4j.Logger;
+import org.apache.mahout.cf.taste.common.TasteException;
+import org.apache.mahout.cf.taste.impl.model.file.FileDataModel;
+import org.apache.mahout.cf.taste.impl.similarity.EuclideanDistanceSimilarity;
+import org.apache.mahout.cf.taste.model.DataModel;
+import org.apache.mahout.cf.taste.similarity.ItemSimilarity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -29,6 +37,7 @@ import com.cheng.mall.service.recommender.RecommenderItemService;
  */
 @Controller
 public class ProductController {
+	private Logger logger = Logger.getLogger(CartController.class);
 	@Resource
 	private CategoryService categoryService;
 	@Resource
@@ -212,6 +221,43 @@ public class ProductController {
 	@RequestMapping(value = { "/getProductByPid" }, method = RequestMethod.GET)
 	public Product findProductByPid(Integer pid) {
 		return productService.findProductByPid(pid);
+	}
+
+	/**
+	 * 根据商品id返回相似商品推荐
+	 * 
+	 * @author linkaicheng
+	 * @date 2017年5月4日 下午2:54:15
+	 * @param pid
+	 * @return
+	 * @throws IOException
+	 * @throws TasteException
+	 *
+	 */
+	@ResponseBody
+	@RequestMapping(value = { "/getRecommenderProductByPid" }, method = RequestMethod.GET)
+	public List<Product> getRecommenderProductByPid(Integer pid) {
+		List<Product> products = new ArrayList<>();
+		// 根据csv文件生成相似度模型
+		String file = "datafile/record.csv";
+		DataModel dataModel;
+		try {
+			dataModel = new FileDataModel(new File(file));
+			// 使用欧氏距离相似度
+			final ItemSimilarity itemSimilarity = new EuclideanDistanceSimilarity(dataModel);
+			for (Long id : itemSimilarity.allSimilarItemIDs(pid)) {
+				Product product = productService.findProductByPid(id.intValue());
+				logger.info("为商品:" + id + "推荐：" + "================" + id + "=======================");
+				products.add(product);
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if (products.size() != 0) {
+			return products;
+		}
+		return null;
 	}
 
 }

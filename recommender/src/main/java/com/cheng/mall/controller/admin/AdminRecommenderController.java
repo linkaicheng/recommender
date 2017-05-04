@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.apache.log4j.Logger;
 import org.apache.mahout.cf.taste.common.TasteException;
 import org.apache.mahout.cf.taste.eval.RecommenderBuilder;
 import org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cheng.mall.bean.RecommenderItem;
 import com.cheng.mall.bean.Record;
+import com.cheng.mall.controller.CartController;
 import com.cheng.mall.service.ProductService;
 import com.cheng.mall.service.UserService;
 import com.cheng.mall.service.recommender.RecommenderItemService;
@@ -39,6 +41,7 @@ import com.cheng.mall.service.recommender.RecordService;
 @RestController
 @RequestMapping("/admin")
 public class AdminRecommenderController {
+	private Logger logger = Logger.getLogger(CartController.class);
 	@Resource
 	private RecommenderItemService recommenderItemService;
 	@Resource

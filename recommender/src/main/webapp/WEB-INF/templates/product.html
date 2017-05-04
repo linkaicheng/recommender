@@ -91,19 +91,19 @@
 		<div class="comWidth clearfix products">
 			<!--左部-->
 			<div class="leftArea">
-				<div class="recommend">
+				<div class="recommend" ng-show="recommend">
 					<h3 class="tit">同类推荐</h3>
-					<div class="item">
+					<div class="item" ng-repeat="rProduct in recommendProducts">
 						<div class="item_cont">
 							<div class="img_item">
-								<a href="#">
-									<img src="static/img/products/23224089-1_w.jpg" alt="">
+								<a ng-href="toProductDetail?pid={{rProduct.pid}}">
+									<img ng-src="{{rProduct.image}}" alt="">
 								</a>
 							</div>
 							<p>
-								<a href="#">文字介绍文字介绍文字介绍文字介绍文字介绍文字介绍</a>
+								<a href="#">{{rProduct.pname}}</a>
 							</p>
-							<p class="money">￥888</p>
+							<p class="money">￥{{rProduct.shop_price}}</p>
 						</div>
 
 					</div>
@@ -193,6 +193,7 @@
 				//时间戳，加载url后解决缓存问题
 				$scope.timestamplog=new Date();
 				$scope.count=1;
+				$scope.recommend=false;
 				//加载用户信息
 				$http.get("/user/getUserFromSession")
 					.success(function(response) {
@@ -235,6 +236,16 @@
 				$http.get("getProductByPid?pid=" + Request.pid)
 					.success(function(response) {
 						$scope.product = response;
+					}).error(function() {
+						alert("加载失败");
+					});
+				//获取该物品向对应的推荐商品
+				$http.get("getRecommenderProductByPid?pid=" + Request.pid)
+					.success(function(response) {
+						if(angular.isObject(response)){
+							$scope.recommend = true;
+						}
+						$scope.recommendProducts= response;
 					}).error(function() {
 						alert("加载失败");
 					});
