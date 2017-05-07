@@ -231,6 +231,17 @@ public class OrderController {
 		return message;
 	}
 
+	/**
+	 * 为订单付款
+	 * 
+	 * @author linkaicheng
+	 * @date 2017年5月6日 上午11:02:59
+	 * @param oid
+	 * @param pdFrpId
+	 * @param user
+	 * @return
+	 *
+	 */
 	@ResponseBody
 	@RequestMapping(value = { "/user/payOrder/{oid}/{pdFrpId}" }, method = RequestMethod.POST)
 	public Message payOrder(@PathVariable("oid") String oid, @PathVariable("pdFrpId") String pdFrpId, User user) {

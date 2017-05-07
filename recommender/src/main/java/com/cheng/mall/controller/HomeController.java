@@ -76,6 +76,14 @@ public class HomeController {
 		return "register";
 	}
 
+	/**
+	 * 
+	 * @author linkaicheng
+	 * @date 2017年5月6日 上午11:04:16
+	 * @param request
+	 * @return
+	 *
+	 */
 	@RequestMapping(value = { "/logout" }, method = RequestMethod.GET)
 	public String logout(HttpServletRequest request) {
 		request.getSession().setAttribute("user", null);

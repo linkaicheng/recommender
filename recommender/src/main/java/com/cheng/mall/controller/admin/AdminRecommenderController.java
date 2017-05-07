@@ -53,6 +53,16 @@ public class AdminRecommenderController {
 	final static int NEIGHBORHOOD_NUM = 2;
 	final static int RECOMMENDER_NUM = 10;
 
+	/**
+	 * 更新推荐结果并返回
+	 * 
+	 * @author linkaicheng
+	 * @date 2017年5月6日 上午11:13:59
+	 * @return
+	 * @throws IOException
+	 * @throws TasteException
+	 *
+	 */
 	@RequestMapping(value = { "/getRecommenderList" }, method = RequestMethod.GET)
 	public List<RecommenderItem> getRecommenderList() throws IOException, TasteException {
 		// 根据购买记录生成csv
