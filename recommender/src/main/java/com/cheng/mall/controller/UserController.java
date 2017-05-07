@@ -42,7 +42,6 @@ public class UserController {
 	@ResponseBody
 	@RequestMapping(value = { "/register" }, method = RequestMethod.POST)
 	public Message register(@Validated({ RegisterFormDto.class }) RegisterFormDto registerFormDto) {
-		System.out.println(registerFormDto + "==================");
 		User user = new User();
 		Message message = validateDto(registerFormDto);
 		if (message.getInfo() == null) {

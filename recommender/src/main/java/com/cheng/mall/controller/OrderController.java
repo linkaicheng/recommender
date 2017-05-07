@@ -137,22 +137,6 @@ public class OrderController {
 			return ordersService.getOrderByOid(orderId);
 		}
 		return null;
-		// Set<CartItem> cartItems = new LinkedHashSet<>();
-		// Cart cart = new Cart();
-		// // 用从session中查处用户勾选的购物项id从数据库中查处购物项返回
-		// Integer[] cartItemIds = (Integer[])
-		// request.getSession().getAttribute("cartItemIds");
-		// double total = 0.0;
-		// for (Integer cartItemId : cartItemIds) {
-		// CartItem cartItem = cartItemService.findCartItemById(cartItemId);
-		// if (cartItem != null) {
-		// total += cartItem.getSubtotal();
-		// cartItems.add(cartItem);
-		// }
-		// }
-		// cart.setCartItems(cartItems);
-		// cart.setTotal(total);
-		// return cart;
 	}
 
 	/**
