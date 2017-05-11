@@ -44,6 +44,10 @@
 								</li>
 							</ul>
 						</div>
+						<div style="text-align: right;margin-right: 195px;margin-bottom: 10px;">
+							<button ng-show="!add && !edit2" class="btn btn-default" ng-click="getCsListAll()">全部显示</button>
+							<button ng-show="!add && !edit2" class="btn btn-default" ng-click="add=true">添加</button>
+						</div>
 						<table class="table table-condensed table-bordered" ng-show="!edit&&!add">
 							<thead>
 								<tr>
@@ -87,14 +91,27 @@
 										</a>
 									</td>
 								</tr>
-								
 								<!--一行--->
+								<!--分页-->
+								<tr ng-show="!showAll">
+									<th colspan="5">
+										<div class="row clearfix">
+											<div class="col-md-12 column" style="margin-top: -2px;text-align: right;">
+												<ul class="pagination" style="margin: 0px;">
+													<li ng-class="{true:'disabled'}[p_current==1]"><a href="javascript:void(0);" ng-click="p_index()">首页</a></li>
+													<li ng-repeat="page in pages" ng-class="{true:'active'}[p_current==page]"><a href="javascript:void(0);" ng-click="load_page(page)">{{ page }}</a></li>
+													<li ng-class="{true:'disabled'}[p_current==p_all_page]"><a href="javascript:void(0);" ng-click="p_last()">尾页</a></li>
+												</ul>
+												<span style="vertical-align: 12px;">  共：{{count}} 条</span>
+											</div>
+										</div>
 
+									</th>
+								</tr>
+								<!---->
 							</tbody>
 						</table>
-						<div style="text-align: right;margin-right: 200px;">
-							<button ng-show="!add && !edit2" class="btn btn-default" ng-click="add=true">添加</button>
-						</div>
+
 						<!--修改-->
 						<div class="form-horizontal" role="form" ng-show="edit">
 							<div class="form-group">
@@ -157,37 +174,44 @@
 		<script>
 			var myModule = angular.module("categorysecondApp", []);
 			myModule.controller('categorysecondCtrl', function($scope, $http) {
+				//分页配置  
+				$scope.count = 0;
+				$scope.p_pernum = 5;
+				//变量  
+				$scope.p_current = 1;
+				$scope.p_all_page = 0;
+				$scope.pages = [];
 				//时间戳，加载url后解决缓存问题
-				$scope.timestamplog=new Date();
+				$scope.timestamplog = new Date();
 				$scope.edit = false;
 				$scope.add = false;
-				$scope.detele={};
-				$scope.updateCs={};
-				//加载二级分类列表
-				$http.get("admin/getCategorySecondList")
-					.success(function(response) {
-						$scope.csList = response;
-
-					});
+				$scope.detele = {};
+				$scope.updateCs = {};
+				//				//加载二级分类列表
+				//				$http.get("admin/getCategorySecondList")
+				//					.success(function(response) {
+				//						$scope.csList = response;
+				//
+				//					});
 
 				//加载一级分类列表
-				$http.get("admin/getCategoryList")
+				$http.get("admin/getCategoryListAll")
 					.success(function(response) {
 						$scope.cList = response;
 
 					});
 				//显示编辑表
-				$scope.toEdit=function(categorySecond){
-					$scope.edit=true;
-					
-					$scope.updateCs.csname=categorySecond.csname;
-					$scope.updateCs.csid=categorySecond.csid;
-					$scope.updateCs.cid=categorySecond.category.cid;
-					
-				}
-				//删除二级分类
+				$scope.toEdit = function(categorySecond) {
+						$scope.edit = true;
+
+						$scope.updateCs.csname = categorySecond.csname;
+						$scope.updateCs.csid = categorySecond.csid;
+						$scope.updateCs.cid = categorySecond.category.cid;
+
+					}
+					//删除二级分类
 				$scope.deleteCs = function(categorySecond) {
-					$scope.detele.csid=categorySecond.csid;
+						$scope.detele.csid = categorySecond.csid;
 						$http({
 							method: 'POST',
 							url: 'admin/deleteCategorySecond',
@@ -196,10 +220,19 @@
 								'Content-Type': 'application/x-www-form-urlencoded'
 							} // set the headers so angular passing info as form data (not request payload)
 						}).success(function(response) {
-							$scope.csList = response;
+							$scope.message = response;
+							if ($scope.message.info == "success") {
+								alert("删除成功");
+								getCsListPage($scope.p_current, $scope.p_pernum, function() {
+
+								});
+							} else {
+								alert("删除失败");
+
+							}
 						});
 					}
-				//修改二级分类
+					//修改二级分类
 				$scope.updateCategorysecond = function(updateCs) {
 						$scope.edit = false;
 						$http({
@@ -210,25 +243,118 @@
 								'Content-Type': 'application/x-www-form-urlencoded'
 							} // set the headers so angular passing info as form data (not request payload)
 						}).success(function(response) {
-							$scope.csList = response;
+							$scope.message = response;
+							if ($scope.message.info == "success") {
+								alert("更新成功");
+								getCsListPage($scope.p_current, $scope.p_pernum, function() {
+
+								});
+							} else {
+								alert("更新失败");
+
+							}
 						});
 					}
-				//添加二级分类
+					//添加二级分类
 				$scope.saveCategorysecond = function(newCs) {
-					$scope.edit = false;
-					$scope.add = false;
-					$http({
-						method: 'POST',
-						url: 'admin/addCategorySecond',
-						data: $.param(newCs), // pass in data as strings
-						headers: {
-							'Content-Type': 'application/x-www-form-urlencoded'
-						} // set the headers so angular passing info as form data (not request payload)
-					}).success(function(response) {
-						$scope.csList = response;
-					});
-				}
+						$scope.edit = false;
+						$scope.add = false;
+						$http({
+							method: 'POST',
+							url: 'admin/addCategorySecond',
+							data: $.param(newCs), // pass in data as strings
+							headers: {
+								'Content-Type': 'application/x-www-form-urlencoded'
+							} // set the headers so angular passing info as form data (not request payload)
+						}).success(function(response) {
+							$scope.message = response;
+							if ($scope.message.info == "success") {
+								alert("添加成功");
+								getCsListPage($scope.p_current, $scope.p_pernum, function() {
 
+								});
+							} else {
+								alert("添加失败");
+
+							}
+						});
+					}
+					//全部显示
+				$scope.getCsListAll = function() {
+					$scope.showAll = !$scope.showAll;
+					if ($scope.showAll == true) {
+						$http.get("admin/getCsListAll")
+							.success(function(response) {
+								$scope.csList = response;
+
+							});
+					} else {
+						getCsListPage($scope.p_current, $scope.p_pernum, function() {});
+					}
+
+				};
+				//分页
+				//分页算法  
+				var calculateIndexes = function(current, length, displayLength) {
+					var indexes = [];
+					var start = Math.round(current - displayLength / 2);
+					var end = Math.round(current + displayLength / 2);
+					if (start <= 1) {
+						start = 1;
+						end = start + displayLength - 1;
+						if (end >= length - 1) {
+							end = length - 1;
+						}
+					}
+					if (end >= length - 1) {
+						end = length;
+						start = end - displayLength + 1;
+						if (start <= 1) {
+							start = 1;
+						}
+					}
+					for (var i = start; i <= end; i++) {
+						indexes.push(i);
+					}
+					return indexes;
+				};
+				//初始化页码  
+				var reloadPno = function() {
+					$scope.pages = calculateIndexes($scope.p_current, $scope.p_all_page, 5);
+				};
+				//获取数据  
+				var getCsListPage = function(page, size, callback) {
+					$http.get("/admin/getCsListPage?status=0&pageNo=" + page + "&pageSize=" + size).success(function(res) {
+						if (res) {
+							$scope.count = res.totalCount;
+							$scope.csList = res.list;
+							$scope.p_current = page;
+							$scope.p_all_page = Math.ceil($scope.count / $scope.p_pernum);
+							reloadPno();
+							callback();
+						} else {
+							alert("加载失败")
+						}
+					});
+				};
+				//初始化第一页  
+				getCsListPage($scope.p_current, $scope.p_pernum, function() {
+
+				});
+
+				//首页  
+				$scope.p_index = function() {
+					$scope.load_page(1);
+				};
+				//尾页  
+				$scope.p_last = function() {
+					$scope.load_page($scope.p_all_page)
+				};
+				//加载某一页  
+				$scope.load_page = function(page) {
+					getCsListPage(page, $scope.p_pernum, function() {});
+				};
+				//
 				//
 
 			});

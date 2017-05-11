@@ -5,6 +5,11 @@ import java.util.List;
 import javax.annotation.Resource;
 import javax.transaction.Transactional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.domain.Sort.Order;
 import org.springframework.stereotype.Service;
 
 import com.cheng.mall.bean.Category;
@@ -63,6 +68,20 @@ public class CategoryService {
 	public Category findCategoryByCid(Integer cid) {
 		// return categoryRepository.findCategoryByCid(cid);
 		return categoryRepository.findOne(cid);
+	}
+
+	public List<Category> findCategorysPage(Integer pageNo, Integer pageSize) {
+		// 根据pid排序，倒序
+		Order orderSort = new Order(Direction.DESC, "cid");
+		Sort sort = new Sort(orderSort);
+		// pageNo从0开始
+		PageRequest pageable = new PageRequest(pageNo, pageSize, sort);
+		Page<Category> page = categoryRepository.findAll(pageable);
+		return page.getContent();
+	}
+
+	public Integer findCount() {
+		return categoryRepository.findAll().size();
 	}
 
 }

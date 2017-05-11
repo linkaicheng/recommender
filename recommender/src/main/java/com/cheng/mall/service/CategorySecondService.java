@@ -5,6 +5,11 @@ import java.util.List;
 import javax.annotation.Resource;
 import javax.transaction.Transactional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.domain.Sort.Order;
 import org.springframework.stereotype.Service;
 
 import com.cheng.mall.bean.CategorySecond;
@@ -69,5 +74,19 @@ public class CategorySecondService {
 			categorySecondRepository.deleteCategorySecondByCsid(categorySesondDelete.getCsid());
 		}
 		return null;
+	}
+
+	public List<CategorySecond> findCsListPage(Integer pageNo, Integer pageSize) {
+		// 根据csid排序，正序
+		Order orderSort = new Order(Direction.ASC, "csid");
+		Sort sort = new Sort(orderSort);
+		// pageNo从0开始
+		PageRequest pageable = new PageRequest(pageNo, pageSize, sort);
+		Page<CategorySecond> page = categorySecondRepository.findAll(pageable);
+		return page.getContent();
+	}
+
+	public Integer findCount() {
+		return categorySecondRepository.findAll().size();
 	}
 }

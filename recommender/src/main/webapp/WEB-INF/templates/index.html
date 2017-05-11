@@ -39,7 +39,7 @@
 								</li>
 								<li>
 									<a href="toRegister" ng-show="!isLogin">注册</a>
-									<a href="/user/toMyOrders" ng-show="isLogin">我的订单</a>
+									<a href="/user/toMyOrders?time={{timestamplog}}" ng-show="isLogin">我的订单</a>
 								</li>
 								<li ng-show="isLogin">
 									<a ng-href="logout?time={{timestamplog}}">退出</a>

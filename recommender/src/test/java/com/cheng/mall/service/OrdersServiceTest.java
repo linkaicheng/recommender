@@ -39,4 +39,9 @@ public class OrdersServiceTest {
 		System.out.println(ordersService.finOrdersByUid(1) + "============================");
 	}
 
+	@Test
+	public void testFindOrdersPage() {
+		System.out.println(ordersService.finOrdersPageByUid(1, 1, 2));
+	}
+
 }

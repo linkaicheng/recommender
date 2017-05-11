@@ -44,6 +44,10 @@
 								</li>
 							</ul>
 						</div>
+						<div style="text-align: right;margin-right: 200px;margin-bottom: 10px;">
+							<button class="btn btn-default" ng-click="getCategoryListAll()">全部显示</button>
+							<button ng-show="!add" class="btn btn-default" ng-click="add=true">添加</button>
+						</div>
 						<table class="table table-condensed table-bordered">
 							<thead>
 								<tr>
@@ -75,7 +79,7 @@
 										<a href="" ng-show="!edit" ng-click="edit=true">
 											<span class="glyphicon glyphicon-pencil"></span>编辑
 										</a>
-										<a href="" ng-show="edit"  ng-click="updateCategory(category)">
+										<a href="" ng-show="edit" ng-click="updateCategory(category)">
 											<span class="glyphicon glyphicon-saved"></span>保存
 										</a>
 									</td>
@@ -86,12 +90,26 @@
 									</td>
 								</tr>
 								<!--一行--->
+								<!--分页-->
+								<tr ng-show="!showAll">
+									<th colspan="5">
+										<div class="row clearfix">
+											<div class="col-md-12 column" style="margin-top: -2px;text-align: right;">
+												<ul class="pagination" style="margin: 0px;">
+													<li ng-class="{true:'disabled'}[p_current==1]"><a href="javascript:void(0);" ng-click="p_index()">首页</a></li>
+													<li ng-repeat="page in pages" ng-class="{true:'active'}[p_current==page]"><a href="javascript:void(0);" ng-click="load_page(page)">{{ page }}</a></li>
+													<li ng-class="{true:'disabled'}[p_current==p_all_page]"><a href="javascript:void(0);" ng-click="p_last()">尾页</a></li>
+												</ul>
+												<span style="vertical-align: 12px;">  共：{{count}} 条</span>
+											</div>
+										</div>
 
+									</th>
+								</tr>
+								<!---->
 							</tbody>
 						</table>
-						<div style="text-align: right;margin-right: 200px;">
-							<button ng-show="!add" class="btn btn-default" ng-click="add=true">添加</button>
-						</div>
+
 						<div class="form-horizontal" role="form" ng-show="add">
 							<div class="form-group">
 								<label for="cotegoryName" class="col-sm-2 control-label">一级分类名</label>
@@ -118,21 +136,29 @@
 		<script>
 			var myModule = angular.module("modulesApp", []);
 			myModule.controller('modulesAppCtrl', function($scope, $http) {
+				//分页配置  
+				$scope.count = 0;
+				$scope.p_pernum = 5;
+				//变量  
+				$scope.p_current = 1;
+				$scope.p_all_page = 0;
+				$scope.pages = [];
 				//时间戳，加载url后解决缓存问题
-				$scope.timestamplog=new Date();
-				$scope.deleteC={};
+				$scope.timestamplog = new Date();
+				$scope.deleteC = {};
 				$scope.edit = false;
 				$scope.add = false;
 				$scope.newCategory = {};
-				$scope.updateCategory={};
-				//加载一级分类列表
-				$http.get("admin/getCategoryList")
-					.success(function(response) {
-						$scope.categoryList = response;
-
-					});
+				$scope.updateCategory = {};
+				//				//加载一级分类列表
+				//				$http.get("admin/getCategoryList")
+				//					.success(function(response) {
+				//						$scope.categoryList = response;
+				//
+				//					});
 				//修改一级分类
 				$scope.updateCategory = function(category) {
+						$scope.showAll = false;
 						$scope.edit = false;
 						$http({
 							method: 'POST',
@@ -142,13 +168,30 @@
 								'Content-Type': 'application/x-www-form-urlencoded'
 							} // set the headers so angular passing info as form data (not request payload)
 						}).success(function(response) {
-							$scope.categoryList = response;
+							getCategoryListPage($scope.p_current, $scope.p_pernum, function() {
+
+							});
 						});
 					}
+					//
+					//全部显示
+				$scope.getCategoryListAll = function() {
+					$scope.showAll = !$scope.showAll;
+					if ($scope.showAll == true) {
+						$http.get("admin/getCategoryListAll")
+							.success(function(response) {
+								$scope.categoryList = response;
+							});
+					} else {
+						getCategoryListPage($scope.p_current, $scope.p_pernum, function() {});
+					}
+
+				};
 				//删除一级分类
-				$scope.deleteCategory=function(category){
-					$scope.deleteC.cid=category.cid
-					$http({
+				$scope.deleteCategory = function(category) {
+						$scope.showAll = false;
+						$scope.deleteC.cid = category.cid
+						$http({
 							method: 'POST',
 							url: 'admin/deleteCategory',
 							data: $.param($scope.deleteC), // pass in data as strings
@@ -156,23 +199,89 @@
 								'Content-Type': 'application/x-www-form-urlencoded'
 							} // set the headers so angular passing info as form data (not request payload)
 						}).success(function(response) {
-							$scope.categoryList = response;
+							getCategoryListPage($scope.p_current, $scope.p_pernum, function() {
+
+							});
 						});
-				}
-				//添加一级分类
+					}
+					//添加一级分类
 				$scope.addCategory = function() {
 					$scope.add = false;
+					$scope.showAll = false;
 					$http({
-							method: 'POST',
-							url: 'admin/addCategory',
-							data: $.param($scope.newCategory), // pass in data as strings
-							headers: {
-								'Content-Type': 'application/x-www-form-urlencoded'
-							} // set the headers so angular passing info as form data (not request payload)
-						}).success(function(response) {
-							$scope.categoryList = response;
-						});
-				}
+						method: 'POST',
+						url: 'admin/addCategory',
+						data: $.param($scope.newCategory), // pass in data as strings
+						headers: {
+							'Content-Type': 'application/x-www-form-urlencoded'
+						} // set the headers so angular passing info as form data (not request payload)
+					}).success(function(response) {
+						getCategoryListPage($scope.p_current, $scope.p_pernum, function() {});
+					});
+				};
+				//
+				//分页
+				//分页算法  
+				var calculateIndexes = function(current, length, displayLength) {
+					var indexes = [];
+					var start = Math.round(current - displayLength / 2);
+					var end = Math.round(current + displayLength / 2);
+					if (start <= 1) {
+						start = 1;
+						end = start + displayLength - 1;
+						if (end >= length - 1) {
+							end = length - 1;
+						}
+					}
+					if (end >= length - 1) {
+						end = length;
+						start = end - displayLength + 1;
+						if (start <= 1) {
+							start = 1;
+						}
+					}
+					for (var i = start; i <= end; i++) {
+						indexes.push(i);
+					}
+					return indexes;
+				};
+				//初始化页码  
+				var reloadPno = function() {
+					$scope.pages = calculateIndexes($scope.p_current, $scope.p_all_page, 5);
+				};
+				//获取数据  
+				var getCategoryListPage = function(page, size, callback) {
+					$http.get("/admin/getCategoryListPage?status=0&pageNo=" + page + "&pageSize=" + size).success(function(res) {
+						if (res) {
+							$scope.count = res.totalCount;
+							$scope.categoryList = res.list;
+							$scope.p_current = page;
+							$scope.p_all_page = Math.ceil($scope.count / $scope.p_pernum);
+							reloadPno();
+							callback();
+						} else {
+							alert("加载失败")
+						}
+					});
+				};
+				//初始化第一页  
+				getCategoryListPage($scope.p_current, $scope.p_pernum, function() {
+
+				});
+
+				//首页  
+				$scope.p_index = function() {
+					$scope.load_page(1);
+				};
+				//尾页  
+				$scope.p_last = function() {
+					$scope.load_page($scope.p_all_page)
+				};
+				//加载某一页  
+				$scope.load_page = function(page) {
+					getCategoryListPage(page, $scope.p_pernum, function() {});
+				};
+				//
 
 			});
 		</script>

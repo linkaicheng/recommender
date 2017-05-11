@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.apache.mahout.cf.taste.common.TasteException;
@@ -26,10 +27,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.cheng.mall.bean.RecommenderItem;
 import com.cheng.mall.bean.Record;
 import com.cheng.mall.controller.CartController;
+import com.cheng.mall.dto.PageDto;
 import com.cheng.mall.service.ProductService;
 import com.cheng.mall.service.UserService;
 import com.cheng.mall.service.recommender.RecommenderItemService;
 import com.cheng.mall.service.recommender.RecordService;
+import com.cheng.mall.util.Message;
 
 /**
  * 推荐管理，更新推荐结果
@@ -54,6 +57,42 @@ public class AdminRecommenderController {
 	final static int RECOMMENDER_NUM = 10;
 
 	/**
+	 * 返回所有推荐结果
+	 *
+	 * @author linkaicheng
+	 * @date 2017年5月10日 下午9:07:39
+	 * @return
+	 *
+	 */
+	@RequestMapping(value = { "/getRecommenderListAll" }, method = RequestMethod.GET)
+	public List<RecommenderItem> getRecommenderList() {
+		List<RecommenderItem> recommenderItems = recommenderItemService.findAllRecommenderItems();
+		return recommenderItems;
+	}
+
+	/**
+	 * 返回分页推荐结果
+	 * 
+	 * @author linkaicheng
+	 * @date 2017年5月11日 上午12:00:29
+	 * @param request
+	 * @param pageNo
+	 * @param pageSize
+	 * @return
+	 *
+	 */
+	@RequestMapping(value = { "/getRecommenderListPage" }, method = RequestMethod.GET)
+	public PageDto<RecommenderItem> getRecommenderListPage(HttpServletRequest request, Integer pageNo,
+			Integer pageSize) {
+		PageDto<RecommenderItem> pageDto = new PageDto<>();
+		List<RecommenderItem> recommenderItems = recommenderItemService.findRecommenderItemsPage(pageNo - 1, pageSize);
+		Integer count = recommenderItemService.findCount();
+		pageDto.setList(recommenderItems);
+		pageDto.setTotalCount(count);
+		return pageDto;
+	}
+
+	/**
 	 * 更新推荐结果并返回
 	 * 
 	 * @author linkaicheng
@@ -63,8 +102,8 @@ public class AdminRecommenderController {
 	 * @throws TasteException
 	 *
 	 */
-	@RequestMapping(value = { "/getRecommenderList" }, method = RequestMethod.GET)
-	public List<RecommenderItem> getRecommenderList() throws IOException, TasteException {
+	@RequestMapping(value = { "/updateRecommenderList" }, method = RequestMethod.GET)
+	public Message updateRecommenderList() throws IOException, TasteException {
 		// 根据购买记录生成csv
 		List<Record> records = recordService.findAllRecord();
 		try {
@@ -110,9 +149,10 @@ public class AdminRecommenderController {
 			}
 			System.out.println();
 		}
-		List<RecommenderItem> recommenderItems = recommenderItemService.findAllRecommenderItems();
-		//
-		return recommenderItems;
+		Message message = new Message();
+		message.setInfo("success");
+		System.out.println("=========================" + message.getInfo());
+		return message;
 	}
 
 }

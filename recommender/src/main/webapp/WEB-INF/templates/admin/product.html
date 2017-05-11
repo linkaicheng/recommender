@@ -54,7 +54,8 @@
 						<!--<div>
 							{{message.info}}
 						</div>-->
-						<div style="text-align: right;margin-right: 200px;margin-bottom: 10px;">
+						<div style="text-align: right;margin-right: 180px;margin-bottom: 10px;">
+							<button ng-show="!add&&!edit" class="btn btn-default" ng-click="getpListAll()">全部显示</button>
 							<button ng-show="!add&&!edit" class="btn btn-default" ng-click="add=true">添加</button>
 						</div>
 						<table class="table table-condensed table-bordered" ng-show="!edit&&!add">
@@ -122,33 +123,22 @@
 								</tr>
 								<!--一行--->
 								<!--分页-->
-								<tr>
-									<td colspan="8" style="text-align: right;">
-										<ul class="pagination pagination-sm">
-											<li>
-												<a href="#">Prev</a>
-											</li>
-											<li>
-												<a href="#">1</a>
-											</li>
-											<li>
-												<a href="#">2</a>
-											</li>
-											<li>
-												<a href="#">3</a>
-											</li>
-											<li>
-												<a href="#">4</a>
-											</li>
-											<li>
-												<a href="#">5</a>
-											</li>
-											<li>
-												<a href="#">Next</a>
-											</li>
-										</ul>
-									</td>
+								<tr ng-show="!showAll">
+									<th colspan="8">
+										<div class="row clearfix">
+											<div class="col-md-12 column" style="margin-top: -2px;text-align: right;">
+												<ul class="pagination" style="margin: 0px;">
+													<li ng-class="{true:'disabled'}[p_current==1]"><a href="javascript:void(0);" ng-click="p_index()">首页</a></li>
+													<li ng-repeat="page in pages" ng-class="{true:'active'}[p_current==page]"><a href="javascript:void(0);" ng-click="load_page(page)">{{ page }}</a></li>
+													<li ng-class="{true:'disabled'}[p_current==p_all_page]"><a href="javascript:void(0);" ng-click="p_last()">尾页</a></li>
+												</ul>
+												<span style="vertical-align: 12px;">  共：{{count}} 条</span>
+											</div>
+										</div>
+
+									</th>
 								</tr>
+								<!---->
 
 							</tbody>
 						</table>
@@ -245,22 +235,29 @@
 		</div>-->
 
 		<script type="text/javascript">
-			var myModule = angular.module("modulesApp",[]);
+			var myModule = angular.module("modulesApp", []);
 
 			myModule.controller('modulesAppCtrl', function($scope, $http) {
+				//分页配置  
+				$scope.count = 0;
+				$scope.p_pernum = 5;
+				//变量  
+				$scope.p_current = 1;
+				$scope.p_all_page = 0;
+				$scope.pages = [];
 				//时间戳，加载url后解决缓存问题
-				$scope.timestamplog=new Date();
+				$scope.timestamplog = new Date();
 				$scope.edit = false;
 				$scope.add = false;
 				$scope.detele = {};
-				//加载商品列表
-				$http.get("admin/getProductList")
-					.success(function(response) {
-						$scope.pList = response;
-
-					});
+				//				//加载商品列表
+				//				$http.get("admin/getProductList")
+				//					.success(function(response) {
+				//						$scope.pList = response;
+				//
+				//					});
 				//加载二级分类列表
-				$http.get("admin/getCategorySecondList")
+				$http.get("admin/getCsListAll")
 					.success(function(response) {
 						$scope.csList = response;
 					});
@@ -275,7 +272,14 @@
 								'Content-Type': 'application/x-www-form-urlencoded'
 							} // set the headers so angular passing info as form data (not request payload)
 						}).success(function(response) {
-							$scope.pList = response;
+							$scope.message = response;
+							if ($scope.message.info == "success") {
+								alert("删除成功");
+								getProductListPage($scope.p_current, $scope.p_pernum, function() {});
+							} else {
+								alert("删除失败");
+
+							}
 						});
 
 					}
@@ -314,13 +318,96 @@
 							}
 
 						}).success(function(response) {
-							$scope.pList = response;
+							$scope.message = response;
+							if ($scope.message.info == "success") {
+								alert("添加成功");
+								getProductListPage($scope.p_current, $scope.p_pernum, function() {});
+							} else {
+								alert("添加失败");
+
+							}
 						});
 
 					}).error(function(response) {
 						$scope.message = response;
 					});
-				}
+				};
+				//
+				//全部显示
+				$scope.getpListAll = function() {
+					$scope.showAll = !$scope.showAll;
+					if ($scope.showAll == true) {
+						$http.get("admin/getProductListAll")
+							.success(function(response) {
+								$scope.pList = response;
+							});
+					} else {
+						getProductListPage($scope.p_current, $scope.p_pernum, function() {});
+					}
+
+				};
+				//分页
+				//分页算法  
+				var calculateIndexes = function(current, length, displayLength) {
+					var indexes = [];
+					var start = Math.round(current - displayLength / 2);
+					var end = Math.round(current + displayLength / 2);
+					if (start <= 1) {
+						start = 1;
+						end = start + displayLength - 1;
+						if (end >= length - 1) {
+							end = length - 1;
+						}
+					}
+					if (end >= length - 1) {
+						end = length;
+						start = end - displayLength + 1;
+						if (start <= 1) {
+							start = 1;
+						}
+					}
+					for (var i = start; i <= end; i++) {
+						indexes.push(i);
+					}
+					return indexes;
+				};
+				//初始化页码  
+				var reloadPno = function() {
+					$scope.pages = calculateIndexes($scope.p_current, $scope.p_all_page, 5);
+				};
+				//获取数据  
+				var getProductListPage = function(page, size, callback) {
+					$http.get("/admin/getProductListPage?status=0&pageNo=" + page + "&pageSize=" + size).success(function(res) {
+						if (res) {
+							$scope.count = res.totalCount;
+							$scope.pList = res.list;
+							$scope.p_current = page;
+							$scope.p_all_page = Math.ceil($scope.count / $scope.p_pernum);
+							reloadPno();
+							callback();
+						} else {
+							alert("加载失败")
+						}
+					});
+				};
+				//初始化第一页  
+				getProductListPage($scope.p_current, $scope.p_pernum, function() {
+
+				});
+
+				//首页  
+				$scope.p_index = function() {
+					$scope.load_page(1);
+				};
+				//尾页  
+				$scope.p_last = function() {
+					$scope.load_page($scope.p_all_page)
+				};
+				//加载某一页  
+				$scope.load_page = function(page) {
+					getProductListPage(page, $scope.p_pernum, function() {});
+				};
+				//
 			});
 
 			//

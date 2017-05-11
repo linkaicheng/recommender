@@ -52,15 +52,75 @@
 							{{message.info}}
 						</div>-->
 						<div style="text-align: right;margin-right: 200px;margin-bottom: 10px;">
-							<button  class="btn btn-default" ng-click="upDateRecommender()">更新推荐</button>
+							<button class="btn btn-default" ng-click="getRecommenderListAll()">全部显示</button>
+							<button class="btn btn-default" ng-click="updateRecommender()">更新推荐</button>
 						</div>
-						{{timestamplog}}===={{rList}}
+						<!--{{timestamplog}}===={{rList}}-->
+						<table class="table table-condensed table-bordered">
+							<thead>
+								<tr>
+									<th>
+										编号
+									</th>
+									<th>
+										目标用户编号
+									</th>
+									<th>
+										推荐的商品编号
+									</th>
+									<th>
+										推荐分数
+									</th>
+									<th>
+										生成日期
+									</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr ng-repeat="RecommenderItem in rList">
+									<td>
+										{{RecommenderItem.recommenderItemId}}
+									</td>
+									<td>
+										{{RecommenderItem.user.uid}}
+									</td>
+									<td>
+										<span>{{RecommenderItem.product.pid}}</span>
+									</td>
+
+									<td>
+										{{RecommenderItem.score}}
+									</td>
+									<td>
+										{{RecommenderItem.recommenderDate | date:'yyyy-MM-dd HH:mm:ss'}}
+									</td>
+								</tr>
+								<!--一行--->
+								<!--分页-->
+								<tr ng-show="!showAll">
+									<th colspan="5">
+										<div class="row clearfix">
+											<div class="col-md-12 column" style="margin-top: -2px;text-align: right;">
+												<ul class="pagination" style="margin: 0px;">
+													<li ng-class="{true:'disabled'}[p_current==1]"><a href="javascript:void(0);" ng-click="p_index()">首页</a></li>
+													<li ng-repeat="page in pages" ng-class="{true:'active'}[p_current==page]"><a href="javascript:void(0);" ng-click="load_page(page)">{{ page }}</a></li>
+													<li ng-class="{true:'disabled'}[p_current==p_all_page]"><a href="javascript:void(0);" ng-click="p_last()">尾页</a></li>
+												</ul>
+												<span style="vertical-align: 12px;">  共：{{count}} 条</span>
+											</div>
+										</div>
+
+									</th>
+								</tr>
+								<!---->
+							</tbody>
+						</table>
+						<!---->
 					</div>
 				</div>
 
 			</div>
 		</div>
-
 		<!--add{{add}} edit{{edit}}
 		<div id="bottom" class="bottom-bar">
 			<div>
@@ -69,21 +129,115 @@
 		</div>-->
 
 		<script type="text/javascript">
-			var myModule = angular.module("modulesApp",[]);
+			var myModule = angular.module("modulesApp", []);
 
 			myModule.controller('modulesAppCtrl', function($scope, $http) {
+				//分页配置  
+				$scope.count = 0;
+				$scope.p_pernum = 5;
+				//变量  
+				$scope.p_current = 1;
+				$scope.p_all_page = 0;
+				$scope.pages = [];
 				//时间戳，加载url后解决缓存问题
-				$scope.timestamplog=new Date();
-				//
-				$scope.upDateRecommender=function(){
-					//加载商品列表
-				$http.get("admin/getRecommenderList")
-					.success(function(response) {
-						$scope.rList = response;
+				$scope.timestamplog = new Date();
+				$scope.message = {};
+				$scope.showAll = false;
+				//				
+				//全部显示
+				$scope.getRecommenderListAll = function() {
+					$scope.showAll = !$scope.showAll;
+					if ($scope.showAll == true) {
+						//加载推荐结果
+						$http.get("admin/getRecommenderListAll")
+							.success(function(response) {
+								$scope.rList = response;
+							});
+					} else {
+						getRecommenderListPage($scope.p_current, $scope.p_pernum, function() {});
+					}
 
+				};
+
+				//分页
+				//分页算法  
+				var calculateIndexes = function(current, length, displayLength) {
+					var indexes = [];
+					var start = Math.round(current - displayLength / 2);
+					var end = Math.round(current + displayLength / 2);
+					if (start <= 1) {
+						start = 1;
+						end = start + displayLength - 1;
+						if (end >= length - 1) {
+							end = length - 1;
+						}
+					}
+					if (end >= length - 1) {
+						end = length;
+						start = end - displayLength + 1;
+						if (start <= 1) {
+							start = 1;
+						}
+					}
+					for (var i = start; i <= end; i++) {
+						indexes.push(i);
+					}
+					return indexes;
+				};
+				//初始化页码  
+				var reloadPno = function() {
+					$scope.pages = calculateIndexes($scope.p_current, $scope.p_all_page, 5);
+				};
+				//获取数据  
+				var getRecommenderListPage = function(page, size, callback) {
+					$http.get("/admin/getRecommenderListPage?status=0&pageNo=" + page + "&pageSize=" + size).success(function(res) {
+						if (res) {
+							$scope.count = res.totalCount;
+							$scope.rList = res.list;
+							$scope.p_current = page;
+							$scope.p_all_page = Math.ceil($scope.count / $scope.p_pernum);
+							reloadPno();
+							callback();
+						} else {
+							alert("加载失败")
+						}
 					});
 				};
-//
+				//更新推荐
+				$scope.updateRecommender = function() {
+					//加载推荐列表
+					$http.get("/admin/updateRecommenderList")
+						.success(function(response) {
+							$scope.message = response;
+							if ($scope.message.info == "success") {
+								alert("更新成功");
+								getRecommenderListPage($scope.p_current, $scope.p_pernum, function() {
+
+								});
+							} else {
+								alert("更新失败");
+
+							}
+						});
+				};
+				//初始化第一页  
+				getRecommenderListPage($scope.p_current, $scope.p_pernum, function() {
+
+				});
+
+				//首页  
+				$scope.p_index = function() {
+					$scope.load_page(1);
+				};
+				//尾页  
+				$scope.p_last = function() {
+					$scope.load_page($scope.p_all_page)
+				};
+				//加载某一页  
+				$scope.load_page = function(page) {
+					getRecommenderListPage(page, $scope.p_pernum, function() {});
+				};
+				//
 			});
 		</script>
 	</body>

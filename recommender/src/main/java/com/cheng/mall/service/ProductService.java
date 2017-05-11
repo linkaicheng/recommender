@@ -255,4 +255,36 @@ public class ProductService {
 		return productRepository.findCountCsid(csid);
 	}
 
+	/**
+	 * 分页查询所有商品
+	 * 
+	 * @author linkaicheng
+	 * @date 2017年5月11日 下午1:54:15
+	 * @param pageNo
+	 * @param pageSize
+	 * @return
+	 *
+	 */
+	public List<Product> findProductsPage(Integer pageNo, Integer pageSize) {
+		// 根据pid排序，倒序
+		Order orderSort = new Order(Direction.DESC, "pid");
+		Sort sort = new Sort(orderSort);
+		// pageNo从0开始
+		PageRequest pageable = new PageRequest(pageNo, pageSize, sort);
+		Page<Product> page = productRepository.findAll(pageable);
+		return page.getContent();
+	}
+
+	/**
+	 * 返回商品总数
+	 * 
+	 * @author linkaicheng
+	 * @date 2017年5月11日 下午1:55:22
+	 * @return
+	 *
+	 */
+	public Integer findCount() {
+		return productRepository.findAll().size();
+	}
+
 }

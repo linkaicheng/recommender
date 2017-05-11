@@ -19,6 +19,7 @@ import com.cheng.mall.bean.Order;
 import com.cheng.mall.bean.OrderItem;
 import com.cheng.mall.bean.Record;
 import com.cheng.mall.bean.User;
+import com.cheng.mall.dto.PageDto;
 import com.cheng.mall.service.CartItemService;
 import com.cheng.mall.service.OrderItemService;
 import com.cheng.mall.service.OrdersService;
@@ -307,6 +308,29 @@ public class OrderController {
 	public Message findPayResult(HttpServletRequest request) {
 		Message message = (Message) request.getSession().getAttribute("message");
 		return message;
+	}
+
+	/**
+	 * 分页查询订单
+	 * 
+	 * @author linkaicheng
+	 * @date 2017年5月7日 下午9:39:36
+	 * @param request
+	 * @return
+	 *
+	 */
+	@ResponseBody
+	@RequestMapping(value = { "/user/findMyOrdersPage" }, method = RequestMethod.GET)
+	public PageDto<Order> findMyOrdersPage(HttpServletRequest request, Integer pageNo, Integer pageSize) {
+		PageDto<Order> pageDto = new PageDto<>();
+		User user = (User) request.getSession().getAttribute("user");
+		if (user != null) {
+			List<Order> orders = ordersService.finOrdersPageByUid(user.getUid(), pageNo - 1, pageSize);
+			Integer count = ordersService.findCountUid(user.getUid());
+			pageDto.setList(orders);
+			pageDto.setTotalCount(count);
+		}
+		return pageDto;
 	}
 
 }
