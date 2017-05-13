@@ -8,6 +8,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.transaction.Transactional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,12 +18,15 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.cheng.mall.bean.Order;
+import com.cheng.mall.dao.OrderItemRepository;
 import com.cheng.mall.dao.OrdersRepository;
 
 @Service
 public class OrdersService {
 	@Resource
 	private OrdersRepository ordersRepository;
+	@Resource
+	private OrderItemRepository orderItemRepository;
 
 	/**
 	 * 
@@ -167,5 +171,18 @@ public class OrdersService {
 
 	public Integer findCount() {
 		return ordersRepository.findAll().size();
+	}
+
+	/**
+	 * 删除订单
+	 * 
+	 * @author linkaicheng
+	 * @date 2017年5月11日 下午11:10:07
+	 * @param order
+	 *
+	 */
+	@Transactional
+	public void deleteOrder(Order order) {
+		ordersRepository.deleteOrderByOid(order.getOid());
 	}
 }

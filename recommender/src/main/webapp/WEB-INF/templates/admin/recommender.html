@@ -52,6 +52,7 @@
 							{{message.info}}
 						</div>-->
 						<div style="text-align: right;margin-right: 200px;margin-bottom: 10px;">
+							搜索：<input type="text" ng-model="titleFilter" placeholder="输入关键字" style="margin-right: 550px;">
 							<button class="btn btn-default" ng-click="getRecommenderListAll()">全部显示</button>
 							<button class="btn btn-default" ng-click="updateRecommender()">更新推荐</button>
 						</div>
@@ -66,6 +67,9 @@
 										目标用户编号
 									</th>
 									<th>
+										目标用户姓名
+									</th>
+									<th>
 										推荐的商品编号
 									</th>
 									<th>
@@ -77,12 +81,15 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr ng-repeat="RecommenderItem in rList">
+								<tr ng-repeat="RecommenderItem in rList | filter:titleFilter">
 									<td>
 										{{RecommenderItem.recommenderItemId}}
 									</td>
 									<td>
 										{{RecommenderItem.user.uid}}
+									</td>
+									<td>
+										{{RecommenderItem.user.username}}
 									</td>
 									<td>
 										<span>{{RecommenderItem.product.pid}}</span>
@@ -98,7 +105,7 @@
 								<!--一行--->
 								<!--分页-->
 								<tr ng-show="!showAll">
-									<th colspan="5">
+									<th colspan="6">
 										<div class="row clearfix">
 											<div class="col-md-12 column" style="margin-top: -2px;text-align: right;">
 												<ul class="pagination" style="margin: 0px;">

@@ -106,6 +106,7 @@
 											<span ng-switch-when=4>订单完成</span>
 											</span>
 										</font>
+										<font color="red"><a href="javascript:void(0)" ng-click="deleteOrder(order)">删除订单</font>
 									</th>
 								</tr>
 								<tr>
@@ -157,17 +158,17 @@
 											<li ng-class="{true:'disabled'}[p_current==1]"><a href="javascript:void(0);" ng-click="p_index()">首页</a></li>
 											<li ng-repeat="page in pages" ng-class="{true:'active'}[p_current==page]"><a href="javascript:void(0);" ng-click="load_page(page)">{{ page }}</a></li>
 											<li ng-class="{true:'disabled'}[p_current==p_all_page]"><a href="javascript:void(0);" ng-click="p_last()">尾页</a></li>
-										</ul>
-										<span style="vertical-align: 12px;">  共：{{count}} 条</span>
-									</div>
-								</div>
-
-							</th>
-						</tr>
-
-					</tbody>
-				</table>
+											</ul>
+											<span style="vertical-align: 12px;">  共：{{count}} 条</span>
 			</div>
+		</div>
+
+		</th>
+		</tr>
+
+		</tbody>
+		</table>
+		</div>
 
 		</div>
 		<!--底部-->
@@ -201,8 +202,32 @@
 				$scope.signIn = function(order) {
 					$http.get("/user/singnIn?oid=" + order.oid + "&time=" + $scope.timestamplog)
 						.success(function(response) {
-							$scope.orders = response;
+							$scope.message = response;
+							if ($scope.message.info == "success") {
+								alert("签收成功，订单完成");
+								getOrderListByUid($scope.p_current, $scope.p_pernum, function() {});
+							} else {
+								alert("签收失败，请重新尝试");
+							}
 						});
+					return false;
+				};
+				// 删除订单
+				$scope.deleteOrder = function(order) {
+					if (order.state == 1 || order.state == 4) {
+						$http.get("/user/deleteOrder?oid=" + order.oid + "&time=" + $scope.timestamplog)
+							.success(function(response) {
+								$scope.message = response;
+								if ($scope.message.info == "success") {
+									alert("删除成功");
+									getOrderListByUid($scope.p_current, $scope.p_pernum, function() {});
+								} else {
+									alert("删除失败，请重新尝试");
+								}
+							});
+					} else {
+						alert("订单已发货，请联系客服取消订单");
+					}
 					return false;
 				};
 				//付款，转到相应的订单支付页面
@@ -232,12 +257,12 @@
 
 					});
 				// 加载订单信息
-//				$http.get("/user/findMyOrders")
-//					.success(function(response) {
-//						$scope.orders = response;
-//					});
+				//				$http.get("/user/findMyOrders")
+				//					.success(function(response) {
+				//						$scope.orders = response;
+				//					});
 				//
-				
+
 				//分页算法  
 				var calculateIndexes = function(current, length, displayLength) {
 					var indexes = [];
@@ -281,7 +306,7 @@
 						}
 					});
 				};
-				
+
 				//初始化第一页  
 				getOrderListByUid($scope.p_current, $scope.p_pernum, function() {
 

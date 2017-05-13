@@ -183,18 +183,44 @@ public class OrderController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = { "/user/singnIn" }, method = RequestMethod.GET)
-	public List<Order> signIn(HttpServletRequest request, String oid) {
+	public Message signIn(HttpServletRequest request, String oid) {
 		Order order = ordersService.finOrdersByOid(oid);
 		if (order != null) {
 			order.setState(4);
 			ordersService.updateOrder(order);
 		}
-		User user = (User) request.getSession().getAttribute("user");
-		if (user != null) {
-			return ordersService.finOrdersByUid(user.getUid());
-		}
+		Message message = new Message();
+		message.setInfo("success");
+		return message;
+	}
 
-		return null;
+	/**
+	 * 删除订单
+	 * 
+	 * @author linkaicheng
+	 * @date 2017年5月11日 下午11:05:20
+	 * @param request
+	 * @param oid
+	 * @return
+	 *
+	 */
+	@ResponseBody
+	@RequestMapping(value = { "/user/deleteOrder" }, method = RequestMethod.GET)
+	public Message deleteOrder(HttpServletRequest request, String oid) {
+		System.out.println("=========================delete");
+		Order order = ordersService.finOrdersByOid(oid);
+		Message message = new Message();
+		if (order != null) {
+			for (OrderItem orderItem : order.getOrderItems()) {
+				orderItemService.deleteOrderItem(orderItem);
+			}
+			ordersService.deleteOrder(order);
+		} else {
+			message.setInfo("faile");
+			return message;
+		}
+		message.setInfo("success");
+		return message;
 	}
 
 	/**

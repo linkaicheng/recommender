@@ -22,4 +22,17 @@ public class OrderItemService {
 		return orderItemRepository.save(orderItem);
 	}
 
+	/**
+	 * 删除订单项
+	 * 
+	 * @author linkaicheng
+	 * @date 2017年5月11日 下午11:09:47
+	 * @param orderItem
+	 *
+	 */
+	public void deleteOrderItem(OrderItem orderItem) {
+		orderItemRepository.delete(orderItem);
+
+	}
+
 }
