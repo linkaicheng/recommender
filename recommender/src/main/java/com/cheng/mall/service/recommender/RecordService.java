@@ -38,4 +38,9 @@ public class RecordService {
 		return recordRepository.findAll();
 	}
 
+	public Record findRecordByPid(Integer pid) {
+		// TODO Auto-generated method stub
+		return recordRepository.findRecordByPid(pid);
+	}
+
 }

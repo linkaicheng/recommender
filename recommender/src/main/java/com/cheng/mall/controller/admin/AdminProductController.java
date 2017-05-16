@@ -46,9 +46,11 @@ public class AdminProductController {
 	 */
 	@RequestMapping(value = { "/uploadImage" }, method = RequestMethod.POST)
 	public Message uploadImage(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
+		request.getSession().setAttribute("hasUploadImage", "yes");
 		Message message = new Message();
 		BufferedOutputStream out = null;
 		if (!file.isEmpty()) {
+			System.out.println("=====uploadimage=============");
 			try {
 				out = new BufferedOutputStream(new FileOutputStream(
 						new File(request.getServletContext().getRealPath("/WEB-INF/static/img/products") + "//"
@@ -60,6 +62,7 @@ public class AdminProductController {
 			} catch (Exception e) {
 				// "上传失败,"
 				message.setInfo("faile");
+				e.printStackTrace();
 			} finally {
 				if (out != null) {
 					try {
@@ -89,10 +92,27 @@ public class AdminProductController {
 	 *
 	 */
 	@RequestMapping(value = { "/addProduct" }, method = RequestMethod.POST)
-	public Message addOrUpdateProduct(AddProductDto productDto) {
+	public Message addOrUpdateProduct(AddProductDto productDto, HttpServletRequest request) {
 		String imagePath = null;
-		if (productDto != null && productDto.getImage() != null) {
-			imagePath = "../static/img/products/" + productDto.getImage();
+		Object hasUploadImage = request.getSession().getAttribute("hasUploadImage");
+		// 有上传图片
+		if (hasUploadImage != null && ((String) hasUploadImage).equals("yes")) {
+			if (productDto != null && productDto.getImage() != null) {
+				imagePath = "../static/img/products/" + productDto.getImage();
+				// 删除商品的图片
+				if (productDto.getPid() != null) {// pid不为空，做更新操作
+					String[] path = productService.findProductByPid(productDto.getPid()).getImage().split("/");
+					File file = new File(request.getServletContext().getRealPath("/WEB-INF/static/img/products") + "//"
+							+ path[path.length - 1]);
+					if (file.exists()) {
+						file.delete();
+					}
+				}
+			}
+			request.getSession().setAttribute("hasUploadImage", "no");
+		} else {
+			// 没上传图片
+			imagePath = productDto.getImage();
 		}
 
 		Product product = new Product();

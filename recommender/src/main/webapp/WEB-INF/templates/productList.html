@@ -112,25 +112,24 @@
 						</div>
 					</div>
 					<!------------------------------------->
-
 				</div>
-
 			</div>
-		</div>
-		<!---分页-->
-		<div class="container text-right" style="margin-top: 15px;">
-			<div class="row clearfix">
-				<div class="col-md-12 column" style="margin-top: -15px;">
-					<!-- paging -->
-					<ul class="pagination" style="margin: 0px;">
-						<li ng-class="{true:'disabled'}[p_current==1]"><a href="javascript:void(0);" ng-click="p_index()">首页</a></li>
-						<li ng-repeat="page in pages" ng-class="{true:'active'}[p_current==page]"><a href="javascript:void(0);" ng-click="load_page(page)">{{ page }}</a></li>
-						<li ng-class="{true:'disabled'}[p_current==p_all_page]"><a href="javascript:void(0);" ng-click="p_last()">尾页</a></li>
-					</ul>
-					<span style="vertical-align: 12px;">  共：{{count}} 条</span>
+			<!---分页-->
+			<div class="container text-right" style="margin-top: 15px;">
+				<div class="row clearfix">
+					<div class="col-md-12 column" style="margin-top: -15px;">
+						<!-- paging -->
+						<ul class="pagination" style="margin: 0px;">
+							<li ng-class="{true:'disabled'}[p_current==1]"><a href="javascript:void(0);" ng-click="p_index()">首页</a></li>
+							<li ng-repeat="page in pages" ng-class="{true:'active'}[p_current==page]"><a href="javascript:void(0);" ng-click="load_page(page)">{{ page }}</a></li>
+							<li ng-class="{true:'disabled'}[p_current==p_all_page]"><a href="javascript:void(0);" ng-click="p_last()">尾页</a></li>
+						</ul>
+						<span style="vertical-align: 12px;">  共：{{count}} 条</span>
+					</div>
 				</div>
 			</div>
 		</div>
+
 		<div id="bottom" class="bottom-bar"></div>
 
 		<script type="text/javascript" src="static/plugins/jquery-2.1.4/jquery.min.js"></script>
@@ -138,9 +137,9 @@
 		<script type="text/javascript">
 			var myModule = angular.module("modulesApp", []);
 
-			myModule.controller('modulesAppCtrl', function($scope, $http,$location) {
+			myModule.controller('modulesAppCtrl', function($scope, $http, $location) {
 				//时间戳，加载url后解决缓存问题
-				$scope.timestamplog=new Date();
+				$scope.timestamplog = new Date();
 				//加载用户信息
 				$http.get("/user/getUserFromSession")
 					.success(function(response) {
@@ -173,9 +172,9 @@
 				}
 
 				var Request = new UrlSearch(); //实例化
-				
+
 				//
-				
+
 				//加载左侧分类导航
 				$http.get("/getCategoryNavigations")
 					.success(function(response) {
@@ -217,7 +216,7 @@
 				};
 				//获取数据  
 				var getProductListByCid = function(page, size, callback) {
-					$scope.timestamp=new Date();
+					$scope.timestamp = new Date();
 					$scope.loadByCs = false;
 					$http.get("getProductsPageByCid?status=0&pageNo=" + page + "&pageSize=" + size + "&cid=" + Request.cid).success(function(res) {
 						if (res) {
@@ -234,7 +233,7 @@
 				};
 				//二级分类
 				var getProductListByCsid = function(csid, page, size, callback) {
-					
+
 					$scope.loadByCs = true;
 					$http.get("getProductsPageByCsid?status=0&pageNo=" + page + "&pageSize=" + size + "&csid=" + csid).success(function(res) {
 						if (res) {
@@ -260,7 +259,7 @@
 				$scope.loadByCs = false;
 				//初始化第一页  
 				getProductListByCid($scope.p_current, $scope.p_pernum, function() {
-					
+
 				});
 
 				//首页  

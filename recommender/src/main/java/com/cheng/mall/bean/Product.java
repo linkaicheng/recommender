@@ -36,6 +36,8 @@ public class Product implements Serializable {
 	private String image;
 	private String pdesc;
 	private Integer is_hot;
+
+	private String brief;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date pdate;
 	// 二级分类的外键:使用二级分类的对象.
@@ -49,6 +51,14 @@ public class Product implements Serializable {
 
 	public void setPid(Integer pid) {
 		this.pid = pid;
+	}
+
+	public String getBrief() {
+		return brief;
+	}
+
+	public void setBrief(String brief) {
+		this.brief = brief;
 	}
 
 	public String getPname() {
@@ -125,8 +135,8 @@ public class Product implements Serializable {
 	@Override
 	public String toString() {
 		return "Product [pid=" + pid + ", pname=" + pname + ", market_price=" + market_price + ", shop_price="
-				+ shop_price + ", image=" + image + ", pdesc=" + pdesc + ", is_hot=" + is_hot + ", pdate=" + pdate
-				+ ", categorySecond=" + categorySecond + "]";
+				+ shop_price + ", image=" + image + ", pdesc=" + pdesc + ", is_hot=" + is_hot + ", brief=" + brief
+				+ ", pdate=" + pdate + ", categorySecond=" + categorySecond + "]";
 	}
 
 }

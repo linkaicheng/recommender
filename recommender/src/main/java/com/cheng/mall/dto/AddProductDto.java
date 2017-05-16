@@ -24,6 +24,7 @@ public class AddProductDto implements Serializable {
 	private Date pdate;
 	private Integer csid;
 	private String csname;
+	private String brief;
 
 	public String getCsname() {
 		return csname;
@@ -105,11 +106,19 @@ public class AddProductDto implements Serializable {
 		this.csid = csid;
 	}
 
+	public String getBrief() {
+		return brief;
+	}
+
+	public void setBrief(String brief) {
+		this.brief = brief;
+	}
+
 	@Override
 	public String toString() {
 		return "AddProductDto [pid=" + pid + ", pname=" + pname + ", market_price=" + market_price + ", shop_price="
 				+ shop_price + ", image=" + image + ", pdesc=" + pdesc + ", is_hot=" + is_hot + ", pdate=" + pdate
-				+ ", csid=" + csid + ", csname=" + csname + "]";
+				+ ", csid=" + csid + ", csname=" + csname + ", brief=" + brief + "]";
 	}
 
 }

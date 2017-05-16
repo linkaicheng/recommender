@@ -45,7 +45,7 @@
 							</ul>
 						</div>
 						<div style="text-align: right;margin-right: 195px;margin-bottom: 10px;">
-							搜索：<input type="text" ng-model="titleFilter" placeholder="输入关键字" style="margin-right: 580px;">
+							<span ng-show="!add && !edit2">搜索：<input type="text" ng-model="titleFilter" placeholder="输入关键字" style="margin-right: 580px;"></span>
 							<button ng-show="!add && !edit2" class="btn btn-default" ng-click="getCsListAll()">全部显示</button>
 							<button ng-show="!add && !edit2" class="btn btn-default" ng-click="add=true">添加</button>
 						</div>

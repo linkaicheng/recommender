@@ -55,7 +55,7 @@
 							{{message.info}}
 						</div>-->
 						<div style="text-align: right;margin-right: 180px;margin-bottom: 10px;">
-							<span ng-show="!add&&!edit" >搜索：<input type="text" ng-model="titleFilter" placeholder="输入关键字" style="margin-right: 580px;"></span>
+							<span ng-show="!add&&!edit">搜索：<input type="text" ng-model="titleFilter" placeholder="输入关键字" style="margin-right: 580px;"></span>
 							<button ng-show="!add&&!edit" class="btn btn-default" ng-click="getpListAll()">全部显示</button>
 							<button ng-show="!add&&!edit" class="btn btn-default" ng-click="add=true">添加</button>
 						</div>
@@ -193,7 +193,7 @@
 								<div class="form-group">
 									<label for="upload" class="col-sm-2 control-label">商品图片</label>
 									<div class="col-sm-10">
-										<input type="file" id="upload" name="file" />
+										<input type="file" id="upload" name="file" ng-click="uploadfile=true" ;/>
 									</div>
 								</div>
 								<div class="form-group">
@@ -209,7 +209,14 @@
 								<div class="form-group">
 									<label for="pdesc" class="col-sm-2 control-label">商品描述</label>
 									<div class="col-sm-4">
-										<textarea ng-model="newProduct.pdesc" name="pdesc" rows="5" cols="30" class="form-control" id=pdesc></textarea>
+										<textarea ng-model="newProduct.pdesc" name="pdesc" rows="5" cols="30" class="form-control" id="pdesc"></textarea>
+									</div>
+									<div class="col-sm-6"></div>
+								</div>
+								<div class="form-group">
+									<label for="pdesc" class="col-sm-2 control-label">内容简介</label>
+									<div class="col-sm-4">
+										<textarea ng-model="newProduct.brief" name="brief" rows="5" cols="30" class="form-control" id="brief"></textarea>
 									</div>
 									<div class="col-sm-6"></div>
 								</div>
@@ -251,6 +258,7 @@
 				$scope.edit = false;
 				$scope.add = false;
 				$scope.detele = {};
+				$scope.uploadfile = false;
 				//				//加载商品列表
 				//				$http.get("admin/getProductList")
 				//					.success(function(response) {
@@ -265,6 +273,7 @@
 				//删除
 				$scope.deleteProduct = function(product) {
 						$scope.detele.pid = product.pid;
+
 						$http({
 							method: 'POST',
 							url: 'admin/deleteProduct',
@@ -293,23 +302,53 @@
 
 				//添加商品
 				$scope.addProduct = function(newProduct) {
+
 					$scope.add = false;
 					$scope.edit = false;
 					var fd = new FormData();
 					var file = document.querySelector('input[type=file]').files[0];
 					fd.append('file', file);
-					$http({
-						method: 'POST',
-						url: 'admin/uploadImage',
-						data: fd, // pass in data as strings
-						headers: {
-							'Content-Type': undefined
-						},
-						transformRequest: angular.identity
+					if ($scope.uploadfile) {
+						//alert("上传图片");
+						//上传图片
+						$http({
+							method: 'POST',
+							url: 'admin/uploadImage',
+							data: fd, // pass in data as strings
+							headers: {
+								'Content-Type': undefined
+							},
+							transformRequest: angular.identity
 
-					}).success(function(response) {
-						$scope.message = response;
-						$scope.newProduct.image = response.param;
+						}).success(function(response) {
+							//添加商品信息
+							$scope.message = response;
+							$scope.newProduct.image = response.param;
+							$http({
+								method: 'POST',
+								url: 'admin/addProduct',
+								data: $.param(newProduct), // pass in data as strings
+								headers: {
+									'Content-Type': 'application/x-www-form-urlencoded'
+								}
+
+							}).success(function(response) {
+								$scope.message = response;
+								if ($scope.message.info == "success") {
+									alert("添加成功");
+									getProductListPage($scope.p_current, $scope.p_pernum, function() {});
+								} else {
+									alert("添加失败");
+
+								}
+							});
+
+						}).error(function(response) {
+							$scope.message = response;
+						});
+					} else {
+						//alert("不上传图片");
+						//不修改图片
 						$http({
 							method: 'POST',
 							url: 'admin/addProduct',
@@ -324,14 +363,14 @@
 								alert("添加成功");
 								getProductListPage($scope.p_current, $scope.p_pernum, function() {});
 							} else {
-								alert("添加失败");
+								alert("faile添加失败");
 
 							}
+						}).error(function(response) {
+							alert("error添加失败");
 						});
+					}
 
-					}).error(function(response) {
-						$scope.message = response;
-					});
 				};
 				//
 				//全部显示

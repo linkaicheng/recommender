@@ -22,12 +22,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.cheng.mall.bean.Category;
 import com.cheng.mall.bean.Product;
 import com.cheng.mall.bean.RecommenderItem;
+import com.cheng.mall.bean.Record;
 import com.cheng.mall.bean.User;
 import com.cheng.mall.dto.CategoryNavigationDto;
 import com.cheng.mall.dto.PageDto;
 import com.cheng.mall.service.CategoryService;
 import com.cheng.mall.service.ProductService;
 import com.cheng.mall.service.recommender.RecommenderItemService;
+import com.cheng.mall.service.recommender.RecordService;
 
 /**
  * 
@@ -44,6 +46,8 @@ public class ProductController {
 	private ProductService productService;
 	@Resource
 	private RecommenderItemService recommenderItemService;
+	@Resource
+	private RecordService recordService;
 
 	/**
 	 * 
@@ -241,22 +245,35 @@ public class ProductController {
 		// 根据csv文件生成相似度模型
 		String file = "datafile/record.csv";
 		DataModel dataModel;
-		try {
-			dataModel = new FileDataModel(new File(file));
-			// 使用欧氏距离相似度
-			final ItemSimilarity itemSimilarity = new EuclideanDistanceSimilarity(dataModel);
-			for (Long id : itemSimilarity.allSimilarItemIDs(pid)) {
-				Product product = productService.findProductByPid(id.intValue());
-				logger.info("为商品:" + id + "推荐：" + "================" + id + "=======================");
-				products.add(product);
+		Record record = recordService.findRecordByPid(pid);
+		if (record != null) {
+			try {
+				dataModel = new FileDataModel(new File(file));
+				// 使用欧氏距离相似度
+				final ItemSimilarity itemSimilarity = new EuclideanDistanceSimilarity(dataModel);
+				for (Long id : itemSimilarity.allSimilarItemIDs(pid)) {
+					Product product = productService.findProductByPid(id.intValue());
+					logger.info("为商品:" + id + "推荐：" + "================" + id + "=======================");
+					if (product.getPid() != pid) {
+						products.add(product);
+					}
+				}
+				// 如果该商品还没有相对应的推荐，返回最热门商品十件
+				if (products.size() == 0) {
+					products = productService.findHot();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				return productService.findHot();
 			}
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} else {
+			products = productService.findHot();
 		}
+
 		if (products.size() != 0) {
 			return products;
 		}
+
 		return null;
 	}
 
