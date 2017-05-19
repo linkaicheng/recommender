@@ -114,22 +114,22 @@
 					<!------------------------------------->
 				</div>
 			</div>
-			<!---分页-->
-			<div class="container text-right" style="margin-top: 15px;">
-				<div class="row clearfix">
-					<div class="col-md-12 column" style="margin-top: -15px;">
-						<!-- paging -->
-						<ul class="pagination" style="margin: 0px;">
-							<li ng-class="{true:'disabled'}[p_current==1]"><a href="javascript:void(0);" ng-click="p_index()">首页</a></li>
-							<li ng-repeat="page in pages" ng-class="{true:'active'}[p_current==page]"><a href="javascript:void(0);" ng-click="load_page(page)">{{ page }}</a></li>
-							<li ng-class="{true:'disabled'}[p_current==p_all_page]"><a href="javascript:void(0);" ng-click="p_last()">尾页</a></li>
-						</ul>
-						<span style="vertical-align: 12px;">  共：{{count}} 条</span>
-					</div>
+
+		</div>
+		<!---分页-->
+		<div class="container text-right" style="margin-top: 15px;">
+			<div class="row clearfix">
+				<div class="col-md-12 column" style="margin-top: -15px;">
+					<!-- paging -->
+					<ul class="pagination" style="margin: 0px;">
+						<li ng-class="{true:'disabled'}[p_current==1]"><a href="javascript:void(0);" ng-click="p_index()">首页</a></li>
+						<li ng-repeat="page in pages" ng-class="{true:'active'}[p_current==page]"><a href="javascript:void(0);" ng-click="load_page(page)">{{ page }}</a></li>
+						<li ng-class="{true:'disabled'}[p_current==p_all_page]"><a href="javascript:void(0);" ng-click="p_last()">尾页</a></li>
+					</ul>
+					<span style="vertical-align: 12px;">  共：{{count}} 条</span>
 				</div>
 			</div>
 		</div>
-
 		<div id="bottom" class="bottom-bar"></div>
 
 		<script type="text/javascript" src="static/plugins/jquery-2.1.4/jquery.min.js"></script>
@@ -250,7 +250,7 @@
 				};
 				//配置  
 				$scope.count = 0;
-				$scope.p_pernum = 12;
+				$scope.p_pernum = 16;
 				//变量  
 				$scope.p_current = 1;
 				$scope.p_all_page = 0;

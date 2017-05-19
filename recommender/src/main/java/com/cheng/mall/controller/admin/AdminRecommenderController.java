@@ -121,10 +121,12 @@ public class AdminRecommenderController {
 		// 根据csv文件生成推荐结果
 		String file = "datafile/record.csv";
 		DataModel dataModel = new FileDataModel(new File(file));
+		// 使用欧氏距离相似度
 		final ItemSimilarity itemSimilarity = new EuclideanDistanceSimilarity(dataModel);
 		RecommenderBuilder recommenderBuilder = new RecommenderBuilder() {
 			@Override
 			public Recommender buildRecommender(DataModel model) throws TasteException {
+				// 布尔型，不用评分
 				return new GenericBooleanPrefItemBasedRecommender(model, itemSimilarity);
 			}
 		};

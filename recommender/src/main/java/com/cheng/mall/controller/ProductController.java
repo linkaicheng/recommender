@@ -245,13 +245,14 @@ public class ProductController {
 		// 根据csv文件生成相似度模型
 		String file = "datafile/record.csv";
 		DataModel dataModel;
-		Record record = recordService.findRecordByPid(pid);
-		if (record != null) {
+		List<Record> records = recordService.findRecordByPid(pid);
+		if (records != null) {
 			try {
 				dataModel = new FileDataModel(new File(file));
 				// 使用欧氏距离相似度
 				final ItemSimilarity itemSimilarity = new EuclideanDistanceSimilarity(dataModel);
 				for (Long id : itemSimilarity.allSimilarItemIDs(pid)) {
+					System.out.println("==========" + id);
 					Product product = productService.findProductByPid(id.intValue());
 					logger.info("为商品:" + id + "推荐：" + "================" + id + "=======================");
 					if (product.getPid() != pid) {
